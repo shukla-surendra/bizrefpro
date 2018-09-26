@@ -1,0 +1,249 @@
+
+@media only screen and (max-width: 575.98px){
+  
+.cl-branding{
+    text-align: center;
+}
+.cl-top-connect .cl-top-full-o{
+    text-align: center;
+}
+.cl-top-connect .cl-top-full-t{
+    text-align: center;
+}
+.cl-home-search .cl-home-search-bar .home-form-row {
+    padding: 5px 5px;
+}
+.cl-top-right {
+    text-align: center;
+    padding: 10px 0px 0px 0px;
+}
+.play-link {
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    line-height: 26px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+}
+.play-link i {
+    font-size: 16px;
+}
+.video-section-cont h3 {
+    font-size: 28px;
+    color: #333;
+    font-weight: 700;
+    padding-top: 10px;
+    padding-bottom: 26px;
+}
+   
+.cl-home-section {
+    position: relative;
+    display: block;
+    height: auto;
+    width: 100%;
+    top: 0;
+}
+.cl-home-search .cl-home-search-in {
+    padding: 30px 0px 90px 0px;
+}
+.cl-home-search .cl-home-search-title h1 {
+    color: #333;
+    font-size: 24px;
+}
+.cl-home-search .cl-home-search-title {
+    margin-bottom: 10px;
+}
+.cl-home-search .cl-home-search-content {
+    color: #333;
+    margin-top: 10px;
+    text-align: justify;
+    padding: 0px 20px;
+}
+.cl-footer-left {
+    text-align: center;
+}
+.cl-footer-right ul {
+    list-style-type: none;
+    float : none;
+    text-align: center;
+}
+.cl-home-search .cl-home-search-bar {
+    padding: 5px 30px;
+}
+.cl-home-video .cl-home-video-in {
+    padding: 26px 0px 60px 0px;
+}
+.cl-nav-section-in nav {
+    padding: 0px 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.cl-top-search .home-form-row{
+    padding: 5px 15px;
+}
+.cl-add-item-detail h4 span {
+    width: 8.5%;
+    float: left;
+    padding: 1px 6px;
+    margin-right: 5px;
+}
+.cl-add-item-detail h4 a {
+    width: 88%;
+    float: left;
+    padding: 0px 0px 0px 0px;
+}
+
+}
+
+
+
+@media only screen and (min-width: 575.98px) and (max-width: 767.98px){
+
+.play-link {
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    line-height: 26px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+}
+.play-link i {
+    font-size: 16px;
+}
+.video-section-cont h3 {
+    font-size: 14px;
+    color: #333;
+    font-weight: 700;
+    padding-top: 10px;
+    padding-bottom: 26px;
+}
+.cl-top-right {
+    padding: 7px 0px;
+    text-align: right;
+}
+.cl-nav-section-in {
+    padding: 10px 0px;
+}
+
+.cl-home-section {
+    position: relative;
+    display: block;
+    height: auto;
+    width: 100%;
+    top: 0;
+}
+.cl-home-search .cl-home-search-in {
+    padding: 30px 0px 90px 0px;
+}
+.cl-home-search .cl-home-search-title h1 {
+    color: #333;
+    font-size: 26px;
+}
+.cl-home-search .cl-home-search-title {
+    margin-bottom: 10px;
+}
+.cl-home-search .cl-home-search-bar {
+    padding: 15px 10px;
+}
+.cl-home-search .cl-home-search-content {
+    margin-top: 10px;
+    text-align: center;
+    padding: 0px 20px;
+}
+.cl-footer-left {
+    text-align: center;
+}
+.cl-footer-right ul {
+    list-style-type: none;
+    float : none;
+    text-align: center;
+}
+.cl-add-item-detail h4 span {
+    width: 5.5%;
+    float: left;
+    padding: 1px 6px;
+    margin-right: 5px;
+}
+.cl-add-item-detail h4 a {
+    width: 90%;
+    float: left;
+    padding: 0px 0px 0px 0px;
+}
+	
+}
+
+
+@media only screen and (min-width: 767.98px) and (max-width: 991.98px){
+    
+
+.cl-home-section {
+    position: relative;
+    display: block;
+    height: auto;
+    width: 100%;
+    top: 0;
+}
+.cl-home-search .cl-home-search-in {
+    padding: 50px 0px 50px 0px;
+}
+.cl-home-search .cl-home-search-title h1 {
+    color: #333;
+    font-size: 30px;
+}
+.cl-home-search .cl-home-search-title {
+    margin-bottom: 10px;
+}
+.cl-home-search .cl-home-search-bar {
+    padding: 15px 10px;
+}
+.cl-home-search .cl-home-search-content {
+    margin-top: 10px;
+    text-align: center;
+    padding: 0px 20px;
+}
+.cl-add-item-detail h4 span {
+    width: 5.5%;
+    float: left;
+    padding: 1px 6px;
+    margin-right: 5px;
+}
+.cl-add-item-detail h4 a {
+    width: 90%;
+    float: left;
+    padding: 0px 0px 0px 0px;
+}
+    
+}
+
+
+
+@media only screen and (max-width: 767.98px){
+ 
+.cl-nav-section-in nav .hamburger{
+    display: block;
+}
+.cl-nav-section-in nav ul {
+    display: none;
+}
+.cl-nav-section-in nav ul li {
+    display: block;
+    color: #333;
+}
+.cl-nav-section-in nav ul li a {
+    padding: 0px 0px;
+    color: #fff;
+}
+
+}
+
+
+@media only screen and (max-width: 991.98px) { 
+
+.page{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+
+}

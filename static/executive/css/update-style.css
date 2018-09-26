@@ -1,0 +1,46 @@
+/*====================================================================
+             updated-dashboard
+======================================================================*/
+
+/*====================================================================
+                   top-box-section
+======================================================================*/
+.panel-box{
+     position: relative;
+     padding: 0px;
+     overflow: hidden;
+}
+.panel-row1{
+    position: relative;
+        padding: 37px 8px 37px 2px;
+    overflow: hidden;
+}
+.panel-text-detail{
+    position: relative;
+    font-size: 27px;
+    font-weight: 600;
+    color: #fff;
+}
+.panel-text-detail span{
+    position: relative;
+    font-size: 12px;
+    color: #fff;
+  line-height: 38px;
+}
+.panel-text-icon{
+      position: relative;
+      
+}
+.panel-text-icon i{
+       color: #68ae00;
+    background-color: #fff;
+    margin: 0 auto;
+    border-radius: 50%;
+    font-size: 29px;
+    padding: 9px 0px 0px 14px;
+    height: 50px;
+    width: 50px;
+}
+.no-padding{
+    padding: 0px!important;
+}

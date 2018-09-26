@@ -1,0 +1,192 @@
+{% extends 'app/layouts/layout.html' %}
+{% block content  %}
+           
+           {% ifnotequal message_type "" %}
+            {% ifequal message_type "success"%}
+                <div class="alert alert-success alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Success!</strong>  {{message}}.
+                </div>
+             {% endifequal %}
+          {% ifequal message_type "failed"%}
+                <div class="alert alert-danger alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Failed!</strong>  {{message}}.
+                </div>
+             {% endifequal %}
+           {% endifnotequal %}
+            
+            <!-- content section begin -->
+            <div class="cl-default-wrapper">
+                <div class="cl-default-wrapper-in">
+                    <div class="container">
+                        <div class="row">
+                            
+                            <!-- content left section begin -->
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                <div class="login-form">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <div class="login-form-title">
+                                            <h4>Login</h4>
+                                        </div>
+                                    </div>
+                                    <form method="post" action="" id="signinForm">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="form_type" value="signin">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                <label>Email ID</label>
+                                            </div>
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                <div class="popup-cont">
+                                                    <input name="email" placeholder="Email ID" required="" type="email">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                <label>Password</label>
+                                            </div>
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                <div class="popup-cont">
+                                                    <input name="password" placeholder="Password" required="" type="password">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
+                                            <div class="row">
+                                                
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 for-pass-padd">
+                                                    <div class="popup-cont">
+                                                        <input name="remember-me" type="checkbox"> &nbsp;&nbsp; Remember me
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 for-pass-padd">
+                                                    <div class="popup-cont for-pass">
+                                                        <a href="/forgot-password">Forgot Password?</a>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                <div class="popup-cont">
+                                                    <button class="btn-style-2">Login</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </form>
+                                </div>
+                            </div>
+                            <!-- content left section end -->
+                            <!-- content left section begin -->
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                <div class="login-form">
+                                    <div class="col-md-12">
+                                        <div class="login-form-title">
+                                            <h4>Register</h4>
+                                        </div>
+                                    </div>
+                                    <form action="" method="post" id="signUpForm">
+                                        {% csrf_token %}
+                                      <input type="hidden" name="form_type" form="signUpForm" value="signup" />
+                                      <div class="col-md-12 login-popup-item">
+                                          <div class="col-md-12">
+                                              <label>Full Name</label>
+                                          </div>
+                                          <div class="col-md-12">
+                                              <div class="popup-cont">
+                                                  <input name="name" id="name" form="signUpForm" placeholder="Full Name" required="" type="text">
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="col-md-12 login-popup-item">
+                                          <div class="col-md-12">
+                                              <label>Email ID</label>
+                                          </div>
+                                          <div class="col-md-12">
+                                              <div class="popup-cont">
+                                                  <input name="email" form="signUpForm" id="email" placeholder="Email ID" required="" type="email">
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="col-md-12 login-popup-item">
+                                          <div class="col-md-12">
+                                              <label>Password</label>
+                                          </div>
+                                          <div class="col-md-12">
+                                              <div class="popup-cont">
+                                                  <input name="password" id="password" form="signUpForm" placeholder="Password" required="" type="password">
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="col-md-12 login-popup-item">
+                                          <div class="col-md-12">
+                                              <label>Contact No.</label>
+                                          </div>
+                                          <div class="col-md-12">
+                                              <div class="popup-cont">
+                                                  <input name="phone" form="signUpForm" id="phone" placeholder="Contact No." required="" type="text">
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="col-md-12 login-popup-item">
+                                        <div class="col-md-12">
+                                            <label>State</label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="popup-cont">
+                                                <select name="state" id="state">
+                                                    <option value="0">Select State</option>
+                                                    {% for state in states%}
+                                                    <option value="{{state.id}}">{{state.name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 login-popup-item">
+                                            <div class="col-md-12">
+                                                <label>Zone</label>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="popup-cont">
+                                                    <select name="zone" id="zone">
+                                                        <option value="0">Select Zone</option>
+                                                       
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 login-popup-item">
+                                                <div class="col-md-12">
+                                                    <label>Executive</label>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="popup-cont">
+                                                        <select name="executive" id="executive">
+                                                            <option value="0">Select Executive</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                      <div class="col-md-12 login-popup-item">
+                                          <div class="col-md-12">
+                                              <div class="popup-cont">
+                                                  <button type="submit" form="signUpForm" class="btn-style-2">Register</button>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </form>
+
+                                </div>
+                            </div>
+                            <!-- content left section end -->
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content section end -->
+{% endblock %}

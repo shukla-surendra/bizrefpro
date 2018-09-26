@@ -1,0 +1,471 @@
+
+{% extends 'user/layouts/layout.html' %}
+{% block content %}
+<div class="body-wrap">
+    <!-- row welcome panel begin -->
+
+    {{form.errors}}
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="row">
+        <form action="" id="profileForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="section-title">
+                <h2><i class="fa fa-file-text-o"></i>Profile</h2>
+            </div>
+        </div>
+        
+        <div class="col-md-12">
+            
+                    <div class="panel-full">
+                        <div class="panel-full-content">
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                           <h4>Full Name</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <input type="text" name="name" value="{{user.name}}" placeholder="Enter Your full name"/>
+                                        </div>
+                                        
+                                    </div>
+                                    <!-- header end -->
+                                    
+                                </div>
+                            </div>
+                            <!--- item end -->
+                            
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="panel-full">
+                        <div class="panel-full-content">
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                           <h4> Email ID</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <input type="text" name="email" value="{{user.email}}" placeholder="Enter Your Email ID"/>
+                                        </div>
+                                        
+                                    </div>
+                                    <!-- header end -->
+                                    
+                                </div>
+                            </div>
+                            <!--- item end -->
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="panel-full">
+                        <div class="panel-full-content">
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                           <h4>Contact No.</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <input type="text" name="phone" value="{{user.phone}}" placeholder="Enter Your Contact No."/>
+                                        </div>
+                                        
+                                    </div>
+                                    <!-- header end -->
+                                    
+                                </div>
+                            </div>
+                            <!--- item end -->
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="panel-full">
+                        <div class="panel-full-content">
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                           <h4>Address 1</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <textarea rows="3" placeholder="Address 1" name="address1">{{user.address1}}</textarea>
+                                        </div>
+                                        
+                                    </div>
+                                    <!-- header end -->
+                                    
+                                </div>
+                            </div>
+                            <!--- item end -->
+                            
+                        </div>
+                    </div>
+                    
+                     <div class="panel-full">
+                        <div class="panel-full-content">
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                           <h4>Address 2</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <textarea rows="3" placeholder="Address 2" name="address2">{{user.address2}}</textarea>
+                                        </div>
+                                        
+                                    </div>
+                                    <!-- header end -->
+                                    
+                                </div>
+                            </div>
+                            <!--- item end -->
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="panel-full">
+                        <div class="panel-full-content">
+                        
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                           <h4>Country</h4>
+                                        </div>
+                                         <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <select name="country" id="country">
+                                                <option value="">Select Your Country</option>
+                                                {% for country in countries %}
+                                                <option {% ifequal country.id user.country.id %} {{ "selected" }} {% endifequal %} value="{{country.id}}">{{country.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- header end -->
+                                </div>
+                            </div>
+                            <!--- item end -->
+                        </div>
+                    </div>
+                    
+                     <div class="panel-full">
+                        <div class="panel-full-content">
+                        
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                           <h4>State</h4>
+                                        </div>
+                                         <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <select name="state" id="state">
+                                                <option value="">Select Your State</option>
+                                                {% for state in states %}
+                                                <option {% ifequal state.id user.state.id %} {{ "selected" }} {% endifequal %} value="{{state.id}}">{{state.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- header end -->
+                                </div>
+                            </div>
+                            <!--- item end -->
+                        </div>
+                    </div>
+                    
+                     <div class="panel-full">
+                        <div class="panel-full-content">
+                        
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                           <h4>City</h4>
+                                        </div>
+                                         <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <input type="text" name="city" id="city" value="{{user.city}}"/>
+                                               
+                                        </div>
+                                    </div>
+                                    <!-- header end -->
+                                </div>
+                            </div>
+                            <!--- item end -->
+                        </div>
+                    </div>
+                    
+                      <div class="panel-full">
+                      
+                        <div class="panel-full-content">
+                            <h2>Document</h2>
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                   <h4>Pan Card (5 Points)</h4>
+                                                </div>
+                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                     {% if pancard.id %}
+                                                       {% if pancard.verified == False %}
+                                                             <input type="file" name="pancard" id="pancard"/>
+                                                             <p>Pancard Uploaded and verification pending <a href="#" data-role="user" class="delete_document btn-sm btn btn-danger" data-id="{{pancard.id}}">Delete</a></p>
+                                                        {% else %}
+                                                        <p>Pancard Uploaded and verified </p>
+                                                        {% endif %}
+                                                     {% else %}
+                                                             <input type="file" name="pancard" id="pancard"/>
+                                                     {% endif %}
+                                                </div>
+                                            </div>
+                                         </div>   
+
+                                         <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                   <h4>Driving Licence (2 points)</h4>
+                                                </div>
+                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                        {% if dl.id %}
+                                                        {% if dl.verified == False %}
+                                                              <input type="file" name="dl" id="dl"/>
+                                                              <p>Driving Licence Uploaded and verification pending <a href="#" data-role="user" class="delete_document btn-sm btn btn-danger" data-id="{{dl.id}}">Delete</a></p>
+                                                         {% else %}
+                                                         <p>Driving Licence Uploaded and verified </p>
+                                                         {% endif %}
+                                                      {% else %}
+                                                              <input type="file" name="dl" id="dl"/>
+                                                      {% endif %}
+                                                </div>
+                                            </div>
+                                         </div>
+                                         
+                                         
+                                         <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                   <h4>AAdhar Card(2 points)</h4>
+                                                </div>
+                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                        {% if aadhar.id %}
+                                                        {% if aadhar.verified == False %}
+                                                              <input type="file" name="aadhar" id="aadhar"/>
+                                                              <p>Aadhar Uploaded and verification pending <a href="#" class="delete_document btn-sm btn btn-danger" data-role="user" data-id="{{aadhar.id}}">Delete</a></p>
+                                                         {% else %}
+                                                         <p>Aadhar Uploaded and verified </p>
+                                                         {% endif %}
+                                                      {% else %}
+                                                              <input type="file" name="aadhar" id="aadhar"/>
+                                                      {% endif %}
+                                                </div>
+                                            </div>
+                                         </div>
+
+                                         <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                   <h4>Voter ID card (2 points)</h4>
+                                                </div>
+                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                        {% if voterid.id %}
+                                                        {% if voterid.verified == False %}
+                                                              <input type="file" name="voterid" id="voterid"/>
+                                                              <p>Voter Id Uploaded and verification pending <a href="#" class="delete_document btn-sm btn btn-danger" data-role="user" data-id="{{voterid.id}}">Delete</a></p>
+                                                         {% else %}
+                                                         <p>Voter Id Uploaded and verified</p>
+                                                         {% endif %}
+                                                      {% else %}
+                                                              <input type="file" name="voterid" id="voterid"/>
+                                                      {% endif %}
+
+                                                </div>
+                                            </div>
+                                         </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                   <h4>Electricity Bill (2 points)</h4>
+                                                </div>
+                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                        {% if electricity.id %}
+                                                        {% if electricity.verified == False %}
+                                                              <input type="file" name="electricity" id="electricity"/>
+                                                              <p>Electricity Uploaded and verification pending <a href="#" class="delete_document btn-sm btn btn-danger" data-role="user" data-id="{{electricity.id}}">Delete</a></p>
+                                                         {% else %}
+                                                         <p>electricity Bill Uploaded and verified </p>
+                                                         {% endif %}
+                                                      {% else %}
+                                                              <input type="file" name="electricity" id="electricity"/>
+                                                      {% endif %}
+
+                                                </div>
+                                            </div>
+                                         </div>
+
+                                         <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                   <h4>Passport (10 points)</h4>
+                                                </div>
+                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                        {% if passport.id %}
+                                                        {% if passport.verified == False %}
+                                                              <input type="file" name="passport" id="passport"/>
+                                                              <p>Passport Uploaded and verification pending <a href="#" class="delete_document btn-sm btn btn-danger" data-role="user" data-id="{{passport.id}}">Delete</a></p>
+                                                         {% else %}
+                                                         <p>Passport Bill Uploaded and verified </p>
+                                                         {% endif %}
+                                                      {% else %}
+                                                              <input type="file" name="passport" id="passport"/>
+                                                      {% endif %}
+                                                </div>
+                                            </div>
+                                         </div>
+
+                                         
+                                    </div>
+                                    <!-- header end -->
+                                    
+                                </div>
+                            </div>
+                            <!--- item end -->
+                            
+                        </div>
+                    </div>
+                  <!--  
+                    <div class="panel-full">
+                      <div class="panel-full-content">
+                            <h2>Relation</h2>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <div class="panel-full-header">
+                                        <div class="row m-bottom-15">
+                                            <div class="col-lg-12">
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                   <h4>Group ID</h4>
+                                                </div>
+                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                     <strong>{{user.country}}-{{user.state}}-{{user.city}}</strong>
+                                                </div>
+                                            </div>
+                                         </div>   
+                                         <div class="row m-bottom-15">
+                                            <div class="col-lg-12">
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                   <h4>Refrence ID</h4>
+                                                </div>
+                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                        {% ifequal user.reference_id "" %}
+                                                        <input type="text" name="reference_id" placeholder="Enter Reference Id if any" id="reference_id" /> 
+                                                        {% else %}
+                                                        <strong>{{user.reference_id}}</strong>
+                                                        <input type="hidden" name="reference_id" value="{{user.reference_id}}" />
+                                                        {% endifequal %}
+                                                 </div>
+                                            </div>
+                                         </div>
+                                         <div class="row">
+                                            <div class="col-lg-12 ">
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                   <h4>ID</h4>
+                                                </div>
+                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                    <strong>{{user.country}}-{{user.state}}-{{user.city}}-{{user.id}}</strong>
+                                                </div>
+                                            </div>
+                                         </div>  
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                -->
+                    <div class="panel-full">
+                                          
+                        <div class="panel-full-content">
+                        
+                            <!--- item begin --->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                            &nbsp;
+                                        </div>
+
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                            <button id="mybtn4">Update</button>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                            &nbsp;
+                                       </div>
+                                    </div>
+                                    <!-- header end -->
+                                    
+                                </div>
+                            </div>
+                            <!--- item end -->
+                            
+                        </div>
+                    </div>
+                
+        </div>
+        </form>
+    </div>
+    <!-- row welcome panel end -->
+    
+</div>
+
+<script>
+    $(".delete_document").on("click", function(e){
+         e.preventDefault();
+         e.stopPropagation();
+         mediaId = $(this).data("id");
+         mediaRole = $(this).data("role");
+         $.ajax({
+             type:'GET',
+             url:'/delete_media_file',
+             data:'media_id='+mediaId+"&media_role="+mediaRole,
+             success:function(res, status, xHr){
+                 if(confirm("File Deleted, Do you want to refresh the page?")){
+                     location.reload();
+                 }
+             }
+         })
+    });
+</script>
+
+{% endblock %}

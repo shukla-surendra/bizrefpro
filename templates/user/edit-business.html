@@ -1,0 +1,640 @@
+{% extends 'user/layouts/layout.html' %}
+{% block content  %}{% load staticfiles %}
+<div class="body-wrap">
+    <!-- row welcome panel begin -->
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+    {{form.errors}}
+    <div class="row">
+        <form action="" id="addBusinessForm" method="post" enctype="multipart/form-data">
+            
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="section-title">
+                <h2><i class="fa fa-file-text-o"></i>Update Business</h2>
+            </div>
+        </div>
+        
+        <div class="col-md-12">
+              <div class="panel-full">
+              
+                <div class="panel-full-content">
+                    <h2>Location Information</h2>
+                    <!--- item begin -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                        <div class="panel-full-postbox">
+                            <!-- header begin -->
+                            <div class="panel-full-header">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Business Name</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <input type="text" id="business_name" value="{{ business.business_name|default:"" }}" name="business_name" placeholder="Enter Your Business Name"/>
+                                        </div>
+                                    </div>
+                                </div>    
+                            </div>
+                            <!-- header end -->
+                            
+                            
+                            <div class="panel-full-header">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Address 1</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <textarea rows="3" name="address1" id="address1" placeholder="Address 1">{{ business.address1|default:"" }}</textarea>
+                                        </div>
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Address 2</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <textarea rows="3" name="address2" id="address2" placeholder="Address 2">{{ business.address2|default:"" }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>    
+                            </div>
+                            <div class="panel-full-header">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Landmark</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <textarea rows="3" name="landmark" id="landmark" placeholder="Landmark">{{ business.landmark|default:"" }}</textarea>
+                                        </div>
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Location</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <textarea rows="3" name="location" id="location" placeholder="Location">{{ business.location|default:"" }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>    
+                            </div>
+                            
+                             <div class="panel-full-header">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Country</h4>
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                            <select name="country" id="country">
+                                                <option value="">Select Your Country</option>
+                                                {% for country in countries %}
+                                                <option {% ifequal country.id business.country.id %} {{ "selected" }} {% endifequal %} value="{{country.id}}">{{country.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>State</h4>
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                            <select name="state" id="state">
+                                                <option value="">Select Your State</option>
+                                                {% for state in states %}
+                                                <option {% ifequal state.id business.state.id %} {{ "selected" }} {% endifequal %} value="{{state.id}}">{{state.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>City</h4>
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                            <input type="text" name="city" id="city" value="{{business.city}}" placeholder="Enter City">
+                                            
+                                        </div>
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Pincode</h4>
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                            <input type="text" value="{{ business.pincode|default:"" }}" name="pincode" id="pincode"  placeholder="Enter Pincode">
+                                        </div>
+                                       
+                                    </div>
+                                </div>    
+                            </div>
+                             
+                             
+                            
+                            
+                        </div>
+                    </div>
+                    <!--- item end -->
+                    
+                </div>
+            </div>
+            
+         <div class="panel-full">
+              
+                <div class="panel-full-content">
+                    <h2>Contact Information</h2>
+                    <!--- item begin -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                        <div class="panel-full-postbox">
+                            <!-- header begin -->
+                            <div class="panel-full-header">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Contact Person</h4>
+                                        </div>
+                                        <div class="col-md-1 col-sm-2 col-xs-12">
+                                            <select name="contact_prefix" id="contact_prefix">
+                                                <option>Mr.</option>
+                                                <option>Mrs.</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 col-sm-2 col-xs-12">
+                                             <input type="text" name="first_name" value="{{ business.first_name|default:"" }}" id="first_name" placeholder="Enter Your First Name"/>
+                                        </div>
+                                        <div class="col-md-3 col-sm-2 col-xs-12">
+                                             <input type="text" name="last_name" value="{{ business.last_name|default:"" }}" id="last_name" placeholder="Enter Your Last Name"/>
+                                        </div>
+                                        <div class="col-md-3 col-sm-2 col-xs-12">
+                                             <input type="text" name="designation" value="{{ business.designation|default:"" }}" id="designation" placeholder="Enter Your Designation"/>
+                                        </div>
+                                    </div>
+                                </div>    
+                            </div>
+                            <!-- header end -->
+                            
+                            
+                            <div class="panel-full-header">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Landline No</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                                <div class="input-group control-group after-add-more4">
+                                               <input type="text" name="landline" id="landline" value="{{ business.landline|default:"" }}" class="form-control" placeholder="Enter Landline No.">
+                                                  <div class="input-group-btn"> 
+                                                    <button class="btn btn-success add-more4" type="button"><i class="glyphicon glyphicon-plus"></i> Add</button>
+                                                  </div>
+                                             </div>
+                                                 
+                                        </div>
+                                         <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Contact No</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                           <div class="input-group control-group after-add-more5">
+                                               <input type="text" name="contact_number" value="{{ business.contact_number|default:"" }}" id="contact_number" class="form-control" placeholder="Enter Contact Number">
+                                                  <div class="input-group-btn"> 
+                                                    <button class="btn btn-success add-more5" type="button"><i class="glyphicon glyphicon-plus"></i> Add</button>
+                                                  </div>
+                                             </div>
+                    
+                                        </div>
+                                    </div>
+                                </div>    
+                            </div>
+                            
+                           
+                            
+                            <div class="panel-full-header">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Email ID</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                          <div class="input-group control-group after-add-more3">
+                                               <input type="text" name="email" id="email" value="{{ business.email|default:"" }}" class="form-control" placeholder="Enter Contact Email">
+                                                  <div class="input-group-btn"> 
+                                                    <button class="btn btn-success add-more3" type="button"><i class="glyphicon glyphicon-plus"></i> Add</button>
+                                                  </div>
+                                             </div>
+                                              
+                                        </div>
+                                       
+                                    </div>
+                                </div>    
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                    <!--- item end -->
+                    
+                </div>
+            </div>
+
+            <div class="panel-full">
+              
+                <div class="panel-full-content">
+                    <h2>Search Result Fields</h2>
+                    <!--- item begin -->
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pad-zero">
+                        <div class="panel-full-postbox">
+                            <!-- header begin -->
+                            <div class="panel-full-header">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                           <h4>About</h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <textarea id="aboutus" name="aboutus" rows="3" placeholder="Write Something About you">{{ business.aboutus|default:"" }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>    
+                            </div>
+                            <!-- header end -->
+                        </div>
+                    </div>
+                    <!--- item end -->
+                                        <!--- item begin -->
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pad-zero">
+                                            <div class="panel-full-postbox">
+                                                <!-- header begin -->
+                                                <div class="panel-full-header">
+                                                    <div class="col-lg-12">
+                                                        <div class="row">
+                                                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                                               <h4>Title</h4>
+                                                            </div>
+                                                            <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                 <input type="text" id="title" name="title" value="{{ business.title|default:"" }}" rows="3" placeholder="Write the title">
+                                                            </div>
+                                                        </div>
+                                                    </div>    
+                                                </div>
+                                                <!-- header end -->
+                                            </div>
+                                        </div>
+                                        <!--- item end -->
+                    
+                </div>
+            </div> 
+            
+            <div class="panel-full">
+              
+                <div class="panel-full-content">
+                    <h2>Category & Keyword</h2>
+                    <!--- item begin -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                        <div class="panel-full-postbox">
+                            <!-- header begin -->
+                            <div class="panel-full-header">
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                           <h4>Choose Category</h4>
+                                        </div>
+                                        <div class="col-md-8 col-sm-8 col-xs-12">
+                                             <select id="category" name="categories" multiple>
+                                                 {% for category in categories %}
+                                                 {% if category in savedCategories %}
+                                                 <option  value="{{category.id}}" selected>{{category.name}}</option>
+                                                 {% else %}
+                                                 <option  value="{{category.id}}">{{category.name}}</option>
+                                                 {% endif %}
+                                                  {% endfor %}
+                                             </select>
+                                             <p>Press ctrl and click to select multiple categories</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                           <h4>Enter keyword</h4>
+                                        </div>
+                                        <div class="col-md-8 col-sm-8 col-xs-12">
+                                             <input type="text" value="{{ business.keyword|default:"" }}" id="keyword" name="keyword" />
+                                             <p>You can Add multiple keyword with comma separated.</p>
+                                        </div>
+                                    </div>
+                                </div>													
+                            </div>
+                            <!-- header end -->
+                        </div>
+                    </div>
+                    <!--- item end -->
+                    
+                </div>
+            </div>  
+
+            <div class="panel-full">
+              
+                <div class="panel-full-content">
+                    <h2>Website Detail</h2>
+                    <!--- item begin -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                        <div class="panel-full-postbox">
+                            <!-- header begin -->
+                            <div class="panel-full-header">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                           <h4>Select Website </h4>
+                                        </div>
+                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                             <select name="website">
+                                                 <option>Select Your Website</option>
+                                                 {% for website in websites %}
+                                                 <option {% ifequal website.id business.website %} {{ "selected" }} {% endifequal %} value="{{website.id}}">{{website.name}}</option>
+                                                 {% endfor %}
+                                             </select>
+                                        </div>
+                                         <div class="col-md-1 col-sm-1 col-xs-12">
+                                              &nbsp;
+                                        </div>
+                                       
+                                    </div>
+                                </div>    
+                            </div>
+                            <!-- header end -->
+                        </div>
+                    </div>
+                    <!--- item end -->
+                    
+                </div>
+            </div>  
+                    
+           <div class="panel-full">
+                      
+                        <div class="panel-full-content">
+                            <h2>Business Proofs</h2>
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                            <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                                           <h4>Pan card (5 Points)</h4>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                                            {% if pancard.id %}
+                                                            {% if pancard.verified == False %}
+                                                                  <input type="file" name="pancard" id="pancard"/>
+                                                                  <p>Pancard Uploaded and verification pending <a href="#" class="delete_document btn-sm btn btn-danger" data-role="business" data-id="{{pancard.id}}">Delete</a></p>
+                                                             {% else %}
+                                                             <p>Pancard Uploaded and verified </p>
+                                                             {% endif %}
+                                                          {% else %}
+                                                                  <input type="file" name="pancard" id="pancard"/>
+                                                          {% endif %}
+                                                        </div>
+                                                    </div>
+                                                 </div>
+                                                 
+                                                 <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="col-md-4 col-sm-2 col-xs-12">
+                                                               <h4>Existing bank account statement (3 Points)</h4>
+                                                            </div>
+                                                            <div class="col-md-4 col-sm-2 col-xs-12">
+
+                                                            {% if bankstatement.id %}
+                                                            {% if bankstatement.verified == False %}
+                                                                  <input type="file" name="bankstatement" id="bankstatement"/>
+                                                                  <p>Bank Statement Uploaded and verification pending <a href="#" class="delete_document btn-sm btn btn-danger" data-role="business" data-id="{{bankstatement.id}}">Delete</a></p>
+                                                             {% else %}
+                                                             <p>Bank Statement Uploaded and verified </p>
+                                                             {% endif %}
+                                                          {% else %}
+                                                                  <input type="file" name="bankstatement" id="bankstatement"/>
+                                                          {% endif %}
+                                                            </div>
+                                                        </div>
+                                                     </div>
+        
+        
+                                                     <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                   <h4>Lease/ Leave & license agreement / Rent agreement copy(3 points)</h4>
+                                                                </div>
+                                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                     
+
+                                                                     {% if rentagreement.id %}
+                                                                     {% if rentagreement.verified == False %}
+                                                                           <input type="file" name="rentagreement" id="rentagreement"/>
+                                                                           <p>Rent Agreement Uploaded and verification pending <a href="#" class="delete_document btn-sm btn btn-danger" data-role="business" data-id="{{rentagreement.id}}">Delete</a></p>
+                                                                      {% else %}
+                                                                      <p>Rent Agreement Uploaded and verified </p>
+                                                                      {% endif %}
+                                                                   {% else %}
+                                                                           <input type="file" name="rentagreement" id="rentagreement"/>
+                                                                   {% endif %}
+                                                                </div>
+                                                            </div>
+                                                         </div>
+                                                   
+                                                           <div class="row">
+                                                                <div class="col-lg-12">
+                                                                    <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                       <h4>Utility bill (Electricity, fixed landline, Water bill) in the name of the firm(3 points)</h4>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                         {% if utilitybill.id %}
+                                                                         {% if utilitybill.verified == False %}
+                                                                               <input type="file" name="utilitybill" id="utilitybill"/>
+                                                                               <p>Utility Bill Uploaded and verification pending <a href="#" class="delete_document btn-sm btn btn-danger" data-role="business" data-id="{{utilitybill.id}}">Delete</a></p>
+                                                                          {% else %}
+                                                                          <p>Utility Bill Uploaded and verified </p>
+                                                                          {% endif %}
+                                                                       {% else %}
+                                                                               <input type="file" name="utilitybill" id="utilitybill"/>
+                                                                       {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                             </div>
+        
+        
+                                                             <div class="row">
+                                                                    <div class="col-lg-12">
+                                                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                           <h4>Registration certificate/license issued by Municipal authorities such as Shop & Establishment (3 Points)</h4>
+                                                                        </div>
+                                                                        <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                          
+                                                                             {% if registration_certificate.id %}
+                                                                             {% if registration_certificate.verified == False %}
+                                                                                   <input type="file" name="registration_certificate" id="registration_certificate"/>
+                                                                                   <p>Registration certificate Uploaded and verification pending <a href="#" class="delete_document btn-sm btn btn-danger" data-role="business" data-id="{{registration_certificate.id}}">Delete</a></p>
+                                                                              {% else %}
+                                                                              <p>Registration certificate Uploaded and verified </p>
+                                                                              {% endif %}
+                                                                           {% else %}
+                                                                                   <input type="file" name="registration_certificate" id="registration_certificate"/>
+                                                                           {% endif %}
+                                                                        </div>
+                                                                    </div>
+                                                                 </div>
+        
+        
+                                                                 <div class="row">
+                                                                        <div class="col-lg-12">
+                                                                            <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                               <h4>GST No.(20 points)</h4>
+                                                                            </div>
+                                                                            <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                                 <input name="gst_no" value="{{ business.gst_no}}" id="gst_no" type="text"/>
+                                                                            </div>
+                                                                        </div>
+                                                                     </div>   
+                                           
+                                         
+                                         <div class="row my-doc-img">
+                                             {% for image in images %}
+                                             {% static "" as baseUrl %}
+                                            <div class="col-lg-2 col-sm-2 col-xs-12">
+                                              <figure>
+                                                  <img src="{{baseUrl}}uploads/documents/{{image.path}}">
+                                              </figure>
+                                            </div>
+                                            {% endfor %}                                 
+                                         </div>  
+                                    </div>
+                                    <!-- header end -->
+                                    
+                                </div>
+                            </div>
+                            <!--- item end -->
+                            
+                        </div>
+                    </div>         
+                    
+                    <div class="panel-full">
+                      
+                        <div class="panel-full-content">
+                         <!--   <h2>Upload Videos</h2> -->
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                   <div class="panel-full-header">
+                                        
+                                     <!-- <   <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                   <h4>Choose your Videos</h4>
+                                                </div>
+                                                <div class="col-md-4 col-sm-2 col-xs-12">
+                                                     <input name="videos" id="videos" multiple type="file"/>
+                                                </div>
+                                            </div>
+                                         </div>   -->
+                                           
+                                         
+                                         <div class="row my-doc-img">
+                                           
+                                                {% for image in images %}
+                                                {% static "" as baseUrl %}
+                                               <div class="col-lg-2 col-sm-2 col-xs-12">
+                                                 <figure>
+                                                     <video src="{{baseUrl}}uploads/documents/{{image.path}}" controls></video>
+                                                 </figure>
+                                               </div>
+                                               {% endfor %} 
+
+                                         </div>  
+                                    </div>
+                                    <!-- header end -->
+                                    <div class="panel-full-header">
+                                     <button type="submit" id="more_fields2">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--- item end -->
+                            
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                
+        </div>
+        {% csrf_token %}
+        </form>
+    </div>
+    <!-- row welcome panel end -->
+    
+</div>
+<script>
+                    $(".delete_document").on("click", function(e){
+                     e.preventDefault();
+                     e.stopPropagation();
+                     mediaId = $(this).data("id");
+                     mediaRole = $(this).data("role");
+                     $.ajax({
+                         type:'GET',
+                         url:'/delete_media_file',
+                         data:'media_id='+mediaId+"&media_role="+mediaRole,
+                         success:function(res, status, xHr){
+                             if(confirm("File Deleted, Do you want to refresh the page?")){
+                                 location.reload();
+                             }
+                         }
+                     })
+                });
+    $('#addBusinessForm').validate({
+        rules: {
+            business_name: "required",
+            email: {
+              required: true,
+              email: true
+            },
+            first_name:"required",
+            contact_number:"required",
+            address1:{ 
+                required: true,
+                maxlength:100,
+            },
+            country: "required",
+            state: "required",
+            city: "required",
+            pincode: "required",
+            aboutus: {
+                required: true,
+                maxlength: 300
+            },
+            title: {
+                required :true,
+                maxlength:64
+            },
+          },
+          messages: {
+              business_name: "Business Name is required",
+            email: {
+              required: "Please provide your email to login",
+              email: "Your email address must be in the format of name@domain.com"
+            },
+            address1:{
+                required: "Please enter the Address 1",
+                maxlength:"maximum 100 characters are allowed" 
+            } ,
+            contact_number:"Please provide contact number",
+            first_name: "Contact Person name is required",
+            country: "Please select the Country",
+            state: "Please select the State",
+            city: "Please enter the City",
+            pincode: "Please enter the Pincode",
+            aboutus:{
+                required: "Please enter the about detail",
+                maxlength:"maximum 300 characters are allowed"
+            },
+            title: {
+                required: "Please enter the Title",
+                maxlength:"maximum 64 characters are allowed"
+            }
+          }
+        });
+</script>
+{% endblock %}

@@ -1,0 +1,259 @@
+{% extends 'app/layouts/layout.html' %}
+{% block content  %}
+            <!-- content section begin -->
+            <div class="cl-default-wrapper">
+                <div class="cl-default-wrapper-in">
+                    <div class="container">
+                        <div class="row">
+                            
+                            <!-- content left section begin -->
+                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12">
+                                <!-- add section begin -->
+                                <div class="cl-add-section">
+                                    <!-- item begin -->
+                                <!--    <div class="cl-add-item">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-zero">
+                                            <div class="cl-add-item-detail">
+                                                <h4>
+                                                    <span><i class="fas fa-audio-description"></i></span>
+                                                    <a href="#">Responsive Website In Rs.3500 - Email + Hosting + Domain</a>
+                                                </h4>
+                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer. my text of the printing and typesetting industry.</p>
+                                                <h6><span><a href="#">C1/15 c, Rama Park, Uttam Nagar ,Near Dwarka Mor Metro‎</a></span>‎</h6>
+                                            </div>
+                                            <div class="cl-add-item-icons">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#">
+                                                            250
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="tel:0000000000">
+                                                            Call Now
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="http://www.bizrefpro.com">
+                                                            Visit Website
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                                    <!-- item end -->
+                                    <!-- item begin -->
+                                   <!-- <div class="cl-add-item">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-zero">
+                                            <div class="cl-add-item-detail">
+                                                <h4>
+                                                    <span><i class="fas fa-audio-description"></i></span>
+                                                    <a href="#">Responsive Website In Rs.3500 - Email + Hosting + Domain</a>
+                                                </h4>
+                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer. my text of the printing and typesetting industry.</p>
+                                                <h6><span><a href="#">C1/15 c, Rama Park, Uttam Nagar ,Near Dwarka Mor Metro‎</a></span>‎</h6>
+                                            </div>
+                                            <div class="cl-add-item-icons">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#">
+                                                            250
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="tel:0000000000">
+                                                            Call Now
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="http://www.bizrefpro.com">
+                                                            Visit Website
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <!-- item end -->
+                                   <!-- <p>Currently we are building Genuine Database. Please check back soon</p>-->
+                                    {% for business in businesses %}
+                                    <!-- item begin -->
+                                        <div class="cl-add-item">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-zero">
+                                            <div class="cl-add-item-detail">
+                                                <h4><a href="#">{{ business.title|truncatewords:64 }}</a></h4>
+                                                <p>{{ business.description|truncatewords:300 }}</p>
+                                                <h6><span><a href="#">{{ business.address|truncatewords:100 }}‎</a></span>‎</h6>
+                                            </div>
+                                            <div class="cl-add-item-icons">
+                                                <ul>
+
+                                                   <!-- <li>
+                                                        <a href="#">
+                                                            {{business.rank}}
+                                                        </a>
+                                                    </li>-->
+                                                    <li>
+                                                        <a href="tel:{{business.contact}}">
+                                                            Call Now
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a target= "_blank" href="{{business.website}}">
+                                                            Visit Website
+                                                        </a>
+                                                    </li>
+													<li>
+														<i class="fas fa-thumbs-up" data-id="{{business.business_id}}"></i>&nbsp;
+														<span>{{business.rank}}</span>
+                                                    </li>
+													<li>
+														<i class="fas fa-thumbs-down"></i>&nbsp;
+														<!--<span>12</span>-->
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- item end -->
+                                   {% endfor %}
+                                </div>
+                                <!-- add section end -->
+                            </div>
+                            <!-- content left section end -->
+                            <!-- content left section begin -->
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                                <!-- add section begin -->
+                                <div class="cl-add-section">
+                                    <!-- item begin -->
+                                   <!-- <div class="cl-add-item">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-zero">
+                                            <div class="cl-add-item-detail">
+                                                <h4>
+                                                    <a href="#">Responsive Website In Rs.3500 - Email + Hosting + Domain</a>
+                                                </h4>
+                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer. my text of the printing and typesetting industry.</p>
+                                                <h6><span><a href="#">C1/15 c, Rama Park, Uttam Nagar ,Near Dwarka Mor Metro‎</a></span>‎</h6>
+                                            </div>
+                                            <div class="cl-add-item-icons">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#">
+                                                            250
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="tel:0000000000">
+                                                            Call Now
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="http://www.bizrefpro.com">
+                                                            Visit Website
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <!-- item end -->
+                                    <!-- item begin -->
+                                   <!-- <div class="cl-add-item">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-zero">
+                                            <div class="cl-add-item-detail">
+                                                <h4>
+                                                    <a href="#">Responsive Website In Rs.3500 - Email + Hosting + Domain</a>
+                                                </h4>
+                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer. my text of the printing and typesetting industry.</p>
+                                                <h6><span><a href="#">C1/15 c, Rama Park, Uttam Nagar ,Near Dwarka Mor Metro‎</a></span>‎</h6>
+                                            </div>
+                                            <div class="cl-add-item-icons">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#">
+                                                            250
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="tel:0000000000">
+                                                            Call Now
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="http://www.bizrefpro.com">
+                                                            Visit Website
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <!-- item end -->
+                                </div>
+                                <!-- add section end -->
+                            </div>
+                            <!-- content left section end -->
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content section end -->
+            <!--thumbs up section-->
+               <!-- The Modal -->
+<div class="modal fade" id="thums_up">
+        <div class="modal-dialog">
+          <div class="modal-content">
+      
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Thumbs Up</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+      
+            <!-- Modal body -->
+            <div class="modal-body">
+              <div class="row" id="send_otp_mail">
+                  <div class="col-md-10">
+                      <input type="hidden" id="business_id" name="business_id" value="0">
+                      <input type="email" name="email" id="email" class="form-control" placeholder="Enter Your Registered Email Id">
+                      <p id="message1" style="display:none"></p>
+                  </div>
+                  <div class="col-md-2">
+                      <button class="form-control bg-info" id="sendOtp">Send Otp</button>
+                  </div>
+              </div>
+              <div class="row" id="get_otp" style="display:none">
+                    <div class="col-md-10">
+                        <input type="text" name="otp" id="otp" class="form-control" placeholder="Enter Your Otp">
+                        <p id="message2" style="display:none"></p>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="form-control bg-info" id="thumsup">ThumsUp</button>
+                    </div>
+                </div>
+                <div class="row" id="displayMessage" style="display:none">
+                    <div class="col-md-10">
+                        <p id="message3" style="display:none"></p>
+                    </div>
+                    <div class="col-md-2">
+                      &nbsp;
+                    </div>
+                </div>
+
+            </div>
+      
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+      
+          </div>
+        </div>
+      
+      </div>
+      
+            
+ 
+            {% endblock %}

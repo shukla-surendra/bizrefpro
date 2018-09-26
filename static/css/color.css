@@ -1,0 +1,42 @@
+
+/*============================================
+                color
+==============================================*/
+
+.c-blue-dark {
+    color: #00294d;
+}
+.c-blue-light {
+    color: #0054a0;
+}
+.c-orange-dark {
+    color: #f7841b;
+}
+.c-orange-light {
+    color: #fc8b53;
+}
+
+
+/*============================================
+                background color
+==============================================*/
+
+.bg-blue-dark {
+    background-color: rgba(0, 41, 77, 1);
+}
+.bg-blue-light {
+    background-color: rgba(0, 84, 160, 1);
+}
+.bg-orange-dark {
+    background-color: rgba(247, 132, 27, 1);
+}
+.bg-orange-light {
+    background-color: rgba(252, 139, 83, 1);
+}
+
+
+/*============================================
+                border color
+==============================================*/
+
+

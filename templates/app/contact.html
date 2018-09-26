@@ -1,0 +1,75 @@
+
+          {% extends 'app/layouts/layout.html' %}
+          {% block content  %}
+          <!-- content section begin -->
+            <div class="cl-default-wrapper">
+                <div class="cl-default-wrapper-in">
+                    <div class="container">
+                        <div class="row">
+                            
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="contact-left">
+                                    <h2 itemprop="keyword">We Welcome to All  Professionals International Business Community And Official Organisations.</h2>
+                                    <h5 itemprop="brand">Itinfo Technologies Pvt. Ltd</h5>
+                                    <h6 itemprop="address">4th Floor, Plot No. 94, Dwarka Sec. 13, <br> New Delhi - 110078</h6>
+                                    <h6 itemprop="email"><strong>Email : </strong>info@bizrefpro.com</h6>
+                                    <h6 itemprop="telephone"><strong>Phone : </strong>(+91)-9821 677 950</h6>
+                                    <ul class="social-links">
+                                        <li>
+                                            <a itemprop="url" href="https://www.facebook.com/bizrefpro" target="_blank">
+                                                <i class="fab fa-facebook-f"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a itemprop="url" href="https://www.linkedin.com/company/business-referral-program/" target="_blank">
+                                                <i class="fab fa-linkedin-in"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="contact-form">
+                                        {% if messages %}
+                                        <ul class="messages">
+                                            {% for message in messages %}
+                                            {% if message.tags == "success" %}
+                                            <div class="alert alert-success">
+                                                <strong>Success!</strong> {{ message }}
+                                              {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                    <form name="form1" id="form1" method="post">
+                                        {% csrf_token %}
+                                        <div class="form-row">
+                                            <label>Name<span>*</span></label>
+                                                 <input name="name" id="name" required="" type="text">
+                                        </div>
+                                        <div class="form-row">
+                                            <label>Email<span>*</span></label>
+                                            <input name="email" id="email" required="" type="text">
+                                        </div>
+
+                                        <div class="form-row">
+                                            <label>Contact<span>*</span></label>
+                                            <input name="contact" id="fcontact" required="" type="text">
+                                        </div>
+                                        <div class="form-row">
+                                            <label>Message<span>*</span></label>
+                                            <textarea name="message" id="fmessage"></textarea>
+                                        </div>
+                                        <div class="form-row">
+                                            <button type="submit" onclick="">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content section end -->
+
+        {% endblock %}

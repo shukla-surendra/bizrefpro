@@ -1,0 +1,119 @@
+{% extends 'user/layouts/layout.html' %}
+{% block content  %}
+                    <div class="body-wrap">
+                        <!-- row welcome panel begin -->
+                        <div class="row">
+                            <form action="" id="header-form" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="section-title">
+                                    <h2><i class="fa fa-file-text-o"></i>Add Member</h2>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                    {% if messages %}
+                                    <ul class="messages">
+                                        {% for message in messages %}
+                                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                
+                                        <div class="panel-full">
+                                            <div class="panel-full-content">
+                                                <!--- item begin -->
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                                    <div class="panel-full-postbox">
+                                                        <!-- header begin -->
+                                                        <div class="panel-full-header">
+                                                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                                               <h4>Name</h4>
+                                                            </div>
+                                                            <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                 <input type="text" name="name" required placeholder="Enter Member Name"/>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <!-- header end -->
+                                                        
+                                                    </div>
+                                                </div>
+                                                <!--- item end -->
+
+                                                 <!--- item begin -->
+                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                                    <div class="panel-full-postbox">
+                                                        <!-- header begin -->
+                                                        <div class="panel-full-header">
+                                                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                                               <h4>Email</h4>
+                                                            </div>
+                                                            <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                 <input type="text" name="email" required placeholder="Enter Member Email"/>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <!-- header end -->
+                                                        
+                                                    </div>
+                                                </div>
+                                                <!--- item end -->
+
+                                                 <!--- item begin -->
+                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                                    <div class="panel-full-postbox">
+                                                        <!-- header begin -->
+                                                        <div class="panel-full-header">
+                                                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                                               <h4>Contact Number</h4>
+                                                            </div>
+                                                            <div class="col-md-4 col-sm-2 col-xs-12">
+                                                                 <input type="text" name="phone" required />
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <!-- header end -->
+                                                        
+                                                    </div>
+                                                </div>
+                                                <!--- item end -->
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                        
+										
+										<div class="panel-full">
+                                            <div class="panel-full-content">
+                                                <!--- item begin -->
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                                    <div class="panel-full-postbox">
+                                                        <!-- header begin -->
+                                                        <div class="panel-full-header">
+                                                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                                           
+                                                            </div>
+                                                            <div class="col-md-4 col-sm-2 col-xs-12">
+                                                               
+                                                            </div>
+                                                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                                               <!-- <a href="#" >Connect</a>-->
+                                                                <button id="mybtn4">Save</button>
+                                                            </div>
+                                                        </div>
+                                                        <!-- header end -->
+                                                        
+                                                    </div>
+                                                </div>
+                                                <!--- item end -->
+                                            </div>
+                                        </div>
+                                    
+                            </div>
+                            </form>
+                        </div>
+                        <!-- row welcome panel end -->
+                        
+                    </div>
+               {% endblock%}

@@ -1,0 +1,79 @@
+{% extends 'administration/layouts/layout.html' %}
+{% block content  %} 
+<section class="content">
+        <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+                  <!-- general form elements -->
+                  <div class="box box-primary">
+                    <div class="box-header with-border">
+                      <h3 class="box-title">Employee Form</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" action="" method="post">
+                        {% csrf_token %}
+                      <div class="box-body">
+                        <div class="form-group">
+                            <label for="first_name">First Name</label>
+                            <input type="text" required="required" class="form-control" id="first_name" name="first_name" placeholder="First Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="First Name">
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Email address</label>
+                          <input type="email" name = "email" required="required" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                                <label for="role">Role</label>
+                                <select name="role" class="form-control" id="role">
+                                    <option value="state-manager">State Manager</option>
+                                    <option value="zone-manager">Zone/City Manager</option>
+                                    <option value="executive">Executive</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="state">State</label>
+                          <select name="state" class="form-control" id="state">
+                              <option value="0">Select State</option>
+                              {% for state in states%}
+                              <option value="{{state.id}}">{{state.name}}</option>
+                              {% endfor %}
+                          </select>
+                        </div>
+                        <div class="form-group" id="zone-form-group" style="display:none">
+                          <label for="zone">Zone</label>
+                          <select name="zone" class="form-control" id="zone">
+                              <option value="0">Select Zone</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleInputPassword1">Password</label>
+                          <input type="password" name = "password" required="required" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        </div>
+                        
+                        
+                      </div>
+                      <!-- /.box-body -->
+        
+                      <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- /.box -->
+        
+               
+        
+                </div>
+                <!--/.col (left) -->
+        
+              </div>
+              <!-- /.row -->
+</section>
+{% endblock %}

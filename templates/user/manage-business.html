@@ -1,0 +1,61 @@
+{% extends 'user/layouts/layout.html' %}
+{% block content  %}
+                    <div class="body-wrap">
+					<!-- row welcome panel begin -->
+                        <div class="row">
+                            
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="section-title">
+                                    <h2><i class="fa fa-file-text-o"></i>Manage Business</h2>
+                                </div>
+                                <div class="section-tab-add">
+                                    <a class="btn btn-info" href="/user/add-business">Add New</a>
+                                     <button type="button" id="deleteall" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
+
+                            {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+                            
+                            <div class="col-md-12">
+                                <div class="posts-panel">
+                                    <div class="posts-panel-content">
+                                        
+                                        <div id="no-more-tables">
+                                            <table class="col-md-12 table-condensed pad-zero">
+                                                <thead class="thead-inverse">
+                                                    <tr>
+                                                        <th><input type="checkbox" class="checkall"> Name</th>
+                                                        <th>Contact No.</th>
+                                                        <th>Category</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="tbody-inverse">
+                                                {% for business in businesses %}
+                                                     <tr>
+                                                    	<td><input type="checkbox" value="{{business.id}}" name="selectcheck" class="selectcheck">&nbsp;&nbsp;{{business.business_name}}</td>
+                                                        <td>{{business.contact_number}}</td>
+                                                        <td>  {% for category in business.categories.all %}
+                                                            {{category.name}},
+                                                             {% endfor %}</td>
+                                                        <td><a href="/user/edit-business/{{business.id}}">Edit</a>&nbsp;<a href="#" onclick = "javascript:confirm('Are you sure to want to delete?')?location.href='/user/delete-business/{{business.id}}':''">/ Delete</a></td>
+                                                    </tr>
+                                                    {% endfor %}      
+                                               </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- row welcome panel end -->
+                        
+                    </div>
+                    {% endblock  %}

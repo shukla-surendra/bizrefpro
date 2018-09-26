@@ -1,0 +1,112 @@
+{% extends 'executive/executive/layouts/layout.html' %}
+{% block content  %} 
+ <!-- right content section begin -->
+ <section class="panel-content-wrap col-lg-10 col-md-10 col-sm-11 col-xs-10">
+    <div class="panel-body">
+        <div class="body-wrap">
+            <!-- row welcome panel begin -->
+            <div class="row">
+                <form action="" id="header-form" method="post" enctype="multipart/form-data">
+                    
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <div class="section-title">
+                        <h2><i class="fa fa-tachometer"></i>{{breadcrumb}}</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-12">
+                            
+                      <div class="panel-full">
+                      
+                        <div class="panel-full-content">
+                            <h2>Search by</h2>
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                    
+                                         <div class="col-md-3 col-sm-3 col-xs-12">
+                                           <label>Start date</label><br>
+                                            <input type="date" name="startDate" id="startDate" placeholder="">
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                           <label>End date</label><br>
+                                            <input type="date" name="endDate" id="endDate" placeholder="">
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                             <a href="/static/executive/#" id="mybtn6">Submit</a>
+                                        </div>
+                                        
+                                    </div>
+                                    <!-- header end -->
+                                    
+                                </div>
+                            </div>
+                            <!--- item end -->
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="col-md-12">
+                    <div class="posts-panel">
+                        <div class="posts-panel-content">
+                            
+                            <div id="no-more-tables">
+                                <table class="col-md-12 table-condensed pad-zero" id="leadDataTable">
+                                    <thead class="thead-inverse">
+                                        <tr>
+                                            <th><input type="checkbox" class="checkall">Leads</th>
+                                            <th>Registration Date</th>
+                                            <th>Renewell Date <a href="/static/executive/#"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a> <a href="/static/executive/#"><i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i></a></th>
+                <th>Amount</th>
+                                             <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tbody-inverse">
+                                      
+                                   </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+            <!-- row welcome panel end -->
+            
+        </div>
+    </div>
+</section>
+<script>
+    $('#leadDataTable').DataTable( {
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": "/executive/get_executive_lead?executive_id={{executive_id}}&role={{target_role}}&zone={{target_zone}}&state={{state}}",
+        "type": "GET",
+    },
+    "columns": [
+        { "data": "lead" },
+        { "data": "created" },
+        { "data": "renew" },
+        { "data": "revenue" },
+        { "data": "status" }
+    ]
+} );
+
+$(document).on("click", "#mybtn6", function(e){
+    e.preventDefault();
+     startDate = $("#startDate").val();
+     endDate = $("#endDate").val();
+     searchField = startDate+","+endDate;
+    $("#leadDataTable").dataTable().api().columns(0).search(searchField).draw();
+
+});
+
+</script>
+<!-- right content section end -->
+{% endblock %}

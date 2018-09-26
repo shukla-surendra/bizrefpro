@@ -1,0 +1,24 @@
+{% extends 'app/layouts/layout.html' %}
+{% block content  %}
+           
+            
+            <!-- content section begin -->
+            <div class="cl-default-wrapper">
+                <div class="cl-default-wrapper-in">
+                    <div class="container">
+                        <div class="row">
+                            
+                            {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == "success" %}
+                                <div class="alert alert-success">
+                                    <strong>Success!</strong> {{ message }}
+                                  {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content section end -->
+{% endblock %}
