@@ -4,16 +4,21 @@ from django.contrib.auth.hashers import make_password, check_password
 from .forms import ExecutiveForm
 from django.contrib import messages
 from app.models import Executive, States, Cities, Zones
+from administration.models import Administrator
 
 # Create your views here.
 
 def dashboard(request):
+    if "admin_id" not in request.session:
+        return HttpResponseRedirect('/administration/login')
     pageContext =  {"title": "Bizrefpro Dashboard"}
     pageContext['pageTitle'] = 'Dashboard'
     return render(request, "administration/dashboard.html", pageContext)
 
 
 def add_employee(request):
+    if "admin_id" not in request.session:
+        return HttpResponseRedirect('/administration/login')
     pageContext =  {"title": "Bizrefpro Dashboard"}
     states = States.objects.all()
     pageContext['states'] = states
@@ -43,13 +48,37 @@ def add_employee(request):
 
 
 def all_employee(request):
+    if "admin_id" not in request.session:
+        return HttpResponseRedirect('/administration/login')
     pageContext =  {"title": "Bizrefpro Dashboard"}
     pageContext['pageTitle'] = 'All Employee'
     return render(request, "administration/all_employee.html", pageContext)
 
 
 def login(request):
-    pageContext =  {"title": "Bizrefpro Admin Login"}
+    if "admin_id" in request.session:
+        return HttpResponseRedirect('/administration')
+    pageContext = {}
+    if request.method == 'POST':
+        try:
+            administrator = Administrator.objects.get(email=request.POST['email'])
+            if check_password(request.POST['password'], administrator.password):
+                if administrator.active == False:
+                    pageContext['message_type']="failed"
+                    pageContext['message']="Your Profile is disabled Contact customer care to approve"
+                    return render(request, "administration/login.html", pageContext)
+                else:
+                    request.session['admin_id'] = administrator.id
+                    return HttpResponseRedirect('/administration')
+            else:
+                pageContext['message_type']="failed"
+                pageContext['message']="Incorrect username and password"
+                return render(request, "administration/login.html", pageContext)
+        except:
+            pageContext['message_type']="failed"
+            pageContext['message']="Incorrect username and password"
+            return render(request, "administration/login.html", pageContext)
+    pageContext["title"]= "Bizrefpro Admin Login"
     pageContext['pageTitle'] = 'Bizrefpro Administration Login'
     return render(request, "administration/login.html", pageContext)
 
@@ -76,3 +105,7 @@ def get_executives(request, id):
     except:
         None        
     return HttpResponse(htmlResponse);
+
+def logout(request):
+    request.session.flush()
+    return HttpResponseRedirect('/administration/login')

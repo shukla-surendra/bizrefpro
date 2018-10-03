@@ -292,7 +292,7 @@
                                            <h4>Choose Category</h4>
                                         </div>
                                         <div class="col-md-8 col-sm-8 col-xs-12">
-                                             <select id="category" name="categories" multiple>
+                                             <select id="categories" name="categories" multiple>
                                                  {% for category in categories %}
                                                  {% if category in savedCategories %}
                                                  <option  value="{{category.id}}" selected>{{category.name}}</option>
@@ -341,7 +341,7 @@
                                         </div>
                                         <div class="col-md-4 col-sm-2 col-xs-12">
                                              <select name="website">
-                                                 <option>Select Your Website</option>
+                                                 <option value="">Select Your Website</option>
                                                  {% for website in websites %}
                                                  <option {% ifequal website.id business.website %} {{ "selected" }} {% endifequal %} value="{{website.id}}">{{website.name}}</option>
                                                  {% endfor %}
@@ -591,6 +591,8 @@
               required: true,
               email: true
             },
+            keyword : "required",
+            categories:"required",
             first_name:"required",
             contact_number:"required",
             address1:{ 
@@ -620,6 +622,8 @@
                 required: "Please enter the Address 1",
                 maxlength:"maximum 100 characters are allowed" 
             } ,
+            categories:"Please choose categories",
+            keyword:"Please enter keyword",
             contact_number:"Please provide contact number",
             first_name: "Contact Person name is required",
             country: "Please select the Country",

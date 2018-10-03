@@ -19,6 +19,7 @@ from . import views
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
     path("login", views.login, name="login"),
+    path("logout", views.logout, name="logout"),
     path("add_employee", views.add_employee, name="add_employee"),
     path("all_employee", views.all_employee, name="all_employee"),
     path("get-zones/<int:id>", views.get_zones, name="get_zones"),

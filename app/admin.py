@@ -27,7 +27,7 @@ class CountriesAdmin(admin.ModelAdmin):
     list_display = ['id','name']
 
 class ExecutiveAdmin(admin.ModelAdmin):
-    list_display = ['id','first_name','last_name','email','phone','role']
+    list_display = ['id','first_name','last_name','email','phone','role','zone']
     search_fields = ['role','first_name','last_name']
 
 class KeywordsAdmin(admin.ModelAdmin):

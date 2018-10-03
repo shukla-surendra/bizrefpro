@@ -8,7 +8,7 @@ from app.models import User,Countries, States, Cities,Category, Website, Keyword
 from .rating import calculate_rating
 import time, magic, uuid, urllib.parse, urllib.request
 from bizrefpro.settings import BASE_DIR
-import os, json
+import os, json, datetime
 from app.bizrefpro_mail import send_invitation
 
 
@@ -16,7 +16,14 @@ def dashboard(request):
     if "id" not in request.session:
         return HttpResponseRedirect('/login-register')
     else:
-        return render(request, "user/index.html", {"title": "Best Business Referral Program | Destination to Grow Business"})
+        user = User.objects.get(id= request.session['id'])
+        signupDate = user.created_at.strftime("%d-%m-%Y")
+        expiryDate = user.created_at+datetime.timedelta(days=364)
+        if user.user_type == "f":
+            accountType = "Free"
+        else:
+            accountType = "Paid"
+        return render(request, "user/index.html", {"user":user,"expiryDate":expiryDate,"amount":user.amount,"accountType":accountType,"expiryDate":'',"created_at":signupDate,"title": "Best Business Referral Program | Destination to Grow Business"})
 
 def profile(request):
     if "id" not in request.session:
@@ -317,7 +324,10 @@ def edit_business(request, id):
                     business.keyword = form.cleaned_data['keyword']
                     business.city = form.cleaned_data['city']
                     business.gst_no = form.cleaned_data['gst_no']
-                    business.website = form.cleaned_data['website']
+                    website = request.POST['website']
+                    if website == "":
+                        website = 0;
+                    business.website = website
                     business.save()
                     business.categories.set(request.POST.getlist('categories'))
                     messages.success(request, 'Business Successfully Updated.')
@@ -496,7 +506,10 @@ def add_business(request):
                     state = States.objects.get(id=request.POST['state'])
                 except:
                     state = None
-                business = Business(business_name=form.cleaned_data['business_name'],user=user,address1=form.cleaned_data['address1'],address2=form.cleaned_data['address2'], landmark=form.cleaned_data['landmark'], location=form.cleaned_data['location'],country=country, state=state, city=form.cleaned_data['city'], pincode=form.cleaned_data['pincode'], contact_prefix=form.cleaned_data['contact_prefix'], first_name =form.cleaned_data['first_name'], last_name =form.cleaned_data['last_name'], designation=form.cleaned_data['designation'], landline=form.cleaned_data['landline'],contact_number=form.cleaned_data['contact_number'],email=form.cleaned_data['email'],website=form.cleaned_data['website'], aboutus=form.cleaned_data['aboutus'],title=form.cleaned_data['title'],keyword=form.cleaned_data['keyword'],gst_no=form.cleaned_data['gst_no'])
+                website = request.POST['website']
+                if website == "":
+                    website = 0
+                business = Business(business_name=form.cleaned_data['business_name'],user=user,address1=form.cleaned_data['address1'],address2=form.cleaned_data['address2'], landmark=form.cleaned_data['landmark'], location=form.cleaned_data['location'],country=country, state=state, city=form.cleaned_data['city'], pincode=form.cleaned_data['pincode'], contact_prefix=form.cleaned_data['contact_prefix'], first_name =form.cleaned_data['first_name'], last_name =form.cleaned_data['last_name'], designation=form.cleaned_data['designation'], landline=form.cleaned_data['landline'],contact_number=form.cleaned_data['contact_number'],email=form.cleaned_data['email'],website=website, aboutus=form.cleaned_data['aboutus'],title=form.cleaned_data['title'],keyword=form.cleaned_data['keyword'],gst_no=form.cleaned_data['gst_no'])
                 business.save()
                 business.categories.set(request.POST.getlist('categories'))
 
@@ -624,6 +637,8 @@ def get_user_groupes(request):
     if "id" not in request.session:
         return HttpResponse(json.dumps([]))
     try:
+        total_thumsup = 0
+        total_thumsdown = 0
         start = int(request.GET['start'])
         length = int(request.GET['length'])
         object_list = User.objects.filter(reference_id=request.session['id'])[start:start + length]  # or any kind of queryset
@@ -636,7 +651,22 @@ def get_user_groupes(request):
             for business in busineses:
                 thumbs_up += business.thumbs_up
                 thumbs_down += business.thumbs_down
+                total_thumsup = thumbs_up
+                total_thumsdown = thumbs_down
             list.append({"name": object.name, "positive_points": thumbs_up, "negative_points": thumbs_down, "action":'<a href="#" data-id="'+str(object.id)+'" class="text-danger detach">Detach</a>'})
+        try:
+            current_user = User.objects.get(id=request.session['id'])
+            busineses = Business.objects.filter(user=current_user)
+            for business in busineses:
+                thumbs_up += business.thumbs_up
+                thumbs_down += business.thumbs_down
+                total_thumsup = thumbs_up
+                total_thumsdown = thumbs_down
+            list.append({"name": current_user.name, "positive_points": thumbs_up, "negative_points": thumbs_down, "action":'<a href="#" data-id="'+str(current_user.id)+'" class="text-danger">--</a>'})
+        except:
+            None
+        list.append({"name": '<h4>Total</h4>', "positive_points": total_thumsup, "negative_points": total_thumsdown, "action":'--'})
+        business = Business
         mdict = {"data": list}
         mdict['draw'] = request.GET['draw']
         mdict['recordsTotal'] = total  # show from how many record its filtered.

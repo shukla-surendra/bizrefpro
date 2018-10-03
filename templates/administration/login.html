@@ -34,6 +34,20 @@
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
+      {% ifnotequal message_type "" %}
+      {% ifequal message_type "success"%}
+          <div class="alert alert-success alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Success!</strong>  {{message}}.
+          </div>
+       {% endifequal %}
+    {% ifequal message_type "failed"%}
+          <div class="alert alert-danger alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Failed!</strong>  {{message}}.
+          </div>
+       {% endifequal %}
+     {% endifnotequal %}
     <p class="login-box-msg">Sign in to start your session</p>
 
     <form action="" method="post">

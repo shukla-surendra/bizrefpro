@@ -284,7 +284,7 @@
                                            <h4>Choose Category</h4>
                                         </div>
                                         <div class="col-md-8 col-sm-8 col-xs-12">
-                                            <select id="category" name="categories" multiple>
+                                            <select id="categories" name="categories" multiple>
                                                 {% for category in categories %}
                                                 <option  value="{{category.id}}">{{category.name}}</option>
                                                  {% endfor %}
@@ -328,7 +328,7 @@
                                            <h4>Select Website </h4>
                                         </div>
                                         <div class="col-md-4 col-sm-2 col-xs-12">
-                                             <select name="website">
+                                             <select name="website" id="website">
                                                  <option value="">Select Your Website</option>
                                                  {% for website in websites %}
                                                  <option value="{{website.id}}">{{website.name}}</option>
@@ -492,7 +492,9 @@
               email: true
             },
             first_name:"required",
+            keyword : "required",
             contact_number:"required",
+            categories:"required",
             address1:{ 
                 required: true,
                 maxlength:100,
@@ -521,6 +523,8 @@
                 maxlength:"maximum 100 characters are allowed" 
             } ,
             contact_number:"Please provide contact number",
+            categories:"Please choose categories",
+            keyword:"Please enter keyword",
             first_name: "Contact Person name is required",
             country: "Please select the Country",
             state: "Please select the State",

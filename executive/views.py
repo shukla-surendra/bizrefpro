@@ -66,9 +66,9 @@ def dashboard(request):
     else :
         #city-manager
         pageContext['breadcrumb'] = "Dashboad >> Zone Manager("+executive.first_name+" "+executive.last_name+")"
-        pageContext['zone_id'] = executive.zone.id;
-        pageContext['role'] = executive.role;
-        pageContext['state'] = executive.state;
+        pageContext['zone_id'] = executive.zone.id
+        pageContext['role'] = executive.role
+        pageContext['state'] = executive.state
         return render(request, "executive/zone-manager/index.html", pageContext)
 
 
@@ -84,7 +84,12 @@ def lead_detail(request, id):
     else:
         pageContext['status'] = 'Inactive'
     if executive.role == 'state-manager':
-        pageContext['breadcrumb'] = "State-Manager ("+executive.first_name+" "+executive.last_name+") >> Executive ("+user.executive.first_name+" "+user.executive.last_name+")"
+        try:
+           zone_manager = Executive.objects.get(zone = user.zone,role = 'zone-manager')
+           zone_manager = zone_manager.first_name+" "+zone_manager.last_name
+        except:
+            zone_manager = ""
+        pageContext['breadcrumb'] = "State-Manager ("+executive.first_name+" "+executive.last_name+") >> Zone Manager("+zone_manager+") >>Executive ("+user.executive.first_name+" "+user.executive.last_name+")"
     elif executive.role == 'zone-manager':
         pageContext['breadcrumb'] = "Zone Manager ("+executive.first_name+" "+executive.last_name+")  >> Executive ("+user.executive.first_name+" "+user.executive.last_name+")"
     else:
@@ -185,7 +190,7 @@ def setting(request):
                executive.save()
                messages.success(request, 'Your password is updated')
             else:
-                messages.warning(request, 'Your current password is incorrect');
+                messages.warning(request, 'Your current password is incorrect')
 
     # user = User.objects.get(id=id)
     pageContext = {}
@@ -254,7 +259,7 @@ def executive_list(request, id):
     pageContext['state'] = executive.state
     pageContext['breadcrumb'] = 'Zone Manager('+executive.first_name+""+executive.last_name+') >> Executives'
     if(loggedExecutive.role == 'state-manager'):
-        pageContext['breadcrumb'] = 'State Manager ('+loggedExecutive.first_name+''+loggedExecutive.last_name+') >> '+pageContext['breadcrumb'];
+        pageContext['breadcrumb'] = 'State Manager ('+loggedExecutive.first_name+''+loggedExecutive.last_name+') >> '+pageContext['breadcrumb']
     pageContext['layout_file'] = 'executive/state-manager/layouts/layout.html'
     return render(request, "executive/common/executive.html", pageContext)
 
@@ -270,7 +275,7 @@ def get_executive_data(request):
     searchZone = ""
     try:
         search = str(request.GET.getlist('columns[0][search][value]')[0])
-        dateRange = search.split(",");
+        dateRange = search.split(",")
         searchZone = dateRange[0]
         if dateRange[1] !="" and dateRange[2] !="":
             minRange = timezone.make_aware(datetime.datetime.strptime(dateRange[1], "%Y-%m-%d"))
@@ -327,7 +332,7 @@ def get_executive_data(request):
     mdict['draw'] = request.GET['draw']
     mdict['recordsTotal'] = total  # show from how many record its filtered.
     mdict['recordsFiltered'] = total  # show how many record filtered.
-    return HttpResponse(json.dumps(mdict));
+    return HttpResponse(json.dumps(mdict))
 
 
 # return list of lead for executive, state-manager, zone-manager
@@ -343,7 +348,7 @@ def get_executive_lead(request):
     maxRange = ""
     try:
         search = str(request.GET.getlist('columns[0][search][value]')[0])
-        dateRange = search.split(",");
+        dateRange = search.split(",")
         if dateRange[0] !="" and dateRange[1] !="":
             minRange = timezone.make_aware(datetime.datetime.strptime(dateRange[0], "%Y-%m-%d"))
             maxRange = timezone.make_aware(datetime.datetime.strptime(dateRange[1], "%Y-%m-%d"))          
@@ -352,7 +357,7 @@ def get_executive_lead(request):
     try:
         executive = Executive.objects.get(id=request.GET['executive_id'])
     except:
-        executive = None;
+        executive = None
     start = int(request.GET['start'])
     length = int(request.GET['length'])
     target_role = request.GET['role']
@@ -394,7 +399,7 @@ def get_executive_lead(request):
             status = "Active"
         else:
             status = "In-Active"
-        addedYear = object.created_at+datetime.timedelta(days=364);
+        addedYear = object.created_at+datetime.timedelta(days=364)
         list.append({"lead": '<input type="checkbox" value="'+str(object.id)+'" name="selectcheck" class="selectcheck"><a href="/executive/lead_detail/'+str(object.id)+'">'+object.name+'</a>', "created": str(object.created_at.strftime("%d-%m-%Y")), "renew": str(addedYear.strftime("%d-%m-%Y")), "revenue": object.amount, "status": status})
         totalAmount += object.amount
     list.append({"lead": "<h4>Total:</h4>", "created": "", "renew": "", "revenue": "<h4>"+str(totalAmount)+"</h4>", "status": ""})
@@ -411,7 +416,7 @@ def get_zonecity_manager(request):
     totalRevenue = 0
     try:
         search = str(request.GET.getlist('columns[0][search][value]')[0])
-        dateRange = search.split(",");
+        dateRange = search.split(",")
         searchZone = dateRange[0]
         if dateRange[1] !="" and dateRange[2] !="":
             minRange = timezone.make_aware(datetime.datetime.strptime(dateRange[1], "%Y-%m-%d"))
