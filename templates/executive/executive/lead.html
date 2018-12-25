@@ -1,0 +1,106 @@
+{% extends 'executive/executive/layouts/layout.html' %}
+{% block content  %} 
+<!-- right content section begin -->
+<section class="panel-content-wrap col-lg-10 col-md-10 col-sm-11 col-xs-10">
+    <div class="panel-body">
+        <div class="body-wrap">
+            <!-- row welcome panel begin -->
+            <div class="row">
+                <form action="" id="header-form" method="post" enctype="multipart/form-data">
+                    
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                   <div class="section-title">
+                        <h2><i class="fa fa-tachometer"></i>All Leads</h2>
+                    </div>
+                </div>
+                
+                <div class="col-md-12">
+                            
+                      <div class="panel-full">
+                      
+                        <div class="panel-full-content">
+                            <h2>Search by</h2>
+                            <!--- item begin -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+                                <div class="panel-full-postbox">
+                                    <!-- header begin -->
+                                    <div class="panel-full-header">
+                                        
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            <label>Registration/Expire</label><br>
+                                            <select>
+                                                <option>Select Registration/Expire</option>
+                                                <option>Registration</option>
+                                                <option>Expire</option>
+                                            </select>
+                                        </div>
+                                         <div class="col-md-3 col-sm-3 col-xs-12">
+                                           <label>Start date</label><br>
+                                            <input type="date" placeholder="">
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                           <label>End date</label><br>
+                                            <input type="date" placeholder="">
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                             <a href="#" id="mybtn6">Submit</a>
+                                        </div>
+                                        
+                                    </div>
+                                    <!-- header end -->
+                                    
+                                </div>
+                            </div>
+                            <!--- item end -->
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="col-md-12">
+                    <div class="posts-panel">
+                        <div class="posts-panel-content">
+                            
+                            <div id="no-more-tables">
+                                <table class="col-md-12 table-condensed pad-zero">
+                                    <thead class="thead-inverse">
+                                        <tr>
+                                            <th><input type="checkbox" class="checkall">Leads</th>
+                                            <th>Registration Date</th>
+                                            <th>Renewell Date <a href="#"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a> <a href="#"><i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i></a></th>
+                <th>Amount</th>
+                                             <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="tbody-inverse">
+                                        {% for user in users %}
+                                        <tr>
+                                            <td>
+                <input type="checkbox" value="295" name="selectcheck" class="selectcheck">&nbsp;&nbsp;
+                                                <a href="/executive/lead_detail/{{user.id}}">{{user.name}}</a>
+                </td>
+                                            <td>{{user.created_at.date}}</td>
+                                            <td>31-Mar-18</td> 
+                                             <td>3000</td> 
+                                           <td> Active</td>
+                                        </tr>
+                               {% endfor %}
+                                   </tbody>
+                                
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+            <!-- row welcome panel end -->
+            
+        </div>
+    </div>
+</section>
+<script>
+</script>
+{% endblock %}

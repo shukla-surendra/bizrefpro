@@ -49,6 +49,12 @@
 .cl-home-search .cl-home-search-title h1 {
     color: #333;
     font-size: 24px;
+	line-height: 37px;
+}
+.cl-home-search .cl-home-search-bottom {
+    margin-top: 30px;
+    text-align: center;
+    padding: 0px 8px;
 }
 .cl-home-search .cl-home-search-title {
     margin-bottom: 10px;

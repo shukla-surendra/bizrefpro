@@ -40,10 +40,15 @@
                                                 
                                                     {% for website in websites %}
                                                     <tr>
-                                                            <td><input type="checkbox" value="295" name="selectcheck" class="selectcheck">&nbsp;&nbsp;{{website.name}}</td>
-                                                           <!-- <td>HIT</td> --> 
-                                                            <td><a href="/user/edit-website/{{website.id}}">Edit</a>&nbsp;<a href="/user/delete-website/{{website.id}}">/ Delete</a></td>
-                                                        </tr> 
+														<td>
+															<input type="checkbox" value="295" name="selectcheck" class="selectcheck">&nbsp;&nbsp;{{website.name}}
+														</td>
+														<!-- <td>HIT</td> --> 
+														<td>
+															<a href="/user/edit-website/{{website.id}}" class="ico_edit" alt="Edit" title="Edit"><i class="fa fa-pencil-square-o"></i></a>
+															<a href="/user/delete-website/{{website.id}}" class="ico_delete" alt="Delete" title="Delete"><i class="fa fa-times"></i></a>
+														</td>
+													</tr> 
                                                     {% endfor %}
                                                    
                                                </tbody>

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'user',
     'administration',
     'executive',
+    'django_cron'
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CRON_CLASSES = [
+"app.jobs.SearchSyncCronJob.SearchSyncCronJob",
+# ...
 ]
 
 ROOT_URLCONF = 'bizrefpro.urls'

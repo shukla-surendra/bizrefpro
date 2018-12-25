@@ -1,0 +1,81 @@
+{% extends 'user/layouts/layout.html' %}
+{% block content  %}
+
+                    <div class="body-wrap">
+					<!-- row welcome panel begin -->
+                        <div class="row">
+                            
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="section-title">
+                                    <h2><i class="fa fa-file-text-o"></i>Manage Group Detail</h2>
+                                </div>
+                            </div>
+
+                            {% if messages %}
+							<ul class="messages">
+								{% for message in messages %}
+								<li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+								{% endfor %}
+							</ul>
+							{% endif %}
+                            
+                            <div class="col-md-12">
+                                <div class="posts-panel">
+                                    <div class="posts-panel-content">
+                                        
+                                        <div id="no-more-tables">
+                                            <table class="col-md-12 table-condensed pad-zero" id="groupMember">
+                                                <thead class="thead-inverse">
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Company Name</th>
+                                                        <th>Email</th>
+														<th>Contact No.</th>
+                                                        <th>State</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="tbody-inverse">
+                                                
+                                               </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- row welcome panel end -->
+                        
+                    </div><script>
+                    $('#groupMember').DataTable( {
+                        "processing": true,
+                        "serverSide": true,
+                        "searching": true,
+                        "ajax": {
+                            "url": "/user/get_user_groupes",
+                            "type": "GET",
+                        },
+                        "columns": [
+                            { "data": "name" },
+                            { "data": "positive_points" },
+                            { "data": "negative_points" },
+                            { "data": "action" }
+                        ]
+                    } );
+                    $(document).on("click", ".detach", function(e){
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if(confirm("Are you sure, You want to detach ?")){
+                            id = $(this).data('id');
+                            $.ajax({
+                                url:'/user/detach_user',
+                                type:'GET',
+                                data:'id='+id,
+                                success:function(res, status, xHr){
+                                    location.reload();
+                                }
+                            })
+                        }
+                    });
+                </script>
+               {% endblock  %}

@@ -12,15 +12,15 @@ $("#profileForm").validate({
       city: "required",
     },
     messages: {
-      password: "Please enter the Name",
+      password: "<i>Please enter the Name</i>",
       email: {
-        required: "Please provide your email to login",
-        email: "Your email address must be in the format of name@domain.com"
+        required: "<i>Please provide your email to login</i>",
+        email: "<i>Your email address must be in the format of name@domain.com</i>"
       },
-      phone: "Please enter the Contact Number",
-      address1: "Please enter the Address 1",
-      country: "Please select the Country",
-      state: "Please select the State",
-      city: "Please enter the City",
+      phone: "<i>Please enter the Contact Number</i>",
+      address1: "<i>Please enter the Address 1</i>",
+      country: "<i>Please enter the Country</i>",
+      state: "<i>Please enter the State</i>",
+      city: "<i>Please enter the City</i>",
     }
   })

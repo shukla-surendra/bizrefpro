@@ -30,6 +30,7 @@
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+        <link rel="stylesheet" type="text/css" href="/static/vendors/datatable1.10/datatables.min.css"/>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -347,22 +348,32 @@
             <li class="active"><a href="/administration/add_employee"><i class="fa fa-circle-o"></i> Add New Employee</a></li>
           </ul>
         </li>
-        <!--
-        <li class="treeview">
+                  <li class="active treeview menu-open">
           <a href="#">
-            <i class="fa fa-files-o"></i>
-            <span>Layout Options</span>
+            <i class="fa fa-dashboard"></i> <span>User Management</span>
             <span class="pull-right-container">
-              <span class="label label-primary pull-right">4</span>
+              <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
-            <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
-            <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
-            <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
+            <li><a href="/administration/all_users"><i class="fa fa-circle-o"></i> View All User</a></li>
+
           </ul>
         </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-files-o"></i>
+            <span>Import/Export</span>
+            <span class="pull-right-container">
+              <span class="label label-primary pull-right">2</span>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="/administration/category_import"><i class="fa fa-circle-o"></i> Category Import</a></li>
+            <li><a href="/administration/keyword_import"><i class="fa fa-circle-o"></i> Keywords Import</a></li>
+          </ul>
+        </li>
+        <!--
         <li>
           <a href="pages/widgets.html">
             <i class="fa fa-th"></i> <span>Widgets</span>
@@ -753,6 +764,7 @@
 <!--<script src="/static/administration/dist/js/pages/dashboard2.js"></script> -->
 <!-- AdminLTE for demo purposes -->
 <script src="/static/administration/dist/js/demo.js"></script>
+<script type="text/javascript" src="/static/vendors/datatable1.10/datatables.min.js"></script>
 <script>
   $(document).ready(function(){
     $("#role").change(function(e){
@@ -777,6 +789,67 @@
        })
      })
   });
+</script>
+<script>
+
+                    $('#userDataTable').DataTable( {
+                        "processing": true,
+                        "serverSide": true,
+                        "searching": true,
+                        "ajax": {
+                            "url": "/administration/get_users",
+                            "type": "GET",
+                        },
+                        "columns": [
+                            { "data": "name" },
+                            { "data": "email" },
+                            { "data": "phone" },
+                            { "data": "city" },
+                            { "data": "status" },
+                            { "data": "action" }
+                        ]
+                    } );
+
+ $(document).on("click", ".approve_user", function(e){
+     e.preventDefault();
+     e.stopPropagation();
+     userId = $(this).data("id");
+     if(confirm("Are you sure to approve user")){
+
+         $.ajax({
+         type:'GET',
+         url:'/administration/approve_users',
+         data:"user_id="+userId,
+         success:function(result, status, Xhr){
+          respObject = JSON.parse(result)
+          if(respObject.status){
+              alert(respObject.message)
+              location.reload();
+          }else{
+             alert(respObject.message)
+          }
+         }
+         })
+
+     }
+
+
+ });
+                    </script>
+                    <script>
+$(document).on("change","#parent_id", function(e){
+    e.preventDefault();
+    value = $(this).val();
+    $.ajax({
+    type:'GET',
+    url:'/administration/get_sub_category/'+value,
+    success:function(res, status, xHr){
+        $("#child_id").html(res)
+    }
+    })
+
+
+});
 </script>
 </body>
 </html>

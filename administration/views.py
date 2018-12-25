@@ -3,8 +3,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.hashers import make_password, check_password
 from .forms import ExecutiveForm
 from django.contrib import messages
-from app.models import Executive, States, Cities, Zones
+from app.models import Executive, States, User, Zones, Category, Keyword, Business
 from administration.models import Administrator
+from app.bizrefpro_mail import BizEmailService
+import json, time, magic, csv
+from bizrefpro.settings import BASE_DIR
 
 # Create your views here.
 
@@ -109,3 +112,157 @@ def get_executives(request, id):
 def logout(request):
     request.session.flush()
     return HttpResponseRedirect('/administration/login')
+
+def all_users(request):
+    if "admin_id" not in request.session:
+        return HttpResponseRedirect('/administration/login')
+    pageContext =  {"title": "Bizrefpro Dashboard"}
+    pageContext['pageTitle'] = 'All Users'
+    return render(request, "administration/all_business_users.html", pageContext)
+
+def get_users(request):
+    if "admin_id" not in request.session:
+        return HttpResponse(json.dumps({}))
+    list = []
+    start = int(request.GET['start'])
+    length = int(request.GET['length'])
+    count = User.objects.count()
+    users = User.objects.all().order_by('-id')[start:start+length]
+    for user in users:
+        status = '<span class="text-warning">Pending</span>'
+        action = "<a href='' class='approve_user' data-id = '"+str(user.id)+"'>Approve</a>"
+        if user.active:
+            action = ""
+            status = '<span class="text-success">Approved<span>'
+        list.append({"name":user.name,"email":user.email, "phone": user.phone, "city":user.city,"status":status,"action":action})
+    mdict = {"data": list}
+    mdict['draw'] = request.GET['draw']
+    mdict['recordsTotal'] = count  # show from how many record its filtered.
+    mdict['recordsFiltered'] = count  # show how many record filtered.
+    return HttpResponse(json.dumps(mdict))
+
+def approve_users(request):
+    response = {}
+    if "admin_id" not in request.session:
+        response['status'] = False
+        response['message'] = "Admin not logged in"
+        return HttpResponse(json.dumps(response))
+    user_id = int(request.GET['user_id'])
+    try:
+        user = User.objects.get(id=user_id)
+        user.active = True
+        user.save()
+        user_email = BizEmailService()
+        user_email.send_approval_notification_to_user(user)
+        response['status'] = True
+        response['message'] = "User successfully approved"
+    except:
+        response['status'] = False
+        response['message'] = "Unknown error occured"
+    return HttpResponse(json.dumps(response))
+
+
+def category_import(request):
+    if request.method == 'POST':
+        parent_id = request.POST['parent_id']
+        mime = magic.Magic(mime=True)
+        if "csv_file" in request.FILES:
+            csv_file = request.FILES['csv_file']
+            mimetype = mime.from_buffer(csv_file.read())
+            if mimetype in ["text/plain", 'text/csv']:
+                nt = str(time.time())
+                stamp = nt.replace(".", "-")
+                filename = stamp + "-" + csv_file.name.replace(" ", "-")
+                filename = filename.replace(",", "-")
+                with open(BASE_DIR + '/static/uploads/' + filename, 'wb+') as destination:
+                    for chunk in csv_file.chunks():
+                        destination.write(chunk)
+                with open(BASE_DIR + '/static/uploads/' + filename) as csv_file:
+                    csv_reader = csv.reader(csv_file, delimiter=',')
+                    for row in csv_reader:
+                        try:
+                            if row[0] not in ["", None]:
+                                category = Category(name=row[0],parent_id=parent_id, active=1)
+                                category.save()
+                        except:
+                            pass
+                    messages.success(request, 'CSV successfully imported.')
+    context = {}
+    parent_categories = Category.objects.filter(parent_id=0)
+    context['parent_categories'] = parent_categories;
+    return render(request, "administration/category_import.html", context)
+
+
+def keyword_import(request):
+    if request.method == 'POST':
+        parent_id = request.POST['parent_id']
+        child_id = request.POST['child_id']
+        category = Category.objects.get(id=child_id)
+        mime = magic.Magic(mime=True)
+        if "csv_file" in request.FILES:
+            csv_file = request.FILES['csv_file']
+            mimetype = mime.from_buffer(csv_file.read())
+            if mimetype in ["text/plain", 'text/csv']:
+                nt = str(time.time())
+                stamp = nt.replace(".", "-")
+                filename = stamp + "-" + csv_file.name.replace(" ", "-")
+                filename = filename.replace(",", "-")
+                with open(BASE_DIR + '/static/uploads/' + filename, 'wb+') as destination:
+                    for chunk in csv_file.chunks():
+                        destination.write(chunk)
+                with open(BASE_DIR + '/static/uploads/' + filename) as csv_file:
+                    csv_reader = csv.reader(csv_file, delimiter=',')
+                    for row in csv_reader:
+                        try:
+                            if row[0] not in ["", None]:
+                                keyword = Keyword(name=row[0], category=category, active=True)
+                                keyword.save()
+                        except:
+                            pass
+                    messages.success(request, 'CSV successfully imported.')
+    context = {}
+    parent_categories = Category.objects.filter(parent_id=0)
+    context['parent_categories'] = parent_categories;
+    return render(request, "administration/keyword_import.html", context)
+
+def get_sub_category(request, id):
+    htmlResponse = "";
+    if 'user' in request.GET:
+        try:
+            parent_categories = Category.objects.filter(parent_id=id)
+            for category in parent_categories:
+                htmlResponse += '<li><input type="checkbox" name="categories" class="sub_category_id sub_category_'+str(category.id)+'" value="' + str(category.id) + '">' + category.name + '</li>'
+        except:
+            None
+
+    else:
+        htmlResponse += '<option value="">Select SubCategory</option>'
+        try:
+            parent_categories = Category.objects.filter(parent_id=id)
+            for category in parent_categories:
+                htmlResponse += '<option value="' + str(category.id) + '">' + category.name + '</option>'
+        except:
+            None
+    return HttpResponse(htmlResponse);
+
+def get_keywords(request, id):
+    htmlResponse = "";
+    try:
+        if 'business_id' in request.GET:
+            business_id = request.GET['business_id']
+            business = Business.objects.get(id=business_id)
+            keywords_list = business.keywords.all().values_list('id',flat=True)
+        category = Category.objects.get(id=id)
+        keywords = Keyword.objects.filter(category=category)
+        for keyword in keywords:
+            if 'business_id' in request.GET:
+                if keyword.id in keywords_list:
+                    htmlResponse += '<li> <input type="checkbox" checked="checked" class="keywords_to_add" data-category="'+str(category.id)+'" data-title="' + keyword.name +'" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
+                else:
+                    htmlResponse += '<li> <input type="checkbox" class="keywords_to_add" data-category="' + str(category.id) + '" data-title="' + keyword.name + '" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
+            else:
+                htmlResponse += '<li> <input type="checkbox" class="keywords_to_add" data-category="' + str(category.id) + '" data-title="' + keyword.name + '" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
+    except:
+        print("error")
+    return HttpResponse(htmlResponse);
+

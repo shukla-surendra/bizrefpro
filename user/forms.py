@@ -5,7 +5,7 @@ from app.models import Business, User
 class BusinessForm(forms.ModelForm):
     class Meta:
         model = Business
-        fields = ['business_name', 'address1', 'address2','landmark','location','city','pincode','contact_prefix','first_name', 'last_name', 'designation','landline','contact_number','email','aboutus','title','categories','keyword','gst_no']
+        fields = ['business_name', 'address1', 'address2','landmark','location','city','pincode','first_name', 'last_name', 'designation','landline','contact_number','email','aboutus','title','gst_no', 'category_id']
 
 
 class ProfileForm(forms.ModelForm):

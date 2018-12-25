@@ -44,7 +44,7 @@
                                                         <td>  {% for category in business.categories.all %}
                                                             {{category.name}},
                                                              {% endfor %}</td>
-                                                        <td><a href="/user/edit-business/{{business.id}}">Edit</a>&nbsp;<a href="#" onclick = "javascript:confirm('Are you sure to want to delete?')?location.href='/user/delete-business/{{business.id}}':''">/ Delete</a></td>
+                                                        <td><a href="/user/edit-business/{{business.id}}" class="ico_edit" alt="Edit" title="Edit"><i class="fa fa-pencil-square-o"></i></a>&nbsp;<a href="#" onclick = "javascript:confirm('Are you sure to want to delete?')?location.href='/user/delete-business/{{business.id}}':''"class="ico_delete" alt="Delete" title="Delete"><i class="fa fa-times"></i></a></td>
                                                     </tr>
                                                     {% endfor %}      
                                                </tbody>

@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import User, Business,Contact, Media, Cities, Countries, States, Category, Keyword, Website, Executive, BizRefProSearch, Zones
+from .models import User, Business,Contact, Media, Cities, Countries, States, Category, Keyword, Website, Executive, BizRefProSearch, Zones, Referer, Thumsup, Otp, Location
+
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ['id','name','email','phone','address1']
@@ -27,7 +30,7 @@ class CountriesAdmin(admin.ModelAdmin):
     list_display = ['id','name']
 
 class ExecutiveAdmin(admin.ModelAdmin):
-    list_display = ['id','first_name','last_name','email','phone','role','zone']
+    list_display = ['id','first_name','last_name','email','phone','role']
     search_fields = ['role','first_name','last_name']
 
 class KeywordsAdmin(admin.ModelAdmin):
@@ -45,7 +48,19 @@ class StatesAdmin(admin.ModelAdmin):
 class WebsiteAdmin(admin.ModelAdmin):
     list_display = ['id','name', 'user','category','created_at']
     search_fields = []
-    
+
+
+class RefererAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'email', 'phone', 'referer', 'user']
+    search_fields = []
+
+class ThumsupAdmin(admin.ModelAdmin):
+    list_display = ['email', 'thumbs_up', 'thumbs_down', 'business_id']
+    search_fields = []
+
+class OtpAdmin(admin.ModelAdmin):
+    list_display = ['otp', 'email', 'business_id']
+    search_fields = []
 
 
 admin.site.register(User, UserAdmin)
@@ -61,6 +76,10 @@ admin.site.register(Website, WebsiteAdmin)
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(BizRefProSearch, SearchAdmin)
 admin.site.register(Executive, ExecutiveAdmin)
+admin.site.register(Referer, RefererAdmin)
+admin.site.register(Thumsup, ThumsupAdmin)
+admin.site.register(Otp, OtpAdmin)
+admin.site.register(Location, LocationAdmin)
 
 
 

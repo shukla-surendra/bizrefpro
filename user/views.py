@@ -2,10 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.contrib.auth.hashers import make_password, check_password
-from .forms import BusinessForm, ProfileForm, UpdateProfileForm
-from app.models import User,Countries, States, Cities,Category, Website, Keyword, Business, Media, Referer
-from .rating import calculate_rating
+from .forms import BusinessForm, UpdateProfileForm
+from app.models import User,Countries, States, Cities,Category, Website, Business, Media, Referer, Thumsup, Keyword, Location
+from .rating import calculate_rating, get_calculate_rating
 import time, magic, uuid, urllib.parse, urllib.request
 from bizrefpro.settings import BASE_DIR
 import os, json, datetime
@@ -19,11 +18,23 @@ def dashboard(request):
         user = User.objects.get(id= request.session['id'])
         signupDate = user.created_at.strftime("%d-%m-%Y")
         expiryDate = user.created_at+datetime.timedelta(days=364)
+        expiryDate = expiryDate.strftime("%d-%m-%Y")
+        doc_points = 0
+        businesses = Business.objects.filter(user=user)
+        for business in businesses:
+            doc_points += (get_calculate_rating(business.id) + business.thumbs_up)
+        status = ""
+        if user.active == True:
+            status = "Active"
+        else:
+            status = "Not Active"
         if user.user_type == "f":
             accountType = "Free"
         else:
             accountType = "Paid"
-        return render(request, "user/index.html", {"user":user,"expiryDate":expiryDate,"amount":user.amount,"accountType":accountType,"expiryDate":'',"created_at":signupDate,"title": "Best Business Referral Program | Destination to Grow Business"})
+        if user.member_type == 'l':
+            expiryDate = '-'
+        return render(request, "user/index.html", {"user":user,"expiryDate":expiryDate,"docPoint":doc_points, "amount":user.amount,"accountType":accountType,"status":status, "created_at":signupDate,"title": "Best Business Referral Program | Destination to Grow Business"})
 
 def profile(request):
     if "id" not in request.session:
@@ -65,7 +76,7 @@ def profile(request):
                             oldfile = media.path
                             media.path = fileName
                             media.media_type = mimetype
-                            media.verification_status = 0
+                            media.verified = 1
                             media.save()
                             #deleting old file
                             try:
@@ -74,7 +85,7 @@ def profile(request):
                                 pass
                         except:
                             #save new media
-                            media = Media(title="pancard",path=fileName,user=user, media_type=mimetype, ref_type="user")
+                            media = Media(title="pancard",path=fileName,user=user, media_type=mimetype,verified=1, ref_type="user")
                             media.save();
                 if "dl" in request.FILES:
                     dl = request.FILES['dl']
@@ -87,7 +98,7 @@ def profile(request):
                             oldfile = media.path
                             media.path = fileName
                             media.media_type = mimetype
-                            media.verification_status = 0
+                            media.verified = 1
                             media.save()
                             #deleting old file
                             try:
@@ -96,7 +107,7 @@ def profile(request):
                                 pass
                         except:
                             #save new media
-                            media = Media(title="dl",path=fileName,user=user, media_type=mimetype, ref_type="user")
+                            media = Media(title="dl",path=fileName,user=user, media_type=mimetype, verified=1, ref_type="user")
                             media.save();
                 if "aadhar" in request.FILES:
                     aadhar = request.FILES['aadhar']
@@ -109,7 +120,7 @@ def profile(request):
                             oldfile = media.path
                             media.path = fileName
                             media.media_type = mimetype
-                            media.verified = 0
+                            media.verified = 1
                             media.save()
                             #deleting old file
                             try:
@@ -118,7 +129,7 @@ def profile(request):
                                 pass
                         except:
                             #save new media
-                            media = Media(title="aadhar",path=fileName,user=user, media_type=mimetype, ref_type="user")
+                            media = Media(title="aadhar",path=fileName,user=user, media_type=mimetype, verified=1, ref_type="user")
                             media.save();
                 if "voterid" in request.FILES:
                     voterid = request.FILES['voterid']
@@ -131,7 +142,7 @@ def profile(request):
                             oldfile = media.path
                             media.path = fileName
                             media.media_type = mimetype
-                            media.verification_status = 0
+                            media.verified = 1
                             media.save()
                             #deleting old file
                             try:
@@ -140,7 +151,7 @@ def profile(request):
                                 pass
                         except:
                             #save new media
-                            media = Media(title="voterid",path=fileName,user=user, media_type=mimetype, ref_type="user")
+                            media = Media(title="voterid",path=fileName,user=user, media_type=mimetype,verified=1, ref_type="user")
                             media.save();
 
                 if "electricity" in request.FILES:
@@ -154,7 +165,7 @@ def profile(request):
                             oldfile = media.path
                             media.path = fileName
                             media.media_type = mimetype
-                            media.verification_status = 0
+                            media.verified = 1
                             media.save()
                             #deleting old file
                             try:
@@ -163,7 +174,7 @@ def profile(request):
                                 pass
                         except:
                             #save new media
-                            media = Media(title="electricity",path=fileName,user=user, media_type=mimetype, ref_type="user")
+                            media = Media(title="electricity",path=fileName,user=user, media_type=mimetype,verified=1, ref_type="user")
                             media.save();
                 if "passport" in request.FILES:
                     passport = request.FILES['passport']
@@ -176,7 +187,7 @@ def profile(request):
                             oldfile = media.path
                             media.path = fileName
                             media.media_type = mimetype
-                            media.verification_status = 0
+                            media.verified = 1
                             media.save()
                             #deleting old file
                             try:
@@ -185,7 +196,7 @@ def profile(request):
                                 pass
                         except:
                             #save new media
-                            media = Media(title="passport",path=fileName,user=user, media_type=mimetype, ref_type="user")
+                            media = Media(title="passport",path=fileName,user=user, media_type=mimetype, verified=1, ref_type="user")
                             media.save();
         try:   
             passport = Media.objects.get(title="passport", user=user, ref_type="user")
@@ -247,6 +258,7 @@ def add_website(request):
             uuidKey = uuid.uuid4().hex
             website = Website(name=request.POST['name'], verification_key=uuidKey,user=user)
             website.save()
+            messages.success(request, 'Website Successfully Added.')
         categories = Category.objects.all()
         context = {"title": "Add Website", "message_type":"","categories":categories}
         return render(request, "user/add-website.html", context)
@@ -289,10 +301,11 @@ def edit_business(request, id):
             return HttpResponseRedirect('/login-register')
         else:
             business = Business.objects.get(id=id)
-            savedCategories = business.categories.all()
+            savedKeywords = business.keywords.all()
             countries = Countries.objects.all()
             states = States.objects.all()
             cities = Cities.objects.all()
+            locations = Location.objects.all()
             form = BusinessForm()
             if request.method == "POST":
                 form = BusinessForm(request.POST)
@@ -302,7 +315,7 @@ def edit_business(request, id):
                     business.address2 = form.cleaned_data['address2']
                     business.landmark = form.cleaned_data['landmark']
                     business.location = form.cleaned_data['location']
-                    #
+                    business.category_id = form.cleaned_data['category_id']
                     business.title = form.cleaned_data['title']
                     business.aboutus = form.cleaned_data['aboutus']
                     business.email = form.cleaned_data['email']
@@ -315,21 +328,34 @@ def edit_business(request, id):
                         country = Countries.objects.get(id=request.POST['country'])
                     except:
                         country = None
-                    try:
-                        state = States.objects.get(id=request.POST['state'])
-                    except:
-                        state = None
+                    #try:
+                    #    state = States.objects.get(id=request.POST['state'])
+                    #except:
+                    #    state = None
                     business.country = country
-                    business.state = state
-                    business.keyword = form.cleaned_data['keyword']
+                    #business.state = state
+                    business.state = request.POST['state']
+                    #business.keyword = form.cleaned_data['keyword']
                     business.city = form.cleaned_data['city']
-                    business.gst_no = form.cleaned_data['gst_no']
+                    gst_value = ""
+                    if form.cleaned_data['gst_no']:
+                        gst_value = form.cleaned_data['gst_no']
+                        if gst_value is None:
+                            gst_value = ""
+                    business.gst_no = gst_value
                     website = request.POST['website']
                     if website == "":
                         website = 0;
                     business.website = website
                     business.save()
-                    business.categories.set(request.POST.getlist('categories'))
+                    business.keywords.set(request.POST.getlist('keywords'))
+                    list_parent_category = []
+                    for kid in request.POST.getlist('keywords'):
+                        keyword = Keyword.objects.get(id=kid)
+                        list_parent_category.append(keyword.category.id)
+                    business.categories.set(list_parent_category)
+                    business.state_list.set(request.POST.getlist('states'))
+                    business.locations.set(request.POST.getlist('locations'))
                     messages.success(request, 'Business Successfully Updated.')
                     #saving attached media
                     mime = magic.Magic(mime=True)                    
@@ -343,7 +369,7 @@ def edit_business(request, id):
                                 oldfile = media.path
                                 media.path = fileName
                                 media.media_type=mimetype
-                                media.verification_status = 0
+                                media.verified = 1
                                 media.save()
                                 #deleting old file from system
                                 try:
@@ -351,7 +377,7 @@ def edit_business(request, id):
                                 except OSError:
                                     pass
                             except:
-                                media = Media(title="pancard",path=fileName,business=business, media_type=mimetype, ref_type="business")
+                                media = Media(title="pancard",path=fileName,business=business, media_type=mimetype, ref_type="business", verified=True)
                                 media.save()
                     if "bankstatement" in request.FILES:
                         bankstatement = request.FILES['bankstatement']
@@ -363,7 +389,7 @@ def edit_business(request, id):
                                 oldfile = media.path
                                 media.path = fileName
                                 media.media_type=mimetype
-                                media.verification_status = 0
+                                media.verified = 1
                                 media.save()
                                 #deleting old file from system
                                 try:
@@ -371,7 +397,7 @@ def edit_business(request, id):
                                 except OSError:
                                     pass
                             except:
-                                media = Media(title="bankstatement",path=fileName,business=business, media_type=mimetype, ref_type="business")
+                                media = Media(title="bankstatement",path=fileName,business=business, media_type=mimetype, ref_type="business", verified=True)
                                 media.save()
                     if "rentagreement" in request.FILES:
                         rentagreement = request.FILES['rentagreement']
@@ -383,7 +409,7 @@ def edit_business(request, id):
                                 oldfile = media.path
                                 media.path = fileName
                                 media.media_type=mimetype
-                                media.verification_status = 0
+                                media.verified = 1
                                 media.save()
                                 #deleting old file from system
                                 try:
@@ -391,7 +417,7 @@ def edit_business(request, id):
                                 except OSError:
                                     pass
                             except:
-                                media = Media(title="rentagreement",path=fileName,business=business, media_type=mimetype, ref_type="business")
+                                media = Media(title="rentagreement",path=fileName,business=business, media_type=mimetype, ref_type="business", verified=True)
                                 media.save()
 
                     if "utilitybill" in request.FILES:
@@ -404,7 +430,7 @@ def edit_business(request, id):
                                 oldfile = media.path
                                 media.path = fileName
                                 media.media_type=mimetype
-                                media.verification_status = 0
+                                media.verified = 1
                                 media.save()
                                 #deleting old file from system
                                 try:
@@ -412,7 +438,7 @@ def edit_business(request, id):
                                 except OSError:
                                     pass
                             except:
-                                media = Media(title="utilitybill",path=fileName,business=business, media_type=mimetype, ref_type="business")
+                                media = Media(title="utilitybill",path=fileName,business=business, media_type=mimetype, ref_type="business", verified=True)
                                 media.save()
 
                     if "registration_certificate" in request.FILES:
@@ -425,7 +451,7 @@ def edit_business(request, id):
                                 oldfile = media.path
                                 media.path = fileName
                                 media.media_type=mimetype
-                                media.verification_status = 0
+                                media.verified = 1
                                 media.save()
                                 #deleting old file from system
                                 try:
@@ -433,11 +459,11 @@ def edit_business(request, id):
                                 except OSError:
                                     pass
                             except:
-                                media = Media(title="registration_certificate",path=fileName,business=business, media_type=mimetype, ref_type="business")
+                                media = Media(title="registration_certificate",path=fileName,business=business, media_type=mimetype, ref_type="business", verified=True)
                                 media.save()
                 else:
                     print("Invalid form");    
-            categories = Category.objects.all()
+            categories = Category.objects.filter(parent_id=0)
             user = User.objects.get(id=request.session['id'])
             websites = Website.objects.filter(user=user)
             calculate_rating(business_id=id)
@@ -465,9 +491,20 @@ def edit_business(request, id):
                 rentagreement = None
                 
          
-            myContext = {"title": "Manage Business", "message_type":"","business":business,"websites":websites, "form":form, "categories":categories,"countries":countries,"states":states,"cities":cities,"savedCategories":savedCategories}
+            myContext = {"title": "Manage Business", "message_type":"","business":business,"websites":websites, "form":form, "categories":categories,"countries":countries,"states":states,"cities":cities,"savedKeywords":savedKeywords, "locations":locations}
             myContext['vidoes'] = videos 
             myContext['pancard'] = pancard
+            try:
+                selectedCategories = business.categories.all().values_list('id', flat=True)
+                myContext['selectedCategories'] = selectedCategories
+                choosenCategory = Category.objects.get(id=business.category_id)
+                myContext['category'] = choosenCategory
+                subcategories = Category.objects.filter(parent_id=choosenCategory.id)
+                myContext['subcategories'] = subcategories
+                selected_locations = business.locations.all()
+                myContext['selected_locations'] = selected_locations
+            except:
+                myContext['category'] = None
             myContext['bankstatement'] = bankstatement
             myContext['registration_certificate'] = registration_certificate
             myContext['utilitybill'] = utilitybill
@@ -479,7 +516,8 @@ def add_business(request):
     if "id" not in request.session:
         return HttpResponseRedirect('/login-register')
     else:
-        categories = Category.objects.all();
+        categories = Category.objects.filter(parent_id=0)
+        locations = Location.objects.all()
         user = User.objects.get(id=request.session['id'])
         websites = Website.objects.filter(user=user)
         countries = Countries.objects.all()
@@ -502,37 +540,43 @@ def add_business(request):
                     country = Countries.objects.get(id=request.POST['country'])
                 except:
                     country = None
-                try:
-                    state = States.objects.get(id=request.POST['state'])
-                except:
-                    state = None
+                #try:
+                #    state = States.objects.get(id=request.POST['state'])
+                #except:
+                #    state = None
+                state = request.POST['state']
                 website = request.POST['website']
                 if website == "":
                     website = 0
-                business = Business(business_name=form.cleaned_data['business_name'],user=user,address1=form.cleaned_data['address1'],address2=form.cleaned_data['address2'], landmark=form.cleaned_data['landmark'], location=form.cleaned_data['location'],country=country, state=state, city=form.cleaned_data['city'], pincode=form.cleaned_data['pincode'], contact_prefix=form.cleaned_data['contact_prefix'], first_name =form.cleaned_data['first_name'], last_name =form.cleaned_data['last_name'], designation=form.cleaned_data['designation'], landline=form.cleaned_data['landline'],contact_number=form.cleaned_data['contact_number'],email=form.cleaned_data['email'],website=website, aboutus=form.cleaned_data['aboutus'],title=form.cleaned_data['title'],keyword=form.cleaned_data['keyword'],gst_no=form.cleaned_data['gst_no'])
+                gst_value=""
+                if form.cleaned_data['gst_no']:
+                    gst_value = form.cleaned_data['gst_no']
+                business = Business(business_name=form.cleaned_data['business_name'],user=user,address1=form.cleaned_data['address1'],address2=form.cleaned_data['address2'], landmark=form.cleaned_data['landmark'], location=form.cleaned_data['location'],country=country, state=state, city=form.cleaned_data['city'], pincode=form.cleaned_data['pincode'], first_name =form.cleaned_data['first_name'], last_name =form.cleaned_data['last_name'], designation=form.cleaned_data['designation'],category_id=form.cleaned_data['category_id'],landline=form.cleaned_data['landline'],contact_number=form.cleaned_data['contact_number'],email=form.cleaned_data['email'],website=website, aboutus=form.cleaned_data['aboutus'],title=form.cleaned_data['title'],gst_no=gst_value)
                 business.save()
                 business.categories.set(request.POST.getlist('categories'))
-
+                business.keywords.set(request.POST.getlist('keywords'))
+                business.state_list.set(request.POST.getlist('states'))
+                business.locations.set(request.POST.getlist('locations'))
                 if "pancard" in request.FILES:
                     pancard = request.FILES['pancard']
                     mimetype = mime.from_buffer(pancard.read())
                     if mimetype in ["application/pdf", 'image/png', 'image/jpg', 'image/jpeg', 'image/gif']:
                         fileName = handle_uploaded_file(pancard)
-                        media = Media(title="pancard",path=fileName,business=business, media_type=mimetype, ref_type="business")
+                        media = Media(title="pancard",path=fileName,business=business, media_type=mimetype,verified=1, ref_type="business")
                         media.save();
                 if "bankstatement" in request.FILES:
                     bankstatement = request.FILES['bankstatement']
                     mimetype = mime.from_buffer(bankstatement.read())
                     if mimetype in ["application/pdf", 'image/png', 'image/jpg', 'image/jpeg', 'image/gif']:
                         fileName = handle_uploaded_file(bankstatement)
-                        media = Media(title="bankstatement",path=fileName,business=business, media_type=mimetype, ref_type="business")
+                        media = Media(title="bankstatement",path=fileName,business=business, media_type=mimetype,verified=1, ref_type="business")
                         media.save();
                 if "rentagreement" in request.FILES:
                     rentagreement = request.FILES['rentagreement']
                     mimetype = mime.from_buffer(rentagreement.read())
                     if mimetype in ["application/pdf", 'image/png', 'image/jpg', 'image/jpeg', 'image/gif']:
                         fileName = handle_uploaded_file(rentagreement)
-                        media = Media(title="rentagreement",path=fileName,business=business, media_type=mimetype, ref_type="business")
+                        media = Media(title="rentagreement",path=fileName,business=business, media_type=mimetype,verified=1, ref_type="business")
                         media.save();
 
                 if "utilitybill" in request.FILES:
@@ -540,7 +584,7 @@ def add_business(request):
                     mimetype = mime.from_buffer(utilitybill.read())
                     if mimetype in ["application/pdf", 'image/png', 'image/jpg', 'image/jpeg', 'image/gif']:
                         fileName = handle_uploaded_file(utilitybill)
-                        media = Media(title="utilitybill",path=fileName,business=business, media_type=mimetype, ref_type="business")
+                        media = Media(title="utilitybill",path=fileName,business=business, media_type=mimetype,verified=1, ref_type="business")
                         media.save();
 
                 if "registration_certificate" in request.FILES:
@@ -548,14 +592,14 @@ def add_business(request):
                     mimetype = mime.from_buffer(registration_certificate.read())
                     if mimetype in ["application/pdf", 'image/png', 'image/jpg', 'image/jpeg', 'image/gif']:
                         fileName = handle_uploaded_file(registration_certificate)
-                        media = Media(title="registration_certificate",path=fileName,business=business, media_type=mimetype, ref_type="business")
+                        media = Media(title="registration_certificate",path=fileName,business=business, media_type=mimetype,verified=1, ref_type="business")
                         media.save();
                 for video in videolist:
-                    media = Media(title="",path=video,business=business, media_type="video", ref_type="business")
+                    media = Media(title="",path=video,business=business, media_type="video",verified=1, ref_type="business")
                     media.save();
                 messages.success(request, 'Business Successfully Added.')
                 return redirect('/user/edit-business/'+str(business.id))
-        return render(request, "user/add-business.html", {"title": "Add Business", "message_type":"", "form":form,"categories":categories,"websites":websites,"countries":countries,"states":states,"cities":cities})
+        return render(request, "user/add-business.html", {"title": "Add Business", "message_type":"", "form":form,"categories":categories,"websites":websites,"countries":countries,"states":states,"locations":locations,"cities":cities})
 
 
 # method to handle file uploads
@@ -653,19 +697,32 @@ def get_user_groupes(request):
                 thumbs_down += business.thumbs_down
                 total_thumsup = thumbs_up
                 total_thumsdown = thumbs_down
-            list.append({"name": object.name, "positive_points": thumbs_up, "negative_points": thumbs_down, "action":'<a href="#" data-id="'+str(object.id)+'" class="text-danger detach">Detach</a>'})
+            status = "Pending"
+            if object.active == True:
+                status = '<a href="#" data-id="'+str(object.id)+'" class="text-danger detach">Detach</a>'
+            list.append({"name": object.name, "positive_points": '<a href="/user/view-review-detail/'+str(object.id)+'/positive">'+str(thumbs_up)+'</a>', "negative_points": '<a href="/user/view-review-detail/'+str(object.id)+'/negative">'+str(thumbs_down)+'</a>', "action":status})
+        total_thumsup1 = 0
+        total_thumsdown1 = 0
+        document_point = 0
         try:
+            thumbs_up = 0
+            thumbs_down = 0
             current_user = User.objects.get(id=request.session['id'])
             busineses = Business.objects.filter(user=current_user)
             for business in busineses:
                 thumbs_up += business.thumbs_up
                 thumbs_down += business.thumbs_down
-                total_thumsup = thumbs_up
-                total_thumsdown = thumbs_down
-            list.append({"name": current_user.name, "positive_points": thumbs_up, "negative_points": thumbs_down, "action":'<a href="#" data-id="'+str(current_user.id)+'" class="text-danger">--</a>'})
+                total_thumsup1 = thumbs_up
+                total_thumsdown1 = thumbs_down
+                document_point += get_calculate_rating(business.id)
+            list.append({"name": current_user.name, "positive_points": '<a href="/user/view-review-detail/'+str(current_user.id)+'/positive">'+str(thumbs_up)+'</a>', "negative_points": '<a href="/user/view-review-detail/'+str(current_user.id)+'/negative">'+str(thumbs_down)+'</a>', "action":'<a href="#" data-id="'+str(current_user.id)+'" class="text-danger">--</a>'})
         except:
             None
-        list.append({"name": '<h4>Total</h4>', "positive_points": total_thumsup, "negative_points": total_thumsdown, "action":'--'})
+        total_positive = total_thumsup+total_thumsup1
+        total_negative = total_thumsdown+total_thumsdown1
+        list.append({"name": '<h4>Rating Point</h4>', "positive_points":str(total_positive), "negative_points": total_negative, "action":"<!--<strong>"+str(total_positive-total_negative)+"</strong> (Positive-Negative)-->"})
+        list.append({"name": 'Doc Point', "positive_points":str(document_point) , "negative_points": "", "action":""})
+        list.append({"name": '<h4>Total Point</h4>', "positive_points":str(total_positive+document_point) , "negative_points": "", "action":"<!--<strong>"+str((total_positive+document_point)-total_negative)+"</strong>-->"})
         business = Business
         mdict = {"data": list}
         mdict['draw'] = request.GET['draw']
@@ -688,3 +745,52 @@ def detach_user(request):
     except:
         pass
     return HttpResponse(json.dumps([]))
+
+def view_review_detail(request, id, review_type):
+    context = {}
+    context['id'] = id;
+    context['review_type'] = review_type;
+    return render(request, "user/view-review-detail.html", context)
+
+def get_business_review(request, id, review_type):
+    list = []
+    user = User.objects.get(id=id)
+    businesses = Business.objects.filter(user=user)
+    count = 0
+    for business in businesses:
+        if review_type == "positive":
+            thumsup = Thumsup.objects.filter(business_id=business.id,thumbs_up=1)
+        else:
+            thumsup = Thumsup.objects.filter(business_id=business.id,thumbs_down=1)
+        for thumsObj in thumsup:
+            count = count+1
+            uObj = User.objects.get(email=thumsObj.email)
+            list.append({"name":uObj.name, "email":uObj.email, "state":uObj.state.name})
+    mdict = {"data": list}
+    mdict['draw'] = request.GET['draw']
+    mdict['recordsTotal'] = count  # show from how many record its filtered.
+    mdict['recordsFiltered'] = count  # show how many record filtered.
+    return HttpResponse(json.dumps(mdict))
+
+def get_envitations(request):
+    if "id" not in request.session:
+        return HttpResponse(json.dumps([]))
+    try:
+       mdict = {}
+       user = User.objects.get(id=request.session['id'])
+       start = int(request.GET['start'])
+       length = int(request.GET['length'])
+       referers = Referer.objects.filter(user=user).exclude(referer="").order_by('-id')[start:start+length]
+       count = Referer.objects.filter(user=user).exclude(referer="").count()
+       list = []
+       for obj in referers:
+           list.append({"name":obj.name, "email":obj.email, "phone":obj.phone})
+       mdict = {"data": list}
+       mdict['draw'] = request.GET['draw']
+       mdict['recordsTotal'] = count  # show from how many record its filtered.
+       mdict['recordsFiltered'] = count  # show how many record filtered.
+       return HttpResponse(json.dumps(mdict))
+    except Exception as e:
+        print(e)
+        return HttpResponse(json.dumps([]))
+

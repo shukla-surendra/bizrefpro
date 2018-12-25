@@ -9,129 +9,111 @@
 </ul>
 {% endif %}
     {{form.errors}}
-                        <!-- row welcome panel begin -->
-                        <div class="row">
-                            <form action="" id="header-form" method="post" enctype="multipart/form-data">
-                                {% csrf_token %}
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="section-title">
-                                    <h2><i class="fa fa-file-text-o"></i>Edit Webiste</h2>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-12">
-                                
-                                        <div class="panel-full">
-                                            <div class="panel-full-content">
-                                                <!--- item begin -->
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
-                                                    <div class="panel-full-postbox">
-                                                        <!-- header begin -->
-                                                        <div class="panel-full-header">
-                                                            <div class="col-md-2 col-sm-2 col-xs-12">
-                                                               <h4>Website Name</h4>
-                                                            </div>
-                                                            <div class="col-md-4 col-sm-2 col-xs-12">
-                                                                 <input type="text" name="name" value="{{ website.name }}" placeholder="Enter Your website"/>
-                                                            </div>
-                                                            
-                                                        </div>
-                                                        <!-- header end -->
-                                                        
-                                                    </div>
-                                                </div>
-                                                <!--- item end -->
-                                                
-                                            </div>
-                                        </div>
-                                        
-                                        
-                                        
-                                        <div class="panel-full">
-                                            <div class="panel-full-content">
-                                                <!--- item begin -->
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
-                                                    <div class="panel-full-postbox">
-                                                        <!-- header begin -->
-                                                        <div class="panel-full-header">
-                                                            <div class="col-md-2 col-sm-2 col-xs-12">
-                                                               <h4>Website Verification Status</h4>
-                                                            </div>
-                                                            <div class="col-md-4 col-sm-2 col-xs-12">
-                                                                 <p>{{website.verification_status}}</p>
-                                                                 <a href="/user/download_verification_file/{{website.id}}">Download Verification File</a>
-                                                                 <p>Download and upload this html file to your server. Make sure <a href="{{url}}" target="blank">{{url}}</a> link is accessible and then click <a href="/user/verify_site/{{website.id}}">here</a> to verify the site. </p>
-                                                            </div>
-                                                            
-                                                        </div>
-                                                        <!-- header end -->
-                                                        
-                                                    </div>
-                                                </div>
-                                                <!--- item end -->
-                                                
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="panel-full">
-                                            <div class="panel-full-content">
-                                                <!--- item begin -->
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
-                                                    <div class="panel-full-postbox">
-                                                        <!-- header begin -->
-                                                        <div class="panel-full-header">
-                                                            <div class="col-md-2 col-sm-2 col-xs-12">
-                                                               <h4>SER (Search engine ranking)</h4>
-                                                            </div>
-                                                            <div class="col-md-4 col-sm-2 col-xs-12">
-                                                                <h6>10</h6>
-                                                            </div>
-                                                            <div class="col-md-2 col-sm-2 col-xs-12">
-                                                                <a href="#">How to Improve it</a>
-                                                            </div>
-                                                            
-                                                        </div>
-                                                        <!-- header end -->
-                                                        
-                                                    </div>
-                                                </div>
-                                                <!--- item end -->
-                                                
-                                            </div>
-                                        </div>
+	<!-- row welcome panel begin -->
+	<div class="row">
+		<form action="" id="header-form" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="section-title">
+				<h2><i class="fa fa-file-text-o"></i>Edit Webiste</h2>
+			</div>
+		</div>
+		
+		<div class="col-md-12">
+			
+			<div class="panel-full">
+				<div class="panel-full-content">
+					<!--- item begin -->
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
+						<div class="panel-full-postbox">
+							<!-- header begin -->
+							<div class="panel-full-header">
+							
+								<!-- item begin -->
+								<div class="item_form">
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<label>Website Name</label>
+											<div class="row">
+												<div class="col-md-2 col-sm-2 col-xs-12">
+													<select name="" onchange="myFunction(this.value);">
+														<option value="">Select Url type</option>
+														<option value="http://">http://</option>	
+														<option value="https://">https://</option>
+													</select>
+												</div>
+												<div class="col-md-10 col-sm-10 col-xs-12">
+													<input type="text" id="myText" name="name" value="{{ website.name }}" placeholder="Enter Your website"/>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- item end -->
+								
+								<!-- item begin -->
+								<div class="item_form">
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<label>Website Verification Status</label>
+											<div class="row">
+												<div class="col-md-12 col-sm-12 col-xs-12">
+													<p>{{website.verification_status}}</p>
+													<a href="/user/download_verification_file/{{website.id}}">Download Verification File</a>
+													<p>Download and upload this html file to your server. Make sure <a href="{{url}}" target="blank">{{url}}</a> link is accessible and then click <a href="/user/verify_site/{{website.id}}">here</a> to verify the site. </p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- item end -->
+								
+								<!-- item begin -->
+								<div class="item_form">
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<div class="row">
+												<div class="col-md-3 col-sm-3 col-xs-12">
+													<label>SER (Search engine ranking)</label>
+												</div>
+												<div class="col-md-2 col-sm-2 col-xs-12">
+													<span class="badge" style="float: left;">10</span>
+												</div>
+												<div class="col-md-4 col-sm-4 col-xs-12">
+													<a href="#">How to Improve it</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- item end -->
+								
+								<!-- item begin -->
+								<div class="item_form">
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="col-md-3 col-sm-3 col-xs-12">
+										   <button id="mybtn4">Update</button>
+										</div>
+									</div>
+								</div>
+								<!-- item end -->
+								
+							</div>
+							<!-- header end -->
+							
+						</div>
+					</div>
+					<!--- item end -->
+					
+				</div>
+			</div>
+				
+		</div>
+		</form>
+	</div>
+	<!-- row welcome panel end -->
+	
+</div>
 
-                                        <div class="panel-full">
-                                                <div class="panel-full-content">
-                                                    <!--- item begin -->
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pad-zero">
-                                                        <div class="panel-full-postbox">
-                                                            <!-- header begin -->
-                                                            <div class="panel-full-header">
-                                                                <div class="col-md-2 col-sm-2 col-xs-12">
-                                                                  &nbsp;
-                                                                </div>
-                                                                <div class="col-md-4 col-sm-2 col-xs-12">
-                                                                    &nbsp;
-                                                                </div>
-                                                                <div class="col-md-2 col-sm-2 col-xs-12">
-                                                                    <button id="mybtn4">Update</button>
-                                                                </div>
-                                                                
-                                                            </div>
-                                                            <!-- header end -->
-                                                            
-                                                        </div>
-                                                    </div>
-                                                    <!--- item end -->
-                                                    
-                                                </div>
-                                            </div>
-                                    
-                            </div>
-                            </form>
-                        </div>
-                        <!-- row welcome panel end -->
-                        
-                    </div>
-                    {% endblock %}
-               
+{% endblock %}
+              

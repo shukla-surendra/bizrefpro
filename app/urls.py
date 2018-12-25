@@ -25,6 +25,7 @@ urlpatterns = [
     path("about-us", views.about, name="about"),
     path("faq", views.faq, name="faq"),
     path("why-join", views.how_it_work, name="how_it_work"),
+	path("support-troops", views.support_troops, name="support_troops"),
     path("pricing", views.pricing, name="pricing"),
     path("news", views.news, name="news"),
     path("career", views.career, name="career"),
@@ -36,8 +37,15 @@ urlpatterns = [
     path("search-result", views.search_result, name="search_result"),
     path("send_thumbsup_otp", views.send_thumbsup_otp, name="send_thumbsup_otp"),
     path("thums_up", views.thums_up, name="thums_up"),	
+    path("thums_down", views.thums_down, name="thums_down"),
     path("search-result-test", views.search_result_test, name="search_result_test"),
     path("hosting-features.html", views.hosting_features, name="hosting_features"),
+    #search url
+    path("search", views.search, name="search"),
+    path("autocomplete", views.autocomplete, name="autocomplete"),
+    path("location_autocomplete", views.location_autocomplete, name="location_autocomplete"),
+    #search auto complete
+    #path("hosting-features.html", views.hosting_features, name="hosting_features"),
     #sync search index
     path("syncSearch", views.syncSearch, name="syncSearch"),
     #delete path

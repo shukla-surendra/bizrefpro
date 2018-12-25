@@ -3,7 +3,7 @@ import email.utils
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 def send_enquiry_email(name, e_email, phone, location):
-   SENDER = 'info@bizrefpro.com'  
+   SENDER = 'info@bizrefpro.com'
    SENDERNAME = 'BizRefPro Enquiry'
    RECIPIENT  = 'info@bizrefpro.com'
    USERNAME_SMTP = "YOUR_SES_SMTP_USERNAME"
@@ -36,7 +36,7 @@ def send_enquiry_email(name, e_email, phone, location):
 
 
 def send_userforget_password_link_mail(user):
-   SENDER = 'info@bizrefpro.com'  
+   SENDER = 'info@bizrefpro.com'
    SENDERNAME = 'BizRefPro Support'
    RECIPIENT  = user.email
    USERNAME_SMTP = "YOUR_SES_SMTP_USERNAME"
@@ -69,16 +69,16 @@ def send_userforget_password_link_mail(user):
 
 
 def send_otp(email_to_send, otp):
-    SENDER = 'info@bizrefpro.com'  
+    SENDER = 'info@bizrefpro.com'
     SENDERNAME = 'BizRefPro Support'
     RECIPIENT  = email_to_send
     USERNAME_SMTP = "YOUR_SES_SMTP_USERNAME"
     PASSWORD_SMTP = "YOUR_SES_SMTP_PASSWORD"
     HOST = "email-smtp.us-east-1.amazonaws.com"
     PORT = 587
-    SUBJECT = 'OTP fro BizRefPro Thumsup'
-    BODY_TEXT = "Your Bizrefpro otp is"+str(otp)
-    BODY_HTML = "<html><head></head><body>Your Bizrefpro otp is "+str(otp)+"<br/></body></html>"
+    SUBJECT = 'BiZRefPro OTP for Rating'
+    BODY_TEXT = "Your Bizrefpro otp is "+str(otp)
+    BODY_HTML = "<html><head></head><body>Your BizRefPro OTP for rating is "+str(otp)+"<br/></body></html>"
     msg = MIMEMultipart('alternative')
     msg['Subject'] = SUBJECT
     msg['From'] = email.utils.formataddr((SENDERNAME, SENDER))
@@ -102,16 +102,16 @@ def send_otp(email_to_send, otp):
 
 
 def send_invitation(name, email_to_send, inviter_name, key):
-    SENDER = 'info@bizrefpro.com'  
+    SENDER = 'info@bizrefpro.com'
     SENDERNAME = inviter_name
     RECIPIENT  = email_to_send
     USERNAME_SMTP = "YOUR_SES_SMTP_USERNAME"
     PASSWORD_SMTP = "YOUR_SES_SMTP_PASSWORD"
     HOST = "email-smtp.us-east-1.amazonaws.com"
     PORT = 587
-    SUBJECT = inviter_name+' invited you to join Bizrefpro'
-    BODY_TEXT = "copy and paste the link to browser user and signup  https://bizrefpro.com/login-register?referer="+key
-    BODY_HTML = "<html><head></head><body> <p>Click on below link to signup <br/><a href='https://bizrefpro.com/login-register?referer="+key+"'>Click Here</a></p></body></html>"
+    SUBJECT =inviter_name+' has invited you to join World 1 st Referral base Search Engine'
+    BODY_TEXT = inviter_name+" has invited to Join you world’s 1st referral base search engine. Please visit below link or copy and paste the link to browser user and signup  https://bizrefpro.com/login-register?referer="+key
+    BODY_HTML = "<html><head></head><body><p>Hii</p> <p>"+inviter_name+" has invited you to Join world’s 1st referral base search engine. Please <a href='https://bizrefpro.com/login-register?referer="+key+"'>Click Here</a> to signup and get business lead</p><br/><br/><br/><strong>BizRefPro Team</strong><br/>Email : info@bizrefpro.com<br/>Web   : https://www.bizrefpro.com<br/><b>ItInfo Technologies Pvt. Ltd</b></body></html>"
     msg = MIMEMultipart('alternative')
     msg['Subject'] = SUBJECT
     msg['From'] = email.utils.formataddr((SENDERNAME, SENDER))
@@ -132,3 +132,65 @@ def send_invitation(name, email_to_send, inviter_name, key):
         print("Error: ", e)
     else:
         print("Email sent!")
+
+
+class BizEmailService:
+    SENDER = 'info@bizrefpro.com'
+    USERNAME_SMTP = "YOUR_SES_SMTP_USERNAME"
+    PASSWORD_SMTP = "YOUR_SES_SMTP_PASSWORD"
+    HOST = "email-smtp.us-east-1.amazonaws.com"
+    PORT = 587
+
+    def __init__(self):
+        pass
+
+    def send_signup_notification_to_admin(self, user):
+        SUBJECT = 'New User Registation'
+        BODY_TEXT = "A new user is waiting for your approval"
+        BODY_HTML = "<html><head></head><body> <p>A new user is waiting for your approval</p><p>User Name:"+user.name+"</p><p>User Eamail:"+user.email+"</p></body></html>"
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = SUBJECT
+        msg['From'] = email.utils.formataddr(('BizRefPro New User', self.SENDER))
+        msg['To'] = self.SENDER
+        part1 = MIMEText(BODY_TEXT, 'plain')
+        part2 = MIMEText(BODY_HTML, 'html')
+        msg.attach(part1)
+        msg.attach(part2)
+        try:
+            server = smtplib.SMTP(self.HOST, self.PORT)
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(self.USERNAME_SMTP, self.PASSWORD_SMTP)
+            server.sendmail(self.SENDER, self.SENDER, msg.as_string())
+            server.close()
+        except Exception as e:
+            print("Error: ", e)
+        else:
+            print("Email sent!")
+
+    def send_approval_notification_to_user(self, user):
+        SUBJECT = 'BiZRefPro Registration Successfully Completed'
+        BODY_TEXT = "Thanks for registration your application has been approved. Now you can able to login and update your profile and business information.  Below are your login Detail Username : "+user.email+", Password  : Your entered password. Please feel free to ask if you have any query regarding this."
+        BODY_HTML = "<html><head></head><body> <p>Hii</p><p>Thanks for registration your application has been approved. Now you can able to login and update your profile and business information. Below are your login Detail <br/>Username : "+user.email+" <br/>Password  : Your selected password <br/></p><p>Please feel free to ask if you have any query regarding this.</p><br/><br/><br/><strong>BizRefPro Team</strong><br/>Email : info@bizrefpro.com<br/>Web   : https://www.bizrefpro.com<br/><b>ItInfo Technologies Pvt. Ltd</b></body></html>"
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = SUBJECT
+        msg['From'] = email.utils.formataddr(('BizRefPro Alert', self.SENDER))
+        msg['To'] = user.email
+        part1 = MIMEText(BODY_TEXT, 'plain')
+        part2 = MIMEText(BODY_HTML, 'html')
+        msg.attach(part1)
+        msg.attach(part2)
+        try:
+            server = smtplib.SMTP(self.HOST, self.PORT)
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(self.USERNAME_SMTP, self.PASSWORD_SMTP)
+            server.sendmail(self.SENDER, user.email, msg.as_string())
+            server.close()
+        except Exception as e:
+            print("Error: ", e)
+        else:
+            print("Email sent!")
+

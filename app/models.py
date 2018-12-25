@@ -6,6 +6,7 @@ import uuid
 class Category(models.Model):
         name = models.CharField(max_length=100)
         slug = models.CharField(max_length=100)
+        parent_id = models.IntegerField(default=0)
         active = models.BooleanField(default=False)
         def __str__(self):
             return self.name
@@ -25,6 +26,12 @@ class User(models.Model):
     MAYBECHOICE = (
     ('f', 'Free'),
     ('p', 'Paid'),)
+    PAYMENTMODES = (
+    ('n', 'Net Banking'),
+    ('c', 'Cash'),('w', 'Cheque/Wire'),('e', 'ECS'),)
+    MEMBERSHIPTYPES = (
+    ('l', 'LifeTime'),
+    ('y', 'Yearly'),)
     name = models.CharField(max_length=80)
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=120)
@@ -40,6 +47,8 @@ class User(models.Model):
     reference_id = models.CharField(max_length=50, default="", blank=True, null=True)
     amount = models.FloatField(default=0.0)
     user_type = models.CharField(max_length=1, choices=MAYBECHOICE, default = 'f')
+    payment_mode = models.CharField(max_length=1, choices=PAYMENTMODES, default='n')
+    member_type = models.CharField(max_length=1, choices=MEMBERSHIPTYPES, default='l')
     active = models.BooleanField(default=False)
     created_at = models.DateTimeField('date created', default=timezone.now)
     
@@ -63,17 +72,16 @@ class Business(models.Model):
     user = models.ForeignKey('User', on_delete=models.DO_NOTHING)
     business_name = models.CharField(max_length=100)
     address1 = models.CharField(max_length=100)
-    address2 = models.CharField(max_length=100, blank=True, null=True)
+    address2 = models.CharField(max_length=250, blank=True, null=True)
     landmark = models.CharField(max_length=100, blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
     country = models.ForeignKey('Countries',on_delete=models.SET_NULL, null=True)
     state = models.ForeignKey('States',on_delete=models.SET_NULL, null=True)
     thumbs_up = models.IntegerField(default=0)
     thumbs_down = models.IntegerField(default=0)
-    state = models.ForeignKey('States',on_delete=models.SET_NULL, null=True)
+    state = models.CharField(max_length=100, default="", blank=True, null=True)
     city =  models.CharField(max_length=100, blank=True, null=True)
     pincode = models.CharField(max_length=100)
-    contact_prefix = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100, blank=True, null=True)
     designation = models.CharField(max_length=100, blank=True, null=True)
@@ -84,10 +92,13 @@ class Business(models.Model):
     #searchengine field
     aboutus = models.CharField(max_length=300)
     title = models.CharField(max_length=100)
+    state_list = models.ManyToManyField('States')
+    locations = models.ManyToManyField('Location')
     gst_no = models.CharField(max_length=30, default="", blank=True, null=True)
     rating = models.IntegerField(default=10)
     categories = models.ManyToManyField('Category')
-    keyword = models.CharField(max_length=100)
+    category_id = models.IntegerField(default=0)
+    keywords = models.ManyToManyField('Keyword')
     created_at = models.DateTimeField('date created', default=timezone.now)
     active = models.BooleanField(default=False)
     def __str__(self):
@@ -203,3 +214,15 @@ class Referer(models.Model):
     referer = models.CharField(max_length=80, blank=True, null=True)
     user = models.ForeignKey('User',on_delete=models.SET_NULL, null=True,default=None)
 
+
+class IndexQueue(models.Model):
+    business = models.ForeignKey('Business', on_delete=models.SET_NULL, null=True, default=None)
+    processed = models.BooleanField(default=False)
+
+
+class Location(models.Model):
+    name = models.CharField(max_length=150)
+    state = models.ForeignKey('States',on_delete=models.SET_NULL, null=True)
+    active = models.BooleanField(default=False)
+    def __str__(self):
+        return self.name

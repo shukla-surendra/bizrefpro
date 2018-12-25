@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 # Create your models here.
 class Administrator(models.Model):
     name = models.CharField(max_length=80)
@@ -10,3 +11,4 @@ class Administrator(models.Model):
     verification_key = models.CharField(max_length=100, default="", blank=True, null=True)
     active = models.BooleanField(default=False)
     created_at = models.DateTimeField('date created', default=timezone.now)
+

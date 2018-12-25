@@ -1,6 +1,11 @@
 
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
+@font-face{
+	src:url(fonts/old_stamper/old_stamper.ttf);
+	font-family: old_stamper;
+}
+
 /*====================================================================
                             reset css
 ====================================================================*/
@@ -279,7 +284,20 @@ input,button,select,textarea{
 }
 
 .modal-dialog {
-    width: 800px !important;
+    width: 50% !important;
+}
+@media only screen and (max-width: 768px){
+	.modal-dialog {
+		width: 95% !important;
+	}
+	.form-control{
+		margin: 5px 0px;
+	}
+	.cl-add-item-detail p {
+		padding: 0px 0;
+		margin-top: 0px;
+		text-align: justify;
+	}
 }
 
 /*====================================================================
@@ -296,7 +314,7 @@ input,button,select,textarea{
 }
 .cl-branding{
     display: block;
-    padding: 6px 0px;
+    padding: 15px 0px 8px 0px;
 }
 .cl-branding img{
     min-height: 48px;
@@ -363,8 +381,9 @@ input,button,select,textarea{
 .cl-top-right{
     display: block;
     width: 100%;
-    padding: 12px 0px;
-    text-align: right;
+    padding: 2px 0px;
+    text-align: left;
+	float: right;
 }
 .cl-top-right ul{
     padding: 0;
@@ -411,6 +430,39 @@ input,button,select,textarea{
     font-weight: 300;
     text-transform: uppercase;
 }
+.certificate_image{
+	position: relative;
+    display: block;
+	padding: 0px 0px;
+}
+.certificate_text{
+	position: relative;
+    display: block;
+	padding: 0px 0px;
+}
+.certificate_text h1{
+	padding: 0px 0px;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 22px;
+    margin-bottom: 0px;
+}
+.certificate_text h1 span{
+    font-size: 15px;
+	color: #fc8b53;
+}
+.certificate_text p{
+	padding: 0px 0px;
+	font-size: 15px;
+	font-weight: 300;
+	color: #333;
+	line-height: 24px;
+}
+.certificate_text p span{
+	color: #fc8b53;
+}
+
+
 
 .cl-top-search{
     display: block;
@@ -688,7 +740,7 @@ input,button,select,textarea{
     display: block;
     height: auto;
     width: 100%;
-    top: 28%;
+    top: 18%;
 }
 
 /*===================== home search ========================*/
@@ -793,14 +845,15 @@ input,button,select,textarea{
 .cl-home-search .cl-home-search-content{
     display: block;
     color: #333;
-    margin-top: 30px;
+    margin-top: 10px;
     text-align: center;
     padding: 0px 200px;
 }
 .cl-home-search .cl-home-search-content p{
-    color: #b6b6b6;
-    font-size: 14px;
+    color: #616161;
+    font-size: 20px;
     font-weight: 300;
+	margin-bottom: 10px;
 }
 .cl-home-search .cl-home-search-content h3{
     color: #b6b6b6;
@@ -811,6 +864,83 @@ input,button,select,textarea{
 .cl-home-search .cl-home-search-content h3 a:hover{
     color: #00294d;
 }
+
+.cl-home-search .cl-home-search-bottom{
+	position: relative;
+    display: block;
+    color: #333;
+    margin-top: 30px;
+    text-align: center;
+    padding: 0px 130px;
+}
+.cl-home-search-bottom .search-bottom-img{
+	position: relative;
+    text-align: center;
+	width: 70px;
+	height: 70px;
+	margin: 0 auto;
+	border-radius: 50%;
+}
+.search-bottom-img img{
+	border-radius: 50%;
+	border: 2px solid #484f1e;
+	padding: 3px;
+}
+.search-bottom-img img:hover{
+	border: 2px solid #fd5400;
+}
+.cl-home-search-bottom .search-bottom-left{
+	font-family: old_stamper;
+	position: relative;
+    color: #000;
+    text-align: center;
+    padding: 12px 15px;
+	/* background-color: #f1f1f1;
+	border-top: 1px solid #f1f1f1;
+	border-right: 1px solid #f1f1f1;
+	border-left: 1px solid #f1f1f1;
+	border-bottom: 0px solid #f1f1f1; */
+}
+.search-bottom-left a{
+	font-family: old_stamper;
+    color: #484f1e;
+    font-size: 24px;
+    font-weight: 700;
+	line-height: 22px;
+	margin-bottom: 0px;
+}
+.search-bottom-left a:hover{
+    color: #fd5400;
+}
+.search-bottom-left i{
+    color: #f1f1f1;
+	font-size: 30px;
+    position: absolute;
+	top: 30%;
+	right: -20px;
+	z-index: 999;
+}
+.cl-home-search-bottom .search-bottom-right{
+	position: relative;
+    color: #000;
+    text-align: center;
+    padding: 5px 15px;
+	background-color: #fff;
+	/* border-top: 0px solid #f1f1f1;
+	border-right: 1px solid #f1f1f1;
+	border-left: 1px solid #f1f1f1;
+	border-bottom: 1px solid #f1f1f1; */
+}
+.search-bottom-right a{
+    color: #333;
+    font-size: 16px;
+    font-weight: 700;
+    padding-top: 10px;
+}
+.search-bottom-right a:hover{
+    color: #fd5400;
+}
+
 
 
 /*====================================================================
@@ -978,6 +1108,7 @@ input,button,select,textarea{
     position: relative;
     display: block;
     padding: 0px 0px;
+	overflow: hidden;
 }
 .cl-add-item-icons ul{
     list-style-type: none;
@@ -985,25 +1116,48 @@ input,button,select,textarea{
     padding: 0;
 }
 .cl-add-item-icons ul li{
-    display: inline-block;
     background-color: #f8f8f8;
     border: 1px solid #f2f2f2;
-    padding: 1px 12px;
+    padding: 2px 12px;
     margin-right: 10px;
     border-radius: 3px;
     color: #00294d;
+	cursor: pointer;
+	display: inline-table;
+	float: left;
 }
+.cl-add-item-icons ul li a{
+    color: #00294d;
+	cursor: pointer;
+}
+
 .cl-add-item-icons ul li:hover{
     background-color: #f2f2f2;
 }
-.cl-add-item-icons li a{
-    color: #00294d;
-}
 .cl-add-item-icons li i{
     color: #e94f03;
+	padding-right: 5px;
+}
+.bg-info {
+    color: #fff;
 }
 
 
+.cont_mob{
+	display: none !important;
+}
+.cont_desktop{
+	display: block !important;
+}
+
+@media (max-width: 768px) {
+	.cont_mob{
+		display: block !important;
+	}
+	.cont_desktop{
+		display: none !important;
+	}
+}
 
 /* =============================================================================
     5. login form
@@ -1421,63 +1575,121 @@ input,button,select,textarea{
 /* =============================================================================
    Thumbs up popup style
     ========================================================================= */
-    .modal {
-        position: fixed;
-        top: 50px;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 1050;
-        display: none;
-        overflow: hidden;
-        outline: 0;
-    }
-    .username{
-        position: relative;
-        padding-bottom: 10px;
-    }
-    .username input[type="text"]{
-        position: relative;
-        width: 70%;
-        border: 1px solid #ddd;
-        padding: 7px;
-    }
-    .password{
-        position: relative;
-    }
-    .password input[type="password"]{
-        position: relative;
-        width: 70%;
-        padding: 7px;
-    }
-    .log-btn button {
-        border: none;
-        font-size: 14px;
-        border-radius: 4px;
-        padding: 4px 20px;
-        display: inline-table;
-        background-color: #e4e4e4;
-    }
-    .log-btn button:hover {
-        background-color: #cbcbcb;
-    }
-    .log-btn{
-        position: relative;
-    }
-    
-    .modal-body {
-        padding: 37px;
-    }
-    .modal.show .modal-dialog {
-        top: 2%;
-    }
-    .popup{
-        position: relative;
-    }
-    .popup2 a{
-        color: #e94f03;
-    }
-    .popup2 a:hover{
-        color: rgba(0, 84, 160, 1);
-    }
-    
+.modal {
+	position: fixed;
+	top: 50px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1050;
+	display: none;
+	overflow: hidden;
+	outline: 0;
+}
+.username{
+	position: relative;
+	padding-bottom: 10px;
+}
+.username input[type="text"]{
+	position: relative;
+	width: 70%;
+	border: 1px solid #ddd;
+	padding: 7px;
+}
+.password{
+	position: relative;
+}
+.password input[type="password"]{
+	position: relative;
+	width: 70%;
+	padding: 7px;
+}
+.log-btn button {
+	border: none;
+	font-size: 14px;
+	border-radius: 4px;
+	padding: 4px 20px;
+	display: inline-table;
+	background-color: #e4e4e4;
+}
+.log-btn button:hover {
+	background-color: #cbcbcb;
+}
+.log-btn{
+	position: relative;
+}
+
+.modal-body {
+	padding: 37px;
+}
+.modal.show .modal-dialog {
+	top: 2%;
+}
+.popup{
+	position: relative;
+}
+.popup2 a{
+	color: #e94f03;
+}
+.popup2 a:hover{
+	color: rgba(0, 84, 160, 1);
+}
+
+
+/* =============================================================================
+   countdown style
+    ========================================================================= */
+.countdown {
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+}
+.countdown div {
+  padding: 5px 15px;
+  border: 1px #fff solid;
+  border-radius: 5px;
+  background-color: rgba(252, 139, 83, 1);
+  margin: 5px;
+  color: #fff;
+}
+.countdown div:first-child {
+  background-color: rgba(0, 84, 160, 1);
+}
+.countdown span {
+  display: block;
+  font-size: 20px;
+}
+@media (max-width: 768px) {
+  .landing img {
+    width: 70%;
+  }
+
+  .landing h1 {
+    font-size: 40px;
+  }
+
+  .countdown {
+    font-size: 30px;
+    flex-direction: column;
+  }
+
+  .countdown div {
+    display: none;
+  }
+
+  .countdown div:first-child {
+    display: block;
+    width: 80%;
+    padding: 10px;
+  }
+}
+
+
+
+
+
+
+

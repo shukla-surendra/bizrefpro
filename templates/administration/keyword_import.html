@@ -1,0 +1,61 @@
+{% extends 'administration/layouts/layout.html' %}
+{% block content  %} 
+<section class="content">
+        <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+                  <!-- general form elements -->
+                  <div class="box box-primary">
+                    <div class="box-header with-border">
+                      <h3 class="box-title">Keyword Import</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                      <div class="box-body">
+
+                        <div class="form-group">
+                                <label for="role">Parent Category</label>
+                        <select name="parent_id" class="form-control" id="parent_id">
+                              <option value="0">Select Parent Category</option>
+                              {% for category in parent_categories%}
+                              <option value="{{category.id}}">{{category.name}}</option>
+                              {% endfor %}
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="child_id">Select Child Category</label>
+                          <select name="child_id" required="required" class="form-control" id="child_id">
+
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleInputPassword1">Select CSV to import</label>
+                          <input type="file" name = "csv_file" required="required" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        </div>
+                        
+                        
+                      </div>
+                      <!-- /.box-body -->
+        
+                      <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- /.box -->
+        
+               
+        
+                </div>
+                <!--/.col (left) -->
+        
+              </div>
+              <!-- /.row -->
+</section>
+
+{% endblock %}

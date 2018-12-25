@@ -51,17 +51,29 @@
                         <div class="container">
                             <div class="row">
                                 <!-- logo begin -->
-                                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4">
+                                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 col-12">
                                     <div class="cl-branding">
-                                        <figure>
-                                            <a href="/"><img src="{% static 'images/logo.png' %}" class="" alt="bizrefpro" /></a>
-                                        </figure>
+										<a href="/"><img src="{% static 'images/logo.png' %}" class="" alt="bizrefpro" /></a>
                                     </div>
                                 </div>
                                 <!-- logo end -->
                                 <!-- right video begin -->
-                                <div class="col-xl-9 col-lg-9 col-md-8 col-sm-8">
+                                <div class="col-xl-5 col-lg-5 col-md-5 col-sm-8 col-12 ml-auto">
                                     <div class="cl-top-right">
+									
+										<div class="row">
+											<div class="col-lg-1 col-md-1 col-sm-1 pl-0 pr-0">
+												<div class="certificate_image">
+													<img src="{% static 'images/sign.png' %}" class="img-fluid" alt="CERTIFICATE OF RECOGNITION" />
+												</div>
+											</div>
+											<div class="col-lg-11 col-md-11 col-sm-11 pr-0">
+												<div class="certificate_text">
+													<p>CERTIFICATE OF RECOGNITION <span>(Certificate No.&nbsp;: DIPP30730)</span> <br /> Department of Industrial Policy & Promotion  <br />Ministry of Commerce & Industry <span>(Government of India)</span> </p>
+												</div>
+											</div>
+										</div>
+										
                                        <!-- <ul>
                                             <li>
                                                  <a href="#" data-toggle="modal" data-target="#myModal" class="play-link">
@@ -194,8 +206,9 @@
         <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
         <script src="{% static 'js/default.js' %}" type="text/javascript"></script>
         <script src="{% static 'js/wow.js' %}" type="text/javascript"></script>
-        
-        
+         {% ifequal page "search" %}
+        <script src="{% static 'js/search_script.js' %}" type="text/javascript"></script>
+         {% endifequal %}
 		 {% ifnotequal page "search" %}
             <script src="{% static 'js/jquery.js' %}" type="text/javascript"></script>
             <script src="{% static 'vendors/jquery-validation/dist/jquery.validate.min.js' %}" type="text/javascript"></script>
@@ -266,7 +279,7 @@
                 return re.test(String(email).toLowerCase());
             }
 
-            $(".fa-thumbs-up").click(function(){
+            $(document).on("click", ".fa-thumbs-up", function(){
                 id = $(this).data("id");
                 //reset
                 $("#displayMessage").hide();
@@ -334,13 +347,13 @@
                             if(response.status === "success")
                             {
                                 $("#displayMessage").show();
-                                $("#message3").text("You have successfully upvoted the business.");
+                                $("#message3").text(response.message);
                                 $('#message3').show();
                                 $("#get_otp").hide();
 
                             } else {
                                 $("#message2").addClass("text-danger");
-                                $("#message2").text("This otp might be expired or incorrect.");
+                                $("#message2").text(response.message);
                                 $('#message2').show();
                             }
                            }
@@ -355,6 +368,109 @@
                 
             })
         </script>
+
+<script>
+
+$(document).on("click", ".fa-thumbs-down", function(e){
+                id = $(this).data("id");
+                //reset
+                $("#displayMessage").hide();
+                $("#message11").hide();
+                $("#message22").hide();
+                $("#message33").hide();
+                $("#send_otp_mail_down").show();
+                $("#get_otp_down").hide();
+                $("#otpdown").val("")
+                $("#emaildown").val("")
+                //reset end
+
+                $("#business_id_down").val(id)
+                $("#thums_down").modal('show')
+             });
+
+$(document).on("click","#sendOtpdown", function(e){
+                 e.preventDefault();
+                 e.stopPropagation();
+                business_id = $("#business_id_down").val();
+                email = $("#emaildown").val();
+               
+                if(email != ""){
+                    if(validEmail(email)){
+                        jQuery.ajax({
+                            url:'/send_thumbsup_otp',
+                            type:'GET',
+                            data:'business_id='+business_id+"&email="+email,
+                            success:function(res, status, xhr){
+                            console.log(res);
+                             response = JSON.parse(res);
+                             if(response.status === "success")
+                             {
+                                 $("#send_otp_mail_down").hide();
+                                 $("#get_otp_down").show();
+                             }
+                            }
+                        });
+                    $('#message11').hide();
+                    } else {
+                    $("#message11").addClass("text-danger");
+                    $("#message11").text("Please enter valid registered email id");
+                    $('#message11').show();
+                    }
+                }else{
+                 $("#message11").addClass("text-danger");
+                 $("#message11").text("Please enter your registered email id");
+                 $('#message11').show();
+                }
+                 
+             })
+
+
+$(document).on("click","#thumsdown", function(e){
+                e.preventDefault();
+                e.stopPropagation();
+               business_id = $("#business_id_down").val();
+               otp = $("#otpdown").val();
+               email = $("#emaildown").val();
+               if(otp != ""){
+                       jQuery.ajax({
+                           url:'/thums_down',
+                           type:'GET',
+                           data:'business_id='+business_id+"&otp="+otp+"&email="+email,
+                           success:function(res, status, xhr){
+                            response = JSON.parse(res);
+                            if(response.status === "success")
+                            {
+                                $("#displayMessage2").show();
+                                $("#message33").text(response.message);
+                                $('#message33').show();
+                                $("#get_otp_down").hide();
+
+                            } else {
+                                $("#message22").addClass("text-danger");
+                                $("#message22").text(response.message);
+                                $('#message22').show();
+                            }
+                           }
+                       });
+                   $('#message22').hide();
+               
+               }else{
+                $("#message22").addClass("text-danger");
+                $("#message22").text("Please provide the Otp received on email");
+                $('#message22').show();
+               }
+                
+            })
+
+
+</script>
+
+
+
+
+
+
+
         
 		<script language="JavaScript" type="text/javascript">
 		TrustLogo("https://www.bizrefpro.com/static/images/comodo_secure_seal_113x59_transp.png", "CL1", "none");

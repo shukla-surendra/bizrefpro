@@ -24,4 +24,11 @@ urlpatterns = [
     path("all_employee", views.all_employee, name="all_employee"),
     path("get-zones/<int:id>", views.get_zones, name="get_zones"),
     path("get-executives/<int:id>", views.get_executives, name="get_executives"),
+    path("all_users", views.all_users, name="all_users"),
+    path("get_users", views.get_users, name="get_users"),
+    path("approve_users", views.approve_users, name="approve_users"),
+    path("category_import", views.category_import, name="category_import"),
+    path("keyword_import", views.keyword_import, name="keyword_import"),
+    path("get_sub_category/<int:id>", views.get_sub_category, name="get_sub_category"),
+    path("get_keywords/<int:id>", views.get_keywords, name="get_keywords"),
 ]

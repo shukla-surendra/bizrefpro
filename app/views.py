@@ -3,15 +3,20 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password, check_password
 from .forms import UserForm, ContactForm
-from .models import User, Business, BizRefProSearch, Contact, Website, States, Otp, Thumsup, Zones, Media, Referer
-from user.ses import send_mail
+from .models import User, Business, Executive, Contact, Website, States, Otp, Thumsup, Zones, Media, Referer, Keyword, Countries, Location
 from django.contrib import messages
 import uuid, json, os
+import pysolr
+from urllib.request import urlopen
+import urllib.parse
+import json
 from bizrefpro.settings import BASE_DIR
 from random import randint
 from django.utils import timezone
 from datetime import timedelta
-from .bizrefpro_mail import send_enquiry_email, send_userforget_password_link_mail, send_otp
+from .bizrefpro_mail import send_enquiry_email, send_userforget_password_link_mail, send_otp, BizEmailService
+from nltk.corpus import stopwords 
+from nltk.tokenize import word_tokenize
 
 
 
@@ -36,6 +41,10 @@ def contact(request):
 def pricing(request):
     pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Pricing"}
     return render(request, "app/pricing.html", pageContext)
+
+def support_troops(request):
+    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Support Troops"}
+    return render(request, "app/support-troops.html", pageContext)
 
 def privacy(request):
     pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Privacy"}
@@ -81,22 +90,42 @@ def career(request):
 def search_result(request):
     if "q" not in request.GET:
         return HttpResponseRedirect("/")
-    query = 'SELECT *, MATCH (keywords) AGAINST(\''+request.GET['q']+'\' IN BOOLEAN MODE) AS score FROM app_bizrefprosearch WHERE MATCH (keywords) AGAINST(\''+request.GET['q']+'\' IN BOOLEAN MODE) order by score desc,rank desc'
-    search = BizRefProSearch.objects.raw(query)
+    #query = 'SELECT *, MATCH (keywords) AGAINST(\''+request.GET['q']+'\' IN BOOLEAN MODE) AS score FROM app_bizrefprosearch WHERE MATCH (keywords) AGAINST(\''+request.GET['q']+'\' IN BOOLEAN MODE) order by score desc,rank desc'
+    #search = BizRefProSearch.objects.raw(query)
     pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Search Result"}
     pageContext['businesses']= search
     pageContext['page'] = "search";
     return render(request, "app/search-result.html", pageContext)
 
+def search(request):
+    queryString = request.GET['q']
+    location = request.GET['location']
+    stop_words = set(stopwords.words('english'))
+    stop_words.add("top")
+    word_tokens = word_tokenize(queryString)
+    filtered_sentence = [w for w in word_tokens if not w in stop_words]
+    mmlength = len(filtered_sentence)
+    print(location)
+    queryString = ' '.join(filtered_sentence)
+    if location == "" or location == None:    
+        queryParam = {"q": 'keywords:' + queryString, "defType": "edismax", "qf": "keywords", "mm":mmlength, 'sort':"rank desc"}
+    else:
+        queryParam = {"q": 'keywords:' + queryString, "fq":'locations:' + location, "defType": "edismax", "qf": "keywords", "mm": mmlength, 'sort': "rank desc"}
+    url = "http://localhost:8983/solr/collection1/select?" + urllib.parse.urlencode(queryParam) + "&wt=json"
+    webURL = urlopen(url)
+    data = webURL.read()
+    encoding = webURL.info().get_content_charset('utf-8')
+    JSON_object = json.loads(data.decode(encoding))
+    #results = json.load(results)
+    return HttpResponse(json.dumps(JSON_object),content_type='application/json')
 
 def search_result_test(request):
     if "q" not in request.GET:
         return HttpResponseRedirect("/")
-    query = 'SELECT *, MATCH (keywords) AGAINST(\'' + request.GET['q'] + '\' IN BOOLEAN MODE) AS score FROM app_bizrefprosearch WHERE MATCH (keywords) AGAINST(\''+request.GET['q'] + '\' IN BOOLEAN MODE) order by score desc,rank desc'
-    search = BizRefProSearch.objects.raw(query)
     pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Search Result"}
-    pageContext['businesses']= search
     pageContext['page'] = "search";
+    pageContext['qpart1'] = request.GET['q'];
+    pageContext['qpart2'] = request.GET['location']
     return render(request, "app/search-result-test.html", pageContext)
 
 def hosting_features(request):
@@ -116,6 +145,7 @@ def login_register(request):
                 pageContext['message'] = "Email Address Already Exists"
                 return render(request, "app/login-register.html", pageContext)
             except:
+                country = Countries.objects.get(id=1)
                 uform = UserForm(request.POST)
                 if uform.is_valid():
                     if request.POST['state'] == 0:
@@ -144,15 +174,20 @@ def login_register(request):
                         try:
                             referer_object = Referer.objects.get(referer=referer)
                             referer_id = referer_object.user.id
-                            user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), state=state,zone=zone, executive=executive,reference_id=referer_id)
+                            user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), state=state,zone=zone, address1="", address2 ="", city="", executive=executive,reference_id=referer_id, active=True)
+                            referer_object.referer = ""
+                            referer_object.save()
                         except:
-                            user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), state=state,zone=zone, executive=executive)
+                            user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), country=country, state=state,zone=zone, address1="", address2 ="", city="", executive=executive, active=True)
                     else:
-                        user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), state=state,zone=zone, executive=executive)
+                        user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), country=country, state=state,zone=zone, address1="", address2 ="", city="", executive=executive, active=True)
                     user.save()
+                    bizmail = BizEmailService();
+                    bizmail.send_signup_notification_to_admin(user=user)
+                    bizmail.send_approval_notification_to_user(user)
                     pageContext['message_type']="success"
                     pageContext['message']="Registered Successfully"
-                    messages.success(request, 'Your Application has been submitted successfully and waiting for approval. We will send notification through mail once approved.')
+                    messages.success(request, 'Success! Your Application has been submitted successfully. Please login and complete your profile.')
                     #return render(request, "app/login-register.html", pageContext)
                     return HttpResponseRedirect("/registration-success")
                 else:
@@ -207,7 +242,23 @@ def reset_link(request):
 def reset_password(request, token):
     try:
         user = User.objects.get(verification_key=token)
-        pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Password Reset"}
+        pageContext = {"title": "Best Business Referral Program | Destination to Grow Business",
+                       "pageTitle": "Password Reset","msg_type":''}
+        pageContext['showForm'] = True
+        if request.method == 'POST':
+            password = request.POST['password']
+            cpassword = request.POST['cpassword']
+            if password == cpassword:
+                user.password = make_password(password=cpassword, salt=None, hasher="bcrypt")
+                user.verification_key = ""
+                user.save()
+                pageContext['msg_type'] ='success'
+                pageContext['showForm'] = False
+                pageContext['message']  = 'Password has been reset successfully'
+            else:
+                pageContext['msg_type'] = 'failure'
+                pageContext['showForm'] = True
+                pageContext['message'] = 'Both password didn\'t match'
         return render(request, "app/password-reset.html", pageContext)
     except:
         pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Link Expired"}
@@ -218,29 +269,48 @@ def ssl_validation(request):
 
 
 def syncSearch(request):
+    # Setup a Solr instance. The timeout is optional.
+    solr = pysolr.Solr('http://localhost:8983/solr/collection1/', timeout=10)
+    #solr.delete(q='*:*')
+    indexData = []
     businesses = Business.objects.all()
     for business in businesses:
+        keywordList = []
+        keywords = business.keywords.all()
+        for keyword in keywords:
+            keywordList.append(keyword.name)
         website = "";
         try:
             web = Website.objects.get(id=business.website)
             website = web.name
         except:
             pass
+        locationList = []
+        locations = business.locations.all()
+        for location in locations:
+            locationList.append(location.name)
         try:
-            search = BizRefProSearch.objects.get(business_id=business.id)
-            search.title=business.title
-            search.description=business.aboutus
-            search.keywords=business.keyword
-            search.address=business.address1
-            search.website=website
-            search.contact=business.contact_number
-            search.rank=business.rating + business.thumbs_up
-            search.save()
+            # How you'd index data.
+            indexData.append(
+                {
+                    "id": "doc_" + str(business.id),
+                    "title": business.title,
+                    "description": business.aboutus,
+                    "keywords": keywordList,
+                    "address": business.address1,
+                    "website": website,
+                    "locations": locationList,
+                    "business_id": business.id,
+                    "thumbs_down": business.thumbs_down,
+                    "contact": str(business.contact_number),
+                    "rank": str(business.rating + business.thumbs_up)
+                }
+            )
         except:
-            search = BizRefProSearch(title=business.title,description=business.aboutus,keywords=business.keyword, address=business.city ,website=website, contact=business.contact_number, rank=business.rating+business.thumbs_up,business_id=business.id)
-            search.save();
-          
-    return HttpResponse("Success")
+            pass
+
+    solr.add(indexData, commit=True)
+    return HttpResponse("Ok")
 
 def bizrefpro_promotions(request):
     pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Forgot Password"}
@@ -284,20 +354,56 @@ def thums_up(request):
     try:
         otp_count = Otp.objects.filter(otp=otp,business_id=business_id).count()
         if otp_count > 0:
-            business = Business.objects.get(id=business_id)
-            business.thumbs_up +=1
-            business.save()
-            thumsup = Thumsup(email=email,business_id=business_id,thumbs_up=1)
-            thumsup.save()
-            resp['status']= "success"
-            resp["message"] = "Thumbsup successfully done"
+            try:
+                tup = Thumsup.objects.get(email=email,business_id=business_id,thumbs_up=1)
+                resp['status']= "failed"
+                resp["message"] = "Your review has been already submitted"
+            except:
+                thumsup = Thumsup(email=email,business_id=business_id,thumbs_up=1)
+                thumsup.save()
+                business = Business.objects.get(id=business_id)
+                business.thumbs_up +=1
+                business.save()
+                resp['status']= "success"
+                resp["message"] = "You have successfully submitted your rating."
         else:
             resp['status']= "failed"
-            resp["message"] = "Incorrect otp" 
+            resp["message"] = "This otp might be expired or incorrect." 
     except:
         resp['status']= "failed"
-        resp["message"] = "Incorrect otp"   
+        resp["message"] = "This otp might be expired or incorrect."   
     return HttpResponse(json.dumps(resp))
+
+def thums_down(request):
+    resp = {}
+    otp = request.GET['otp'];
+    email = request.GET['email'];
+    business_id = request.GET['business_id'];
+    time_threshold = timezone.now() - timedelta(minutes=5)
+    Otp.objects.filter(created_at__lt=time_threshold).delete()
+    try:
+        otp_count = Otp.objects.filter(otp=otp,business_id=business_id).count()
+        if otp_count > 0:
+            try:
+                thumsup = Thumsup.objects.get(email=email,business_id=business_id,thumbs_down=1)
+                resp['status']= "failed"
+                resp["message"] = "Your review has been already submitted"
+            except:
+                thumsup = Thumsup(email=email,business_id=business_id,thumbs_down=1)
+                thumsup.save()
+                business = Business.objects.get(id=business_id)
+                business.thumbs_down +=1
+                business.save()
+                resp['status']= "success"
+                resp["message"] = "You have successfully submitted your rating"
+        else:
+            resp['status']= "failed"
+            resp["message"] = "This otp might be expired or incorrect." 
+    except:
+        resp['status']= "failed"
+        resp["message"] = "This otp might be expired or incorrect."   
+    return HttpResponse(json.dumps(resp))
+
 
 def delete_media_file(request):
     resp = {}
@@ -322,6 +428,21 @@ def delete_media_file(request):
     resp['status'] = "success"
     return HttpResponse(json.dumps(resp))
 
+def autocomplete(request):
+    resp = []
+    search_text = request.GET['term']
+    keywords = Keyword.objects.filter(name__icontains=search_text)[:10]
+    for keyword in keywords:
+        resp.append({"id": keyword.name,"value": keyword.name,"label": keyword.name})
+    return HttpResponse(json.dumps(resp))
+
+def location_autocomplete(request):
+    resp = []
+    search_text = request.GET['term']
+    locations = Location.objects.filter(name__icontains=search_text)[:10]
+    for location in locations:
+        resp.append({"id": location.name,"value": location.name,"label": location.name})
+    return HttpResponse(json.dumps(resp))
 #error handlers
 def handler404(request, exception):
     return render(request, 'errors/404.html', locals())
