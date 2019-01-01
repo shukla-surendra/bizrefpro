@@ -3,9 +3,10 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password, check_password
 from .forms import UserForm, ContactForm
-from .models import User, Business, Executive, Contact, Website, States, Otp, Thumsup, Zones, Media, Referer, Keyword, Countries, Location
+from .models import User, Business, Executive, Contact, Website
+from .models import Category, Keyword, States, Otp, Thumsup, Zones, Media, Referer, Keyword, Countries, Location
 from django.contrib import messages
-import uuid, json, os
+import uuid, os, csv
 import pysolr
 from urllib.request import urlopen
 import urllib.parse
@@ -90,11 +91,10 @@ def career(request):
 def search_result(request):
     if "q" not in request.GET:
         return HttpResponseRedirect("/")
-    #query = 'SELECT *, MATCH (keywords) AGAINST(\''+request.GET['q']+'\' IN BOOLEAN MODE) AS score FROM app_bizrefprosearch WHERE MATCH (keywords) AGAINST(\''+request.GET['q']+'\' IN BOOLEAN MODE) order by score desc,rank desc'
-    #search = BizRefProSearch.objects.raw(query)
     pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Search Result"}
-    pageContext['businesses']= search
     pageContext['page'] = "search";
+    pageContext['qpart1'] = request.GET['q'];
+    pageContext['qpart2'] = request.GET['location']
     return render(request, "app/search-result.html", pageContext)
 
 def search(request):
@@ -443,6 +443,24 @@ def location_autocomplete(request):
     for location in locations:
         resp.append({"id": location.name,"value": location.name,"label": location.name})
     return HttpResponse(json.dumps(resp))
+def import_csv(request):
+    return HttpResponse("Already Imported")
+    with open(BASE_DIR + '/static/uploads/category-sub-keyword.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        parent_category = "";
+        child_category = "";
+        for row in csv_reader:
+            if row[0] not in ["", None] and row[1] in ["", None] and row[2] in ["", None]:
+                parent_category = Category(name=row[0], parent_id=0, active=1)
+                parent_category.save()
+            if row[0] in ["", None] and row[1] not in ["", None] and row[2] in ["", None]:
+                child_category = Category(name=row[1], parent_id=parent_category.id, active=1)
+                child_category.save()
+            if row[0] in ["", None] and row[1] in ["", None] and row[2] not in ["", None]:
+                keyword = Keyword(name=row[2], category=child_category, active=True)
+                keyword.save()
+    return HttpResponse("ok")
+
 #error handlers
 def handler404(request, exception):
     return render(request, 'errors/404.html', locals())

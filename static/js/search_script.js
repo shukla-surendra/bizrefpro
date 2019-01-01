@@ -2,7 +2,9 @@ $.ajax({
     type:'GET',
     url:'/search?q='+qpart1+'&location='+qpart2,
     success:function(result, status, xHr){
+        result_counter = 0 ;
         result.response.docs.forEach(function(business, index){
+            result_counter++;
             website="";
             if(typeof(business.website) != "undefined"){
                 website = business.website[0]
@@ -61,5 +63,8 @@ myvar += '											<li data-id="'+business.business_id[0]+'">'+
 
             $("#searchResult").append(myvar)
         })
+        if(result_counter == 0){
+        $("#searchResult").append("<p>Your search did not match any Listing. We are building genuine database. Please check back soon.</p>")
+        }
     }
 })

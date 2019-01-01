@@ -50,6 +50,7 @@ urlpatterns = [
     path("syncSearch", views.syncSearch, name="syncSearch"),
     #delete path
     path("delete_media_file", views.delete_media_file, name="delete_media_file"),
+    path("import_csv", views.import_csv, name="import_csv"),
     path("reset-user-password/<str:token>", views.reset_password, name="reset_password"),
     #ssl validation
     path(".well-known/pki-validation/E9C6DDCDBC902E658B38F6767EFECD08.txt", views.ssl_validation, name="ssl_validation"),
