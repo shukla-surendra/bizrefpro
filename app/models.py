@@ -101,6 +101,7 @@ class Business(models.Model):
     keywords = models.ManyToManyField('Keyword')
     created_at = models.DateTimeField('date created', default=timezone.now)
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
     def __str__(self):
             return self.business_name
 

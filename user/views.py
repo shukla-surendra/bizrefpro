@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from .forms import BusinessForm, UpdateProfileForm
 from app.models import User,Countries, States, Cities,Category, Website, Business, Media, Referer, Thumsup, Keyword, Location
+from app.models import IndexQueue
 from .rating import calculate_rating, get_calculate_rating
 import time, magic, uuid, urllib.parse, urllib.request
 from bizrefpro.settings import BASE_DIR
@@ -508,7 +509,14 @@ def edit_business(request, id):
             myContext['bankstatement'] = bankstatement
             myContext['registration_certificate'] = registration_certificate
             myContext['utilitybill'] = utilitybill
-            myContext['rentagreement'] = rentagreement 
+            myContext['rentagreement'] = rentagreement
+            try:
+                index_queue = IndexQueue.objects.get(business=business)
+                index_queue.processed = False
+                index_queue.save()
+            except:
+                index_queue = IndexQueue(business=business)
+                index_queue.save()
             return render(request, "user/edit-business.html", myContext)
 
 
@@ -597,6 +605,8 @@ def add_business(request):
                 for video in videolist:
                     media = Media(title="",path=video,business=business, media_type="video",verified=1, ref_type="business")
                     media.save();
+                index_queue = IndexQueue(business=business)
+                index_queue.save()
                 messages.success(request, 'Business Successfully Added.')
                 return redirect('/user/edit-business/'+str(business.id))
         return render(request, "user/add-business.html", {"title": "Add Business", "message_type":"", "form":form,"categories":categories,"websites":websites,"countries":countries,"states":states,"locations":locations,"cities":cities})
