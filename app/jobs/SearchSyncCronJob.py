@@ -1,5 +1,5 @@
 from django_cron import CronJobBase, Schedule
-from app.models import IndexQueue
+from app.models import IndexQueue, Business, User
 import pysolr
 
 
@@ -34,6 +34,8 @@ class SearchSyncCronJob(CronJobBase):
                 location_list.append(location.name)
             try:
                 if business.active is True and business.deleted is False:
+                    group_rating = self.calculate_group_rating(business)
+                    business_points = business.rating + business.thumbs_up + group_rating
                     index_data.append(
                         {
                             "id": "doc_" + str(business.id),
@@ -46,13 +48,30 @@ class SearchSyncCronJob(CronJobBase):
                             "business_id": business.id,
                             "thumbs_down": business.thumbs_down,
                             "contact": str(business.contact_number),
-                            "rank": str(business.rating + business.thumbs_up)
+                            "rank": str(business_points)
                         })
                 else:
                     deindex_data.append("doc_" + str(business.id))
             except:
                 pass
         solr.add(index_data, commit=True)
-        solr.delete(id=deindex_data, commit=True)
-        print(index_data, deindex_data)
+        if len(deindex_data) > 0:
+            solr.delete(id=deindex_data, commit=True)
         print("django cron run complete")
+
+    def calculate_group_rating(self, business):
+        points = 0
+        if business is not None:
+            total_thumbs_up =0
+            user_id = business.user.id
+            object_list = User.objects.filter(reference_id=user_id)
+            for object in object_list:
+                thumbs_up = 0
+                businesses = Business.objects.filter(user=object)
+                for business in businesses:
+                    if business.active is True:
+                        thumbs_up += business.thumbs_up
+                        total_thumbs_up = thumbs_up
+            points = total_thumbs_up
+        return points
+

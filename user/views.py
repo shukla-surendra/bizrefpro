@@ -732,8 +732,7 @@ def get_user_groupes(request):
         total_negative = total_thumsdown+total_thumsdown1
         list.append({"name": '<h4>Rating Point</h4>', "positive_points":str(total_positive), "negative_points": total_negative, "action":"<!--<strong>"+str(total_positive-total_negative)+"</strong> (Positive-Negative)-->"})
         list.append({"name": 'Doc Point', "positive_points":str(document_point) , "negative_points": "", "action":""})
-        list.append({"name": '<h4>Total Point</h4>', "positive_points":str(total_positive+document_point) , "negative_points": "", "action":"<!--<strong>"+str((total_positive+document_point)-total_negative)+"</strong>-->"})
-        business = Business
+        list.append({"name": '<h4>Total Point</h4>', "positive_points": str(total_positive+document_point), "negative_points": "", "action": "<!--<strong>"+str((total_positive+document_point)-total_negative)+"</strong>-->"})
         mdict = {"data": list}
         mdict['draw'] = request.GET['draw']
         mdict['recordsTotal'] = total  # show from how many record its filtered.
