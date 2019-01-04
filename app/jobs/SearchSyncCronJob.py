@@ -36,6 +36,7 @@ class SearchSyncCronJob(CronJobBase):
                 if business.active is True and business.deleted is False:
                     group_rating = self.calculate_group_rating(business)
                     business_points = business.rating + business.thumbs_up + group_rating
+                    down_rating = self.calculate_group_thumbs_down_rating(business)
                     index_data.append(
                         {
                             "id": "doc_" + str(business.id),
@@ -46,7 +47,7 @@ class SearchSyncCronJob(CronJobBase):
                             "website": website,
                             "locations":location_list,
                             "business_id": business.id,
-                            "thumbs_down": business.thumbs_down,
+                            "thumbs_down": str(business.thumbs_down+down_rating),
                             "contact": str(business.contact_number),
                             "rank": str(business_points)
                         })
@@ -69,9 +70,25 @@ class SearchSyncCronJob(CronJobBase):
                 thumbs_up = 0
                 businesses = Business.objects.filter(user=object)
                 for business in businesses:
-                    if business.active is True:
-                        thumbs_up += business.thumbs_up
-                        total_thumbs_up = thumbs_up
+                    #if business.active is True:
+                    thumbs_up += business.thumbs_up
+                    total_thumbs_up += thumbs_up
             points = total_thumbs_up
+        return points
+
+    def calculate_group_thumbs_down_rating(self, business):
+        points = 0
+        if business is not None:
+            total_thumbs_down =0
+            user_id = business.user.id
+            object_list = User.objects.filter(reference_id=user_id)
+            for object in object_list:
+                thumbs_down = 0
+                businesses = Business.objects.filter(user=object)
+                for business in businesses:
+                    #if business.active is True:
+                    thumbs_down += business.thumbs_down
+                    total_thumbs_down += thumbs_down
+            points = total_thumbs_down
         return points
 

@@ -24,6 +24,16 @@ def dashboard(request):
         businesses = Business.objects.filter(user=user)
         for business in businesses:
             doc_points += (get_calculate_rating(business.id) + business.thumbs_up)
+
+        #calculating group user
+        object_list = User.objects.filter(reference_id=user.id)
+        for object in object_list:
+            thumbs_up = 0
+            businesses = Business.objects.filter(user=object)
+            for business in businesses:
+                #if business.active is True:
+                thumbs_up += business.thumbs_up
+                doc_points += thumbs_up
         status = ""
         if user.active == True:
             status = "Active"
@@ -464,7 +474,7 @@ def edit_business(request, id):
                                 media.save()
                 else:
                     print("Invalid form");    
-            categories = Category.objects.filter(parent_id=0)
+            categories = Category.objects.filter(parent_id=0).order_by('name')
             user = User.objects.get(id=request.session['id'])
             websites = Website.objects.filter(user=user)
             calculate_rating(business_id=id)
@@ -500,7 +510,7 @@ def edit_business(request, id):
                 myContext['selectedCategories'] = selectedCategories
                 choosenCategory = Category.objects.get(id=business.category_id)
                 myContext['category'] = choosenCategory
-                subcategories = Category.objects.filter(parent_id=choosenCategory.id)
+                subcategories = Category.objects.filter(parent_id=choosenCategory.id).order_by('name')
                 myContext['subcategories'] = subcategories
                 selected_locations = business.locations.all()
                 myContext['selected_locations'] = selected_locations
@@ -524,7 +534,13 @@ def add_business(request):
     if "id" not in request.session:
         return HttpResponseRedirect('/login-register')
     else:
-        categories = Category.objects.filter(parent_id=0)
+        #check for single business
+        user = User.objects.get(id=request.session['id'])
+        businesses = Business.objects.filter(user=user)
+        if len(businesses) > 0:
+            messages.info(request, "Contact your BizRefPro Business Developer")
+            return redirect('/user/manage-business')
+        categories = Category.objects.filter(parent_id=0).order_by('name')
         locations = Location.objects.all()
         user = User.objects.get(id=request.session['id'])
         websites = Website.objects.filter(user=user)

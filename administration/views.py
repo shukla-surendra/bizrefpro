@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.hashers import make_password, check_password
 from .forms import ExecutiveForm
@@ -134,6 +134,7 @@ def get_users(request):
         if user.active:
             action = ""
             status = '<span class="text-success">Approved<span>'
+        status = '<a href="/administration/user_login/'+str(user.id)+'" target="_blank">Login</a> '+status
         list.append({"name":user.name,"email":user.email, "phone": user.phone, "city":user.city,"status":status,"action":action})
     mdict = {"data": list}
     mdict['draw'] = request.GET['draw']
@@ -229,7 +230,7 @@ def get_sub_category(request, id):
     htmlResponse = "";
     if 'user' in request.GET:
         try:
-            parent_categories = Category.objects.filter(parent_id=id)
+            parent_categories = Category.objects.filter(parent_id=id).order_by('name')
             for category in parent_categories:
                 htmlResponse += '<li><input type="checkbox" name="categories" class="sub_category_id sub_category_'+str(category.id)+'" value="' + str(category.id) + '">' + category.name + '</li>'
         except:
@@ -243,26 +244,35 @@ def get_sub_category(request, id):
                 htmlResponse += '<option value="' + str(category.id) + '">' + category.name + '</option>'
         except:
             None
-    return HttpResponse(htmlResponse);
+    return HttpResponse(htmlResponse)
+
 
 def get_keywords(request, id):
-    htmlResponse = "";
+    html_response = ""
     try:
         if 'business_id' in request.GET:
             business_id = request.GET['business_id']
             business = Business.objects.get(id=business_id)
-            keywords_list = business.keywords.all().values_list('id',flat=True)
+            keywords_list = business.keywords.all().values_list('id', flat=True)
         category = Category.objects.get(id=id)
         keywords = Keyword.objects.filter(category=category)
         for keyword in keywords:
             if 'business_id' in request.GET:
                 if keyword.id in keywords_list:
-                    htmlResponse += '<li> <input type="checkbox" checked="checked" class="keywords_to_add" data-category="'+str(category.id)+'" data-title="' + keyword.name +'" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
+                    html_response += '<li> <input type="checkbox" checked="checked" class="keywords_to_add" data-category="'+str(category.id)+'" data-title="' + keyword.name +'" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
                 else:
-                    htmlResponse += '<li> <input type="checkbox" class="keywords_to_add" data-category="' + str(category.id) + '" data-title="' + keyword.name + '" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
+                    html_response += '<li> <input type="checkbox" class="keywords_to_add" data-category="' + str(category.id) + '" data-title="' + keyword.name + '" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
             else:
-                htmlResponse += '<li> <input type="checkbox" class="keywords_to_add" data-category="' + str(category.id) + '" data-title="' + keyword.name + '" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
+                html_response += '<li> <input type="checkbox" class="keywords_to_add" data-category="' + str(category.id) + '" data-title="' + keyword.name + '" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
     except:
         print("error")
-    return HttpResponse(htmlResponse);
+    return HttpResponse(html_response)
+
+
+def user_login(request, id):
+    if "admin_id" in request.session:
+        request.session['id'] = id
+        return redirect("/user/dashboard")
+    else:
+        return redirect("/")
 

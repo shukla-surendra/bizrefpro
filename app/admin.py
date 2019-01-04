@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import User, Business,Contact, Media, Cities, Countries, States, Category, Keyword, Website, Executive, BizRefProSearch, Zones, Referer, Thumsup, Otp, Location
+from .models import User, Business,Contact, Media, Cities, Countries, States, Category, Keyword, Website
+from .models import Executive, BizRefProSearch, Zones, Referer, Thumsup, Otp, Location, IndexQueue
+
+class IndexQueueAdmin(admin.ModelAdmin):
+    list_display = ['id', 'business', 'processed']
 
 class LocationAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
@@ -80,6 +84,7 @@ admin.site.register(Referer, RefererAdmin)
 admin.site.register(Thumsup, ThumsupAdmin)
 admin.site.register(Otp, OtpAdmin)
 admin.site.register(Location, LocationAdmin)
+admin.site.register(IndexQueue, IndexQueueAdmin)
 
 
 

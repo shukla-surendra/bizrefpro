@@ -31,4 +31,5 @@ urlpatterns = [
     path("keyword_import", views.keyword_import, name="keyword_import"),
     path("get_sub_category/<int:id>", views.get_sub_category, name="get_sub_category"),
     path("get_keywords/<int:id>", views.get_keywords, name="get_keywords"),
+    path("user_login/<int:id>", views.user_login, name="user_login"),
 ]
