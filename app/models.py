@@ -2,12 +2,15 @@ from django.db import models
 from django.utils import timezone
 import uuid
 
+
 # Create your models here.
 class Category(models.Model):
         name = models.CharField(max_length=100)
         slug = models.CharField(max_length=100)
         parent_id = models.IntegerField(default=0)
-        active = models.BooleanField(default=False)
+        active = models.BooleanField(default=True)
+        deleted = models.BooleanField(default=False)
+
         def __str__(self):
             return self.name
 
@@ -16,22 +19,17 @@ class Keyword(models.Model):
         name = models.CharField(max_length=150)
         slug = models.CharField(max_length=100)
         category = models.ForeignKey(Category,on_delete=models.DO_NOTHING)
-        active = models.BooleanField(default=False)
+        active = models.BooleanField(default=True)
+        deleted = models.BooleanField(default=False)
+
         def __str__(self):
             return self.name
 
 
-
 class User(models.Model):
-    MAYBECHOICE = (
-    ('f', 'Free'),
-    ('p', 'Paid'),)
-    PAYMENTMODES = (
-    ('n', 'Net Banking'),
-    ('c', 'Cash'),('w', 'Cheque/Wire'),('e', 'ECS'),)
-    MEMBERSHIPTYPES = (
-    ('l', 'LifeTime'),
-    ('y', 'Yearly'),)
+    MAYBECHOICE = (('f', 'Free'), ('p', 'Paid'),)
+    PAYMENTMODES = (('n', 'Net Banking'), ('c', 'Cash'), ('w', 'Cheque/Wire'),('e', 'ECS'),)
+    MEMBERSHIPTYPES = (('l', 'LifeTime'), ('y', 'Yearly'),)
     name = models.CharField(max_length=80)
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=120)
@@ -50,10 +48,12 @@ class User(models.Model):
     payment_mode = models.CharField(max_length=1, choices=PAYMENTMODES, default='n')
     member_type = models.CharField(max_length=1, choices=MEMBERSHIPTYPES, default='l')
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField('date created', default=timezone.now)
     
     def __str__(self):
         return self.name
+
 
 class Website(models.Model):
         name = models.CharField(max_length=150)
@@ -63,6 +63,7 @@ class Website(models.Model):
         verified = models.BooleanField(default=False)
         created_at = models.DateTimeField('date created', default=timezone.now)
         active = models.BooleanField(default=False)
+        deleted = models.BooleanField(default=False)
         
         def __str__(self):
             return self.name
@@ -89,7 +90,6 @@ class Business(models.Model):
     contact_number = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     website = models.IntegerField(default=0)
-    #searchengine field
     aboutus = models.CharField(max_length=300)
     title = models.CharField(max_length=100)
     state_list = models.ManyToManyField('States')
@@ -102,6 +102,7 @@ class Business(models.Model):
     created_at = models.DateTimeField('date created', default=timezone.now)
     active = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
+
     def __str__(self):
             return self.business_name
 
@@ -115,13 +116,18 @@ class Media(models.Model):
     business = models.ForeignKey('Business',on_delete=models.SET_NULL, null=True,default=None)
     ref_type = models.CharField(max_length=30)
     verified = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField('date created', default=timezone.now)
+
 
 class Countries(models.Model):
     sortname = models.CharField(max_length=3)
     name = models.CharField(max_length=150)
     phonecode = models.IntegerField()
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
     def __str__(self):
         return self.name
     
@@ -130,15 +136,19 @@ class States(models.Model):
     name = models.CharField(max_length=150)
     country = models.ForeignKey('Countries',on_delete=models.SET_NULL, null=True)
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
     def __str__(self):
         return self.name
     
 
-#backward compatibilty will be removed later
+# backward compatibility will be removed later
 class Cities(models.Model):
     name = models.CharField(max_length=150)
     state = models.ForeignKey('States',on_delete=models.SET_NULL, null=True)
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
     def __str__(self):
         return self.name
     
@@ -147,10 +157,13 @@ class Zones(models.Model):
     name = models.CharField(max_length=150)
     state = models.ForeignKey('States',on_delete=models.SET_NULL, null=True)
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
     def __str__(self):
         return self.name
 
-#used for search
+
+# used for search
 class BizRefProSearch(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=355)
@@ -159,20 +172,23 @@ class BizRefProSearch(models.Model):
     website = models.CharField(max_length=250)
     contact = models.CharField(max_length=250)
     rank = models.IntegerField(default=0)
-    #business id
     business_id = models.IntegerField(default=0)
     created_at = models.DateTimeField('date created', default=timezone.now)
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
 
 class Contact(models.Model):
-    name  = models.CharField(max_length=150)
+    name = models.CharField(max_length=150)
     email = models.EmailField(max_length=100)
     contact = models.CharField(max_length = 15)
     message = models.CharField(max_length = 255)
     created_at = models.DateTimeField('date created', default=timezone.now)
     active = models.BooleanField(default=False)
+
     def __str__(self):
             return str(self.created_at)+"::"+self.name+"::"+self.email
+
 
 class Executive(models.Model):
     first_name = models.CharField(max_length=80)
@@ -185,9 +201,12 @@ class Executive(models.Model):
     state = models.ForeignKey('States',on_delete=models.SET_NULL, null=True)
     zone = models.ForeignKey('Zones',on_delete=models.SET_NULL, null=True)
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField('date created', default=timezone.now)
+
     def __str__(self):
             return self.first_name+" "+self.last_name
+
 
 class Otp(models.Model):
     otp  = models.CharField(max_length=150)
@@ -195,8 +214,11 @@ class Otp(models.Model):
     business_id = models.CharField(max_length = 15)
     created_at = models.DateTimeField('date created', default=timezone.now)
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
     def __str__(self):
             return str(self.created_at)+"::"+self.otp+"::"+self.email
+
 
 class Thumsup(models.Model):
     email = models.EmailField(max_length=100)
@@ -205,8 +227,11 @@ class Thumsup(models.Model):
     business_id = models.CharField(max_length = 15)
     created_at = models.DateTimeField('date created', default=timezone.now)
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
     def __str__(self):
             return str(self.created_at)+"::"+self.email
+
 
 class Referer(models.Model):
     name = models.CharField(max_length=80)
@@ -214,16 +239,28 @@ class Referer(models.Model):
     phone = models.CharField(max_length=12, blank=True, null=True)
     referer = models.CharField(max_length=80, blank=True, null=True)
     user = models.ForeignKey('User',on_delete=models.SET_NULL, null=True,default=None)
+    active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name+" "+self.email
 
 
 class IndexQueue(models.Model):
     business = models.ForeignKey('Business', on_delete=models.SET_NULL, null=True, default=None)
     processed = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.business.name
 
 
 class Location(models.Model):
     name = models.CharField(max_length=150)
     state = models.ForeignKey('States',on_delete=models.SET_NULL, null=True)
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
     def __str__(self):
         return self.name

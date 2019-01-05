@@ -1,5 +1,5 @@
 from django_cron import CronJobBase, Schedule
-from app.models import IndexQueue, Business, User
+from app.models import IndexQueue, Business, User, Website
 import pysolr
 
 
@@ -24,7 +24,7 @@ class SearchSyncCronJob(CronJobBase):
                 keyword_list.append(keyword.name)
             website = ""
             try:
-                web = business.objects.get(id=business.website)
+                web = Website.objects.get(id=business.website)
                 website = web.name
             except:
                 pass

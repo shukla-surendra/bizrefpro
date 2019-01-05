@@ -366,7 +366,7 @@ def edit_business(request, id):
                         list_parent_category.append(keyword.category.id)
                     business.categories.set(list_parent_category)
                     business.state_list.set(request.POST.getlist('states'))
-                    business.locations.set(request.POST.getlist('locations'))
+                    business.locations.set(filter(None, request.POST.getlist('locations')))
                     messages.success(request, 'Business Successfully Updated.')
                     #saving attached media
                     mime = magic.Magic(mime=True)                    
@@ -580,7 +580,7 @@ def add_business(request):
                 business.categories.set(request.POST.getlist('categories'))
                 business.keywords.set(request.POST.getlist('keywords'))
                 business.state_list.set(request.POST.getlist('states'))
-                business.locations.set(request.POST.getlist('locations'))
+                business.locations.set(filter(None, request.POST.getlist('locations')))
                 if "pancard" in request.FILES:
                     pancard = request.FILES['pancard']
                     mimetype = mime.from_buffer(pancard.read())

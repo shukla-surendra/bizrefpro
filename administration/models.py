@@ -10,5 +10,5 @@ class Administrator(models.Model):
     phone = models.CharField(max_length=12, blank=True, null=True)
     verification_key = models.CharField(max_length=100, default="", blank=True, null=True)
     active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField('date created', default=timezone.now)
-

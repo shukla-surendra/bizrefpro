@@ -25,14 +25,14 @@ urlpatterns = [
     path("about-us", views.about, name="about"),
     path("faq", views.faq, name="faq"),
     path("why-join", views.how_it_work, name="how_it_work"),
-	path("support-troops", views.support_troops, name="support_troops"),
+    path("support-troops", views.support_troops, name="support_troops"),
     path("pricing", views.pricing, name="pricing"),
     path("news", views.news, name="news"),
     path("career", views.career, name="career"),
-	path("privacy-policy", views.privacy, name="privacy"),
-	path("terms", views.terms, name="terms"),
-	path("franchise", views.franchise, name="franchise"),
-	path("career", views.career, name="career"),
+    path("privacy-policy", views.privacy, name="privacy"),
+    path("terms", views.terms, name="terms"),
+    path("franchise", views.franchise, name="franchise"),
+    path("career", views.career, name="career"),
     path("registration-success", views.registration_success, name="registration-success"),
     path("search-result", views.search_result, name="search_result"),
     path("send_thumbsup_otp", views.send_thumbsup_otp, name="send_thumbsup_otp"),
@@ -47,7 +47,7 @@ urlpatterns = [
     #search auto complete
     #path("hosting-features.html", views.hosting_features, name="hosting_features"),
     #sync search index
-    path("syncSearch", views.syncSearch, name="syncSearch"),
+    #path("syncSearch", views.syncSearch, name="syncSearch"),
     #delete path
     path("delete_media_file", views.delete_media_file, name="delete_media_file"),
     path("import_csv", views.import_csv, name="import_csv"),
