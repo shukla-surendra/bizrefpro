@@ -14,9 +14,10 @@ from bizrefpro.settings import BASE_DIR
 def dashboard(request):
     if "admin_id" not in request.session:
         return HttpResponseRedirect('/administration/login')
-    pageContext =  {"title": "Bizrefpro Dashboard"}
-    pageContext['pageTitle'] = 'Dashboard'
-    return render(request, "administration/dashboard.html", pageContext)
+    page_context = dict()
+    page_context['title'] = "Bizrefpro Dashboard"
+    page_context['pageTitle'] = 'Dashboard'
+    return render(request, "administration/dashboard.html", page_context)
 
 
 def add_employee(request):
@@ -43,7 +44,7 @@ def add_employee(request):
                 zone = Zones.objects.get(id=request.POST['zone'])
             except:
                 zone = None
-            executive = Executive(first_name=eform.cleaned_data['first_name'],last_name=eform.cleaned_data['last_name'],email=eform.cleaned_data['email'],role=eform.cleaned_data['role'],password=make_password(password=eform.cleaned_data['password'], salt=None, hasher="bcrypt"),state=state,zone=zone)
+            executive = Executive(first_name=eform.cleaned_data['first_name'],last_name=eform.cleaned_data['last_name'], email=eform.cleaned_data['email'], role=eform.cleaned_data['role'], password=make_password(password=eform.cleaned_data['password'], salt=None, hasher="bcrypt"), state=state, zone=zone)
             executive.save()
         else:
             print(eform.errors)
@@ -102,16 +103,18 @@ def get_executives(request, id):
     htmlResponse = "";
     htmlResponse +='<option value="0">Select Executives</option>'
     try:
-        executives = Executive.objects.filter(zone=id,role='executive')
+        executives = Executive.objects.filter(zone=id,role='executive').exclude(deleted=True)
         for executive in executives:
             htmlResponse +='<option value="'+str(executive.id)+'">'+executive.first_name.capitalize()+' '+executive.last_name.capitalize()+'</option>'
     except:
         None        
     return HttpResponse(htmlResponse);
 
+
 def logout(request):
     request.session.flush()
     return HttpResponseRedirect('/administration/login')
+
 
 def all_users(request):
     if "admin_id" not in request.session:
@@ -120,6 +123,7 @@ def all_users(request):
     pageContext['pageTitle'] = 'All Users'
     return render(request, "administration/all_business_users.html", pageContext)
 
+
 def get_users(request):
     if "admin_id" not in request.session:
         return HttpResponse(json.dumps({}))
@@ -127,7 +131,7 @@ def get_users(request):
     start = int(request.GET['start'])
     length = int(request.GET['length'])
     count = User.objects.count()
-    users = User.objects.all().order_by('-id')[start:start+length]
+    users = User.objects.all().order_by('-id').exclude(deleted=True)[start:start+length]
     for user in users:
         status = '<span class="text-warning">Pending</span>'
         action = "<a href='' class='approve_user' data-id = '"+str(user.id)+"'>Approve</a>"
@@ -141,6 +145,7 @@ def get_users(request):
     mdict['recordsTotal'] = count  # show from how many record its filtered.
     mdict['recordsFiltered'] = count  # show how many record filtered.
     return HttpResponse(json.dumps(mdict))
+
 
 def approve_users(request):
     response = {}
@@ -226,6 +231,7 @@ def keyword_import(request):
     context['parent_categories'] = parent_categories;
     return render(request, "administration/keyword_import.html", context)
 
+
 def get_sub_category(request, id):
     htmlResponse = "";
     if 'user' in request.GET:
@@ -253,13 +259,13 @@ def get_keywords(request, id):
         if 'business_id' in request.GET:
             business_id = request.GET['business_id']
             business = Business.objects.get(id=business_id)
-            keywords_list = business.keywords.all().values_list('id', flat=True)
+            keywords_list = business.keywords.all().exclude(deleted=True).values_list('id', flat=True)
         category = Category.objects.get(id=id)
-        keywords = Keyword.objects.filter(category=category)
+        keywords = Keyword.objects.filter(category=category).exclude(deleted=True)
         for keyword in keywords:
             if 'business_id' in request.GET:
                 if keyword.id in keywords_list:
-                    html_response += '<li> <input type="checkbox" checked="checked" class="keywords_to_add" data-category="'+str(category.id)+'" data-title="' + keyword.name +'" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
+                    html_response += '<li><input type="checkbox" checked="checked" class="keywords_to_add" data-category="'+str(category.id)+'" data-title="' + keyword.name +'" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
                 else:
                     html_response += '<li> <input type="checkbox" class="keywords_to_add" data-category="' + str(category.id) + '" data-title="' + keyword.name + '" value="' + str(keyword.id) + '"/>' + keyword.name + '</li>'
             else:

@@ -4,8 +4,7 @@ import pysolr
 
 
 class SearchSyncCronJob(CronJobBase):
-    RUN_EVERY_MINS = 15
-    # every 15 hours
+    RUN_EVERY_MINS = 15 # every 15 minutes
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
     code = 'app.search_cron_job'
 
@@ -15,8 +14,6 @@ class SearchSyncCronJob(CronJobBase):
         deindex_data = []
         indexes = IndexQueue.objects.filter(processed=False)
         for index in indexes:
-            index.processed = True
-            index.save()
             business = index.business
             keyword_list = []
             keywords = business.keywords.all()
@@ -37,8 +34,7 @@ class SearchSyncCronJob(CronJobBase):
                     group_rating = self.calculate_group_rating(business)
                     business_points = business.rating + business.thumbs_up + group_rating
                     down_rating = self.calculate_group_thumbs_down_rating(business)
-                    index_data.append(
-                        {
+                    index_data.append({
                             "id": "doc_" + str(business.id),
                             "title": business.title,
                             "description": business.aboutus,
@@ -55,6 +51,8 @@ class SearchSyncCronJob(CronJobBase):
                     deindex_data.append("doc_" + str(business.id))
             except:
                 pass
+            index.processed = True
+            index.save()
         solr.add(index_data, commit=True)
         if len(deindex_data) > 0:
             solr.delete(id=deindex_data, commit=True)

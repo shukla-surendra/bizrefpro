@@ -16,86 +16,92 @@ from random import randint
 from django.utils import timezone
 from datetime import timedelta
 from .bizrefpro_mail import send_enquiry_email, send_userforget_password_link_mail, send_otp, BizEmailService
-from nltk.corpus import stopwords 
+from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-
-
 
 
 # Create your views here.
 def index(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business"}
-    return render(request, "app/index.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business"}
+    return render(request, "app/index.html", page_context)
+
 
 def contact(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Contact Us"}
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Contact Us"}
     if request.method == "POST":
         cform = ContactForm(request.POST)
         if cform.is_valid():
             contact = Contact(name=cform.cleaned_data['name'], email=cform.cleaned_data['email'], contact=cform.cleaned_data['contact'], message=cform.cleaned_data['message'])
             contact.save()
             messages.add_message(request, messages.SUCCESS, 'Enquiry Sent Successfully')
-        
-    return render(request, "app/contact.html", pageContext)
+
+    return render(request, "app/contact.html", page_context)
 
 
 def pricing(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Pricing"}
-    return render(request, "app/pricing.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Pricing"}
+    return render(request, "app/pricing.html", page_context)
+
 
 def support_troops(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Support Troops"}
-    return render(request, "app/support-troops.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Support Troops"}
+    return render(request, "app/support-troops.html", page_context)
+
 
 def privacy(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Privacy"}
-    return render(request, "app/privacy-policy.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Privacy"}
+    return render(request, "app/privacy-policy.html", page_context)
+
 
 def terms(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Terms"}
-    return render(request, "app/terms.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Terms"}
+    return render(request, "app/terms.html", page_context)
+
 
 def franchise(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Franchise"}
-    return render(request, "app/franchise.html", pageContext)
-    
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Franchise"}
+    return render(request, "app/franchise.html", page_context)
+
 
 def about(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"About Us"}
-    return render(request, "app/about-us.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"About Us"}
+    return render(request, "app/about-us.html", page_context)
+
 
 def faq(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Faq"}
-    return render(request, "app/faq.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Faq"}
+    return render(request, "app/faq.html", page_context)
 
 
 def how_it_work(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"How It Works"}
-    return render(request, "app/why-join.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"How It Works"}
+    return render(request, "app/why-join.html", page_context)
 
 
 def plan(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"How It Works"}
-    return render(request, "app/plan.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"How It Works"}
+    return render(request, "app/plan.html", page_context)
 
 
 def news(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"News"}
-    return render(request, "app/news.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"News"}
+    return render(request, "app/news.html", page_context)
+
 
 def career(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Career"}
-    return render(request, "app/career.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Career"}
+    return render(request, "app/career.html", page_context)
 
 
 def search_result(request):
     if "q" not in request.GET:
         return HttpResponseRedirect("/")
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Search Result"}
-    pageContext['page'] = "search";
-    pageContext['qpart1'] = request.GET['q'];
-    pageContext['qpart2'] = request.GET['location']
-    return render(request, "app/search-result.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Search Result"}
+    page_context['page'] = "search";
+    page_context['qpart1'] = request.GET['q'];
+    page_context['qpart2'] = request.GET['location']
+    return render(request, "app/search-result.html", page_context)
+
 
 def search(request):
     queryString = request.GET['q']
@@ -107,7 +113,7 @@ def search(request):
     mmlength = len(filtered_sentence)
     print(location)
     queryString = ' '.join(filtered_sentence)
-    if location == "" or location == None:    
+    if location == "" or location == None:
         queryParam = {"q": 'keywords:' + queryString, "defType": "edismax", "qf": "keywords", "mm":mmlength, 'sort':"rank desc"}
     else:
         queryParam = {"q": 'keywords:' + queryString, "fq":'locations:' + location, "defType": "edismax", "qf": "keywords", "mm": mmlength, 'sort': "rank desc"}
@@ -116,34 +122,35 @@ def search(request):
     data = webURL.read()
     encoding = webURL.info().get_content_charset('utf-8')
     JSON_object = json.loads(data.decode(encoding))
-    #results = json.load(results)
     return HttpResponse(json.dumps(JSON_object),content_type='application/json')
+
 
 def search_result_test(request):
     if "q" not in request.GET:
         return HttpResponseRedirect("/")
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Search Result"}
-    pageContext['page'] = "search";
-    pageContext['qpart1'] = request.GET['q'];
-    pageContext['qpart2'] = request.GET['location']
-    return render(request, "app/search-result-test.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Search Result"}
+    page_context['page'] = "search";
+    page_context['qpart1'] = request.GET['q'];
+    page_context['qpart2'] = request.GET['location']
+    return render(request, "app/search-result-test.html", page_context)
+
 
 def hosting_features(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Hosting Features"}
-    return render(request, "app/hosting-features.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Hosting Features"}
+    return render(request, "app/hosting-features.html", page_context)
 
 
 def login_register(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Login Register"}
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Login Register"}
     states = States.objects.filter(country_id=1)
-    pageContext['states'] = states;
+    page_context['states'] = states;
     if request.method == 'POST':
         if request.POST['form_type'] == "signup":
             try:
                 user = User.objects.get(email=request.POST['email'])
-                pageContext['message_type'] = "failed"
-                pageContext['message'] = "Email Address Already Exists"
-                return render(request, "app/login-register.html", pageContext)
+                page_context['message_type'] = "failed"
+                page_context['message'] = "Email Address Already Exists"
+                return render(request, "app/login-register.html", page_context)
             except:
                 country = Countries.objects.get(id=1)
                 uform = UserForm(request.POST)
@@ -185,47 +192,53 @@ def login_register(request):
                     bizmail = BizEmailService();
                     bizmail.send_signup_notification_to_admin(user=user)
                     bizmail.send_approval_notification_to_user(user)
-                    pageContext['message_type']="success"
-                    pageContext['message']="Registered Successfully"
+                    page_context['message_type']="success"
+                    page_context['message']="Registered Successfully"
                     messages.success(request, 'Success! Your Application has been submitted successfully. Please login and complete your profile.')
-                    #return render(request, "app/login-register.html", pageContext)
+                    #return render(request, "app/login-register.html", page_context)
                     return HttpResponseRedirect("/registration-success")
                 else:
                     # return HttpResponse('POST method'+request.POST['name'])
                     # request.session['name'] ="Session Created";
-                    pageContext['message_type']="failed"
-                    pageContext['message']="Something Went wrong"
-                    return render(request, "app/login-register.html", pageContext)
+                    page_context['message_type']="failed"
+                    page_context['message']="Something Went wrong"
+                    return render(request, "app/login-register.html", page_context)
         if request.POST['form_type'] == "signin":
             try:
                 user = User.objects.get(email=request.POST['email'])
                 if check_password(request.POST['password'], user.password):
-                    if user.active == False:
-                        pageContext['message_type']="failed"
-                        pageContext['message']="Your Profile is disabled Contact customer care to approve"
-                        return render(request, "app/login-register.html", pageContext)
+                    if user.deleted is True:
+                        page_context['message_type'] = "failed"
+                        page_context['message'] = "Account has been deleted"
+                        return render(request, "app/login-register.html", page_context)
+                    elif user.active == False:
+                        page_context['message_type']="failed"
+                        page_context['message']="Your Profile is disabled Contact customer care to approve"
+                        return render(request, "app/login-register.html", page_context)
                     else:
                         request.session['id'] = user.id
                         return HttpResponseRedirect('user/dashboard')
                 else:
-                    pageContext['message_type']="failed"
-                    pageContext['message']="Incorrect username and password"
-                    return render(request, "app/login-register.html", pageContext)
+                    page_context['message_type']="failed"
+                    page_context['message']="Incorrect username and password"
+                    return render(request, "app/login-register.html", page_context)
             except:
-                pageContext['message_type']="failed"
-                pageContext['message']="Incorrect username and password"
-                return render(request, "app/login-register.html", pageContext)
-    pageContext['message_type']=""
-    return render(request, "app/login-register.html", pageContext)
+                page_context['message_type']="failed"
+                page_context['message']="Incorrect username and password"
+                return render(request, "app/login-register.html", page_context)
+    page_context['message_type']=""
+    return render(request, "app/login-register.html", page_context)
 
 
 def forgot_password(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Forgot Password"}
-    return render(request, "app/forgot_password.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Forgot Password"}
+    return render(request, "app/forgot_password.html", page_context)
+
 
 def registration_success(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Registration Success"}
-    return render(request, "app/registration-successful.html", pageContext)
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Registration Success"}
+    return render(request, "app/registration-successful.html", page_context)
+
 
 def reset_link(request):
     email = request.POST['email'];
@@ -239,12 +252,15 @@ def reset_link(request):
     except:
         return HttpResponse("failed")
 
+
 def reset_password(request, token):
     try:
         user = User.objects.get(verification_key=token)
-        pageContext = {"title": "Best Business Referral Program | Destination to Grow Business",
-                       "pageTitle": "Password Reset","msg_type":''}
-        pageContext['showForm'] = True
+        page_context = dict()
+        page_context["title"]="Best Business Referral Program | Destination to Grow Business"
+        page_context["pageTitle"]="Password Reset"
+        page_context["msg_type"]= ''
+        page_context['showForm'] = True
         if request.method == 'POST':
             password = request.POST['password']
             cpassword = request.POST['cpassword']
@@ -252,81 +268,39 @@ def reset_password(request, token):
                 user.password = make_password(password=cpassword, salt=None, hasher="bcrypt")
                 user.verification_key = ""
                 user.save()
-                pageContext['msg_type'] ='success'
-                pageContext['showForm'] = False
-                pageContext['message']  = 'Password has been reset successfully'
+                page_context['msg_type'] ='success'
+                page_context['showForm'] = False
+                page_context['message']  = 'Password has been reset successfully'
             else:
-                pageContext['msg_type'] = 'failure'
-                pageContext['showForm'] = True
-                pageContext['message'] = 'Both password didn\'t match'
-        return render(request, "app/password-reset.html", pageContext)
+                page_context['msg_type'] = 'failure'
+                page_context['showForm'] = True
+                page_context['message'] = 'Both password didn\'t match'
+        return render(request, "app/password-reset.html", page_context)
     except:
-        pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Link Expired"}
-        return render(request, "app/link-rexpired.html", pageContext)
+        page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Link Expired"}
+        return render(request, "app/link-rexpired.html", page_context)
+
 
 def ssl_validation(request):
-	return HttpResponse("D7A6A1569AF33477127AB63D7E1C2ECE34978E0B814DF205790B1311A67CA0B3 comodoca.com 5b4825a5529ea")
+    return HttpResponse("D7A6A1569AF33477127AB63D7E1C2ECE34978E0B814DF205790B1311A67CA0B3 comodoca.com 5b4825a5529ea")
 
-
-def syncSearch(request):
-    # Setup a Solr instance. The timeout is optional.
-    solr = pysolr.Solr('http://localhost:8983/solr/collection1/', timeout=10)
-    #solr.delete(q='*:*')
-    indexData = []
-    businesses = Business.objects.all()
-    for business in businesses:
-        keywordList = []
-        keywords = business.keywords.all()
-        for keyword in keywords:
-            keywordList.append(keyword.name)
-        website = "";
-        try:
-            web = Website.objects.get(id=business.website)
-            website = web.name
-        except:
-            pass
-        locationList = []
-        locations = business.locations.all()
-        for location in locations:
-            locationList.append(location.name)
-        try:
-            # How you'd index data.
-            indexData.append(
-                {
-                    "id": "doc_" + str(business.id),
-                    "title": business.title,
-                    "description": business.aboutus,
-                    "keywords": keywordList,
-                    "address": business.address1,
-                    "website": website,
-                    "locations": locationList,
-                    "business_id": business.id,
-                    "thumbs_down": business.thumbs_down,
-                    "contact": str(business.contact_number),
-                    "rank": str(business.rating + business.thumbs_up)
-                }
-            )
-        except:
-            pass
-
-    solr.add(indexData, commit=True)
-    return HttpResponse("Ok")
 
 def bizrefpro_promotions(request):
-    pageContext =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Forgot Password"}
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Forgot Password"}
     if request.method == 'POST':
         name = request.POST['name']
         email = request.POST['email']
         phone = request.POST['phone']
         location = request.POST['location']
         if name == "" or phone == "":
-            return render(request, "promotions/index.html", pageContext)
+            return render(request, "promotions/index.html", page_context)
         else:
             send_enquiry_email(name, email, phone, location)
-            return render(request, "promotions/success.html", pageContext)
-        
+            return render(request, "promotions/success.html", page_context)
+
     else:
-        return render(request, "promotions/index.html", pageContext)
+        return render(request, "promotions/index.html", page_context)
+
 
 def send_thumbsup_otp(request):
     email = request.GET['email'];
@@ -368,11 +342,12 @@ def thums_up(request):
                 resp["message"] = "You have successfully submitted your rating."
         else:
             resp['status']= "failed"
-            resp["message"] = "This otp might be expired or incorrect." 
+            resp["message"] = "This otp might be expired or incorrect."
     except:
         resp['status']= "failed"
-        resp["message"] = "This otp might be expired or incorrect."   
+        resp["message"] = "This otp might be expired or incorrect."
     return HttpResponse(json.dumps(resp))
+
 
 def thums_down(request):
     resp = {}
@@ -385,7 +360,7 @@ def thums_down(request):
         otp_count = Otp.objects.filter(otp=otp,business_id=business_id).count()
         if otp_count > 0:
             try:
-                thumsup = Thumsup.objects.get(email=email,business_id=business_id,thumbs_down=1)
+                thumsup = Thumsup.objects.get(email=email, business_id=business_id, thumbs_down=1)
                 resp['status']= "failed"
                 resp["message"] = "Your review has been already submitted"
             except:
@@ -398,10 +373,10 @@ def thums_down(request):
                 resp["message"] = "You have successfully submitted your rating"
         else:
             resp['status']= "failed"
-            resp["message"] = "This otp might be expired or incorrect." 
+            resp["message"] = "This otp might be expired or incorrect."
     except:
         resp['status']= "failed"
-        resp["message"] = "This otp might be expired or incorrect."   
+        resp["message"] = "This otp might be expired or incorrect."
     return HttpResponse(json.dumps(resp))
 
 
@@ -422,27 +397,31 @@ def delete_media_file(request):
             media = Media.objects.get(id=media_id)
             if os.path.exists(BASE_DIR+'/static/uploads/documents/'+media.path):
                 os.remove(BASE_DIR+'/static/uploads/documents/'+media.path)
-            media.delete() 
+            media.delete()
         except:
             None
     resp['status'] = "success"
     return HttpResponse(json.dumps(resp))
 
+
 def autocomplete(request):
     resp = []
     search_text = request.GET['term']
-    keywords = Keyword.objects.filter(name__icontains=search_text)[:10]
+    keywords = Keyword.objects.filter(name__icontains=search_text).exclude(deleted=True)[:10]
     for keyword in keywords:
         resp.append({"id": keyword.name,"value": keyword.name,"label": keyword.name})
     return HttpResponse(json.dumps(resp))
 
+
 def location_autocomplete(request):
     resp = []
     search_text = request.GET['term']
-    locations = Location.objects.filter(name__icontains=search_text)[:10]
+    locations = Location.objects.filter(name__icontains=search_text).exclude(deleted=True)[:10]
     for location in locations:
         resp.append({"id": location.name,"value": location.name,"label": location.name})
     return HttpResponse(json.dumps(resp))
+
+
 def import_csv(request):
     return HttpResponse("Already Imported")
     with open(BASE_DIR + '/static/uploads/category-sub-keyword.csv') as csv_file:
@@ -461,10 +440,15 @@ def import_csv(request):
                 keyword.save()
     return HttpResponse("ok")
 
-#error handlers
+
+# error handlers
 def handler404(request, exception):
     return render(request, 'errors/404.html', locals())
+
+
 def handler400(request, exception):
     return render(request, 'errors/400.html', locals())
+
+
 def handler500(request, exception):
     return render(request, 'errors/500.html', locals())

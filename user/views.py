@@ -25,7 +25,7 @@ def dashboard(request):
         for business in businesses:
             doc_points += (get_calculate_rating(business.id) + business.thumbs_up)
 
-        #calculating group user
+        # calculating group user
         object_list = User.objects.filter(reference_id=user.id)
         for object in object_list:
             thumbs_up = 0
@@ -46,6 +46,7 @@ def dashboard(request):
         if user.member_type == 'l':
             expiryDate = '-'
         return render(request, "user/index.html", {"user":user,"expiryDate":expiryDate,"docPoint":doc_points, "amount":user.amount,"accountType":accountType,"status":status, "created_at":signupDate,"title": "Best Business Referral Program | Destination to Grow Business"})
+
 
 def profile(request):
     if "id" not in request.session:
@@ -233,17 +234,17 @@ def profile(request):
             electricity = Media.objects.get(title="electricity", user=user, ref_type="user")
         except:
             electricity = None
-        pageContext = {"title": "Best Business Referral Program | Destination to Grow Business", "countries":countries,"states":states,"cities":cities}
+        page_context = {"title": "Best Business Referral Program | Destination to Grow Business", "countries":countries,"states":states,"cities":cities}
         user = User.objects.get(id=request.session['id']);
-        pageContext["user"] = user
-        pageContext["form"] = form
-        pageContext["pancard"] = pancard
-        pageContext["dl"] = dl
-        pageContext["aadhar"] = aadhar
-        pageContext["passport"] = passport
-        pageContext["voterid"] = voterid
-        pageContext["electricity"] = electricity
-        return render(request, "user/profile.html",pageContext)
+        page_context["user"] = user
+        page_context["form"] = form
+        page_context["pancard"] = pancard
+        page_context["dl"] = dl
+        page_context["aadhar"] = aadhar
+        page_context["passport"] = passport
+        page_context["voterid"] = voterid
+        page_context["electricity"] = electricity
+        return render(request, "user/profile.html",page_context)
 
 
 def logout(request):
@@ -273,6 +274,7 @@ def add_website(request):
         categories = Category.objects.all()
         context = {"title": "Add Website", "message_type":"","categories":categories}
         return render(request, "user/add-website.html", context)
+
 
 def edit_website(request,id):
         if "id" not in request.session:
@@ -698,10 +700,12 @@ def add_member(request):
                 pass
     return render(request, "user/add-member.html", {})
 
+
 def manage_group(request):
     if "id" not in request.session:
         return HttpResponseRedirect('/login-register')
     return render(request, "user/manage-group.html", {})
+
 
 def get_user_groupes(request):
     if "id" not in request.session:
@@ -796,6 +800,7 @@ def get_business_review(request, id, review_type):
     mdict['recordsTotal'] = count  # show from how many record its filtered.
     mdict['recordsFiltered'] = count  # show how many record filtered.
     return HttpResponse(json.dumps(mdict))
+
 
 def get_envitations(request):
     if "id" not in request.session:

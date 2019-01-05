@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'change-me-dev-only'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['YOUR_SERVER_IP','bizrefpro.com','www.bizrefpro.com']
 
@@ -40,7 +40,12 @@ INSTALLED_APPS = [
     'app',
     'user',
     'administration',
-    'executive',
+    'django_cron',
+]
+
+CRON_CLASSES = [
+    "app.jobs.SearchSyncCronJob.SearchSyncCronJob",
+    "app.jobs.SearchSyncCronJob.SolrIndexFullFeed"
 ]
 
 MIDDLEWARE = [

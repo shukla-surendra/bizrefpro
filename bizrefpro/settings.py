@@ -55,8 +55,8 @@ MIDDLEWARE = [
 ]
 
 CRON_CLASSES = [
-"app.jobs.SearchSyncCronJob.SearchSyncCronJob",
-# ...
+    "app.jobs.SearchSyncCronJob.SearchSyncCronJob",
+    "app.jobs.SolrIndexFullFeed.SolrIndexFullFeed"
 ]
 
 ROOT_URLCONF = 'bizrefpro.urls'
