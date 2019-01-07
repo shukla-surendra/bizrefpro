@@ -91,7 +91,7 @@ class Business(models.Model):
     website = models.IntegerField(default=0)
     aboutus = models.CharField(max_length=300)
     title = models.CharField(max_length=100)
-    state_list = models.ManyToManyField('States')
+    state_list = models.ManyToManyField('States', blank=True)
     locations = models.ManyToManyField('Location')
     gst_no = models.CharField(max_length=30, default="", blank=True, null=True)
     rating = models.IntegerField(default=10)

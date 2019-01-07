@@ -42,6 +42,7 @@ urlpatterns = [
     path("hosting-features.html", views.hosting_features, name="hosting_features"),
     #search url
     path("search", views.search, name="search"),
+    path("category/<int:category_id>", views.dispaly_business, name="dispaly_business"),
     path("autocomplete", views.autocomplete, name="autocomplete"),
     path("location_autocomplete", views.location_autocomplete, name="location_autocomplete"),
     #search auto complete

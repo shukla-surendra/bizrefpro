@@ -367,7 +367,7 @@ def edit_business(request, id):
                         keyword = Keyword.objects.get(id=kid)
                         list_parent_category.append(keyword.category.id)
                     business.categories.set(list_parent_category)
-                    business.state_list.set(request.POST.getlist('states'))
+                    business.state_list.set(filter(None, request.POST.getlist('states')))
                     business.locations.set(filter(None, request.POST.getlist('locations')))
                     messages.success(request, 'Business Successfully Updated.')
                     #saving attached media
@@ -502,8 +502,7 @@ def edit_business(request, id):
                 rentagreement = Media.objects.get(title="rentagreement", business=business, ref_type="business")
             except:
                 rentagreement = None
-                
-         
+
             myContext = {"title": "Manage Business", "message_type":"","business":business,"websites":websites, "form":form, "categories":categories,"countries":countries,"states":states,"cities":cities,"savedKeywords":savedKeywords, "locations":locations}
             myContext['vidoes'] = videos 
             myContext['pancard'] = pancard
@@ -516,7 +515,11 @@ def edit_business(request, id):
                 myContext['subcategories'] = subcategories
                 selected_locations = business.locations.all()
                 myContext['selected_locations'] = selected_locations
-            except:
+                selected_states = business.state_list.all()
+                myContext['selected_states'] = selected_states
+                myContext['locations_len'] = len(selected_locations)
+            except Exception as e:
+                print("exception occure", e)
                 myContext['category'] = None
             myContext['bankstatement'] = bankstatement
             myContext['registration_certificate'] = registration_certificate
@@ -527,8 +530,7 @@ def edit_business(request, id):
                 index_queue.processed = False
                 index_queue.save()
             except:
-                index_queue = IndexQueue(business=business)
-                index_queue.save()
+                pass
             return render(request, "user/edit-business.html", myContext)
 
 
@@ -577,11 +579,11 @@ def add_business(request):
                 gst_value=""
                 if form.cleaned_data['gst_no']:
                     gst_value = form.cleaned_data['gst_no']
-                business = Business(business_name=form.cleaned_data['business_name'],user=user,address1=form.cleaned_data['address1'],address2=form.cleaned_data['address2'], landmark=form.cleaned_data['landmark'], location=form.cleaned_data['location'],country=country, state=state, city=form.cleaned_data['city'], pincode=form.cleaned_data['pincode'], first_name =form.cleaned_data['first_name'], last_name =form.cleaned_data['last_name'], designation=form.cleaned_data['designation'],category_id=form.cleaned_data['category_id'],landline=form.cleaned_data['landline'],contact_number=form.cleaned_data['contact_number'],email=form.cleaned_data['email'],website=website, aboutus=form.cleaned_data['aboutus'],title=form.cleaned_data['title'],gst_no=gst_value)
+                business = Business(business_name=form.cleaned_data['business_name'],user=user,address1=form.cleaned_data['address1'],address2=form.cleaned_data['address2'], landmark=form.cleaned_data['landmark'], location=form.cleaned_data['location'],country=country, state=state, city=form.cleaned_data['city'], pincode=form.cleaned_data['pincode'], first_name =form.cleaned_data['first_name'], last_name =form.cleaned_data['last_name'], designation=form.cleaned_data['designation'],category_id=form.cleaned_data['category_id'],landline=form.cleaned_data['landline'],contact_number=form.cleaned_data['contact_number'],email=form.cleaned_data['email'],website=website, aboutus=form.cleaned_data['aboutus'],title=form.cleaned_data['title'],gst_no=gst_value, active=True)
                 business.save()
                 business.categories.set(request.POST.getlist('categories'))
                 business.keywords.set(request.POST.getlist('keywords'))
-                business.state_list.set(request.POST.getlist('states'))
+                business.state_list.set(filter(None, request.POST.getlist('states')))
                 business.locations.set(filter(None, request.POST.getlist('locations')))
                 if "pancard" in request.FILES:
                     pancard = request.FILES['pancard']

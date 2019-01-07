@@ -441,6 +441,37 @@ def import_csv(request):
     return HttpResponse("ok")
 
 
+def dispaly_business(request, category_id):
+    businesses = Business.objects.filter(category_id=category_id, active=True, deleted=False)
+    docs = []
+    page_context = dict()
+    for business in businesses:
+        group_rating = calculate_group_rating(business)
+        business_points = business.rating + business.thumbs_up + group_rating
+        down_rating = calculate_group_thumbs_down_rating(business)
+        website = ""
+        try:
+            web = Website.objects.get(id=business.website)
+            website = web.name
+        except Exception as ex:
+            print("exception(No website)", ex)
+        docs.append({
+                            "id": business.id,
+                            "title": business.title,
+                            "description": business.aboutus,
+                            "address": business.address1,
+                            "website": website,
+                            "business_id": business.id,
+                            "thumbs_down": str(business.thumbs_down+down_rating),
+                            "contact": str(business.contact_number),
+                            "rank": str(business_points)
+                        })
+
+    page_context['docs'] = docs
+    page_context['doc_len'] = len(docs)
+    return render(request, "app/category-data.html", page_context)
+
+
 # error handlers
 def handler404(request, exception):
     return render(request, 'errors/404.html', locals())
@@ -452,3 +483,39 @@ def handler400(request, exception):
 
 def handler500(request, exception):
     return render(request, 'errors/500.html', locals())
+
+
+def calculate_group_rating(business):
+        points = 0
+        if business is not None:
+            total_thumbs_up =0
+            user_id = business.user.id
+            object_list = User.objects.filter(reference_id=user_id)
+            for object in object_list:
+                thumbs_up = 0
+                businesses = Business.objects.filter(user=object)
+                for business in businesses:
+                    if business.active is True:
+                        thumbs_up += business.thumbs_up
+                        total_thumbs_up += thumbs_up
+            points = total_thumbs_up
+        return points
+
+
+def calculate_group_thumbs_down_rating(business):
+        points = 0
+        if business is not None:
+            total_thumbs_down =0
+            user_id = business.user.id
+            object_list = User.objects.filter(reference_id=user_id)
+            for object in object_list:
+                thumbs_down = 0
+                businesses = Business.objects.filter(user=object)
+                for business in businesses:
+                    if business.active is True:
+                        thumbs_down += business.thumbs_down
+                        total_thumbs_down += thumbs_down
+            points = total_thumbs_down
+        return points
+
+

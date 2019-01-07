@@ -138,7 +138,7 @@ def get_users(request):
         if user.active:
             action = ""
             status = '<span class="text-success">Approved<span>'
-        status = '<a href="/administration/user_login/'+str(user.id)+'" target="_blank">Login</a> '+status
+        action = '<a href="/administration/user_login/'+str(user.id)+'" target="_blank">Login</a>'+action+" <a href='' class='delete_user text-danger' data-id = '"+str(user.id)+"'>Delete</a>"
         list.append({"name":user.name,"email":user.email, "phone": user.phone, "city":user.city,"status":status,"action":action})
     mdict = {"data": list}
     mdict['draw'] = request.GET['draw']

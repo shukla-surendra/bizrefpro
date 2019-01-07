@@ -41,7 +41,7 @@ class SearchSyncCronJob(CronJobBase):
                             "keywords": keyword_list,
                             "address": business.address1,
                             "website": website,
-                            "locations":location_list,
+                            "locations": location_list,
                             "business_id": business.id,
                             "thumbs_down": str(business.thumbs_down+down_rating),
                             "contact": str(business.contact_number),

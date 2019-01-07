@@ -41,7 +41,7 @@ class SolrIndexFullFeed(CronJobBase):
                             "keywords": keyword_list,
                             "address": business.address1,
                             "website": website,
-                            "locations":location_list,
+                            "locations": location_list,
                             "business_id": business.id,
                             "thumbs_down": str(business.thumbs_down+down_rating),
                             "contact": str(business.contact_number),
@@ -52,8 +52,10 @@ class SolrIndexFullFeed(CronJobBase):
                 # mark index as processed
                 index.processed = True
                 index.save()
-            except:
+            except Exception as ex:
+                print("Exception Occurs", ex)
                 pass
+        print(index_data)
         solr.add(index_data, commit=True)
         if len(deindex_data) > 0:
             solr.delete(id=deindex_data, commit=True)

@@ -183,7 +183,7 @@
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<div class="col-md-12 col-sm-12 col-xs-12">
 										<label>Contact Number</label>
-										<input type="text" name="landline" id="landline" value="{{ business.landline|default:"" }}" class="form-control" placeholder="Contact No.">
+										<input type="text" name="landline" id="landline" value="{{ business.landline|default:"" }}" class="form-control" placeholder="Contact No." />
 									</div>
 								</div>
 							</div>
@@ -456,6 +456,18 @@
 									<div class="col-md-12 col-sm-12 col-xs-12 center-clock" style="text-align: center;">
 										<button type="button" class="btn btn-primary btn-add center-clock">Add More</button>
 									</div>
+								</div>
+							</div>
+                            <div class="item_form">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="col-md-12 col-sm-12 col-xs-12 center-clock" style="text-align: center;">
+							{% if locations_len is 0 %}
+										<h4>Served Area</h4>
+                            {% for state in selected_states %}
+							<p>{{state.name}}</p>
+							{% endfor %}
+							{% endif %}
+										</div>
 								</div>
 							</div>
 							
