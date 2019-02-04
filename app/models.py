@@ -234,7 +234,7 @@ class Thumsup(models.Model):
 
 class Referer(models.Model):
     name = models.CharField(max_length=80)
-    email = models.EmailField(max_length=100, unique=True)
+    email = models.EmailField(max_length=100,blank=True, null=True)
     phone = models.CharField(max_length=12, blank=True, null=True)
     referer = models.CharField(max_length=80, blank=True, null=True)
     user = models.ForeignKey('User',on_delete=models.SET_NULL, null=True,default=None)

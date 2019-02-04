@@ -394,6 +394,9 @@
 										<label>Select Locations</label>
 										<select name="locations">
 											 <option value="">Select Your Location</option>
+																{% ifnotequal delhi_ncr None %}
+											<option value="{{delhi_ncr.id}}">{{delhi_ncr.name}}</option>
+											{% endifnotequal%}
 											 {% for location in locations %}
 											 <option value="{{location.id}}">{{location.name}}</option>
 											 {% endfor %}

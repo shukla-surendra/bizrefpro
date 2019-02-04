@@ -169,10 +169,10 @@ class BizEmailService:
         else:
             print("Email sent!")
 
-    def send_approval_notification_to_user(self, user):
+    def send_approval_notification_to_user(self, user, password):
         SUBJECT = 'BiZRefPro Registration Successfully Completed'
         BODY_TEXT = "Thanks for registration your application has been approved. Now you can able to login and update your profile and business information.  Below are your login Detail Username : "+user.email+", Password  : Your entered password. Please feel free to ask if you have any query regarding this."
-        BODY_HTML = "<html><head></head><body> <p>Hii</p><p>Thanks for registration your application has been approved. Now you can able to login and update your profile and business information. Below are your login Detail <br/>Username : "+user.email+" <br/>Password  : Your selected password <br/></p><p>Please feel free to ask if you have any query regarding this.</p><br/><br/><br/><strong>BizRefPro Team</strong><br/>Email : info@bizrefpro.com<br/>Web   : https://www.bizrefpro.com<br/><b>ItInfo Technologies Pvt. Ltd</b></body></html>"
+        BODY_HTML = "<html><head></head><body> <p>Hii</p><p>Thanks for registration your application has been approved. Now you can able to login and update your profile and business information. Below are your login Detail <br/>Username : "+user.email+" <br/>Password  : "+password+" <br/></p><p>Please feel free to ask if you have any query regarding this.</p><br/><br/><br/><strong>BizRefPro Team</strong><br/>Email : info@bizrefpro.com<br/>Web   : https://www.bizrefpro.com<br/><b>ItInfo Technologies Pvt. Ltd</b></body></html>"
         msg = MIMEMultipart('alternative')
         msg['Subject'] = SUBJECT
         msg['From'] = email.utils.formataddr(('BizRefPro Alert', self.SENDER))

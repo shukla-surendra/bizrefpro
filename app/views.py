@@ -43,9 +43,13 @@ def pricing(request):
     return render(request, "app/pricing.html", page_context)
 
 
-def support_troops(request):
-    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Support Troops"}
-    return render(request, "app/support-troops.html", page_context)
+def csr(request):
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"csr"}
+    return render(request, "app/csr.html", page_context)
+	
+def why_we(request):
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Why We"}
+    return render(request, "app/why-we.html", page_context)
 
 
 def privacy(request):
@@ -78,6 +82,11 @@ def how_it_work(request):
     return render(request, "app/why-join.html", page_context)
 
 
+def refer_friend(request):
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Refer Friend"}
+    return render(request, "app/refer_friend.html", page_context)
+
+
 def plan(request):
     page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"How It Works"}
     return render(request, "app/plan.html", page_context)
@@ -97,21 +106,25 @@ def search_result(request):
     if "q" not in request.GET:
         return HttpResponseRedirect("/")
     page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Search Result"}
-    page_context['page'] = "search";
-    page_context['qpart1'] = request.GET['q'];
-    page_context['qpart2'] = request.GET['location']
+    page_context['page'] = "search"
+    page_context['page_tag'] = 'Showing result of "'+request.GET['q']+'"'
+    page_context['qpart1'] = request.GET['q']
+    page_context['qpart2'] = ""
+    if 'location' in request.GET:
+        page_context['qpart2'] = request.GET['location']
     return render(request, "app/search-result.html", page_context)
 
 
 def search(request):
     queryString = request.GET['q']
-    location = request.GET['location']
+    location = ""
+    if 'location' in request.GET:
+        location = request.GET['location']
     stop_words = set(stopwords.words('english'))
     stop_words.add("top")
     word_tokens = word_tokenize(queryString)
     filtered_sentence = [w for w in word_tokens if not w in stop_words]
     mmlength = len(filtered_sentence)
-    print(location)
     queryString = ' '.join(filtered_sentence)
     if location == "" or location == None:
         queryParam = {"q": 'keywords:' + queryString, "defType": "edismax", "qf": "keywords", "mm":mmlength, 'sort':"rank desc"}
@@ -141,7 +154,7 @@ def hosting_features(request):
 
 
 def login_register(request):
-    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Login Register"}
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Login"}
     states = States.objects.filter(country_id=1)
     page_context['states'] = states;
     if request.method == 'POST':
@@ -187,11 +200,22 @@ def login_register(request):
                         except:
                             user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), country=country, state=state,zone=zone, address1="", address2 ="", city="", executive=executive, active=True)
                     else:
-                        user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), country=country, state=state,zone=zone, address1="", address2 ="", city="", executive=executive, active=True)
+                        try:
+                            referer_object = Referer.objects.get(phone=uform.cleaned_data['phone'])
+                            referer_id = referer_object.user.id
+                            user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'],
+                                        email=uform.cleaned_data['email'],
+                                        password=make_password(password=uform.cleaned_data['password'], salt=None,
+                                                               hasher="bcrypt"), state=state, zone=zone, address1="",
+                                        address2="", city="", executive=executive, reference_id=referer_id, active=True)
+                            referer_object.referer = ""
+                            referer_object.save()
+                        except Exception as e:
+                            user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), country=country, state=state,zone=zone, address1="", address2 ="", city="", executive=executive, active=True)
                     user.save()
                     bizmail = BizEmailService();
                     bizmail.send_signup_notification_to_admin(user=user)
-                    bizmail.send_approval_notification_to_user(user)
+                    bizmail.send_approval_notification_to_user(user, uform.cleaned_data['password'])
                     page_context['message_type']="success"
                     page_context['message']="Registered Successfully"
                     messages.success(request, 'Success! Your Application has been submitted successfully. Please login and complete your profile.')
@@ -228,6 +252,106 @@ def login_register(request):
                 return render(request, "app/login-register.html", page_context)
     page_context['message_type']=""
     return render(request, "app/login-register.html", page_context)
+
+def register(request):
+    page_context =  {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle":"Register"}
+    states = States.objects.filter(country_id=1)
+    page_context['states'] = states;
+    if request.method == 'POST':
+        if request.POST['form_type'] == "signup":
+            try:
+                user = User.objects.get(email=request.POST['email'])
+                page_context['message_type'] = "failed"
+                page_context['message'] = "Email Address Already Exists"
+                return render(request, "app/register.html", page_context)
+            except:
+                country = Countries.objects.get(id=1)
+                uform = UserForm(request.POST)
+                if uform.is_valid():
+                    if request.POST['state'] == 0:
+                        state = None
+                    else:
+                        try:
+                            state = States.objects.get(id=request.POST['state'])
+                        except:
+                            state = None
+                    if request.POST['zone'] == 0:
+                        zone = None
+                    else:
+                        try:
+                            zone =Zones.objects.get(id=request.POST['zone'])
+                        except:
+                            zone = None
+                    if request.POST['executive'] == 0:
+                        executive = None
+                    else:
+                        try:
+                            executive = Executive.objects.get(id=request.POST['executive'])
+                        except:
+                            executive = None
+                    if 'referer' in request.GET:
+                        referer = request.GET['referer']
+                        try:
+                            referer_object = Referer.objects.get(referer=referer)
+                            referer_id = referer_object.user.id
+                            user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), state=state,zone=zone, address1="", address2 ="", city="", executive=executive,reference_id=referer_id, active=True)
+                            referer_object.referer = ""
+                            referer_object.save()
+                        except:
+                            user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), country=country, state=state,zone=zone, address1="", address2 ="", city="", executive=executive, active=True)
+                    else:
+                        try:
+                            referer_object = Referer.objects.get(phone=uform.cleaned_data['phone'])
+                            referer_id = referer_object.user.id
+                            user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'],
+                                        email=uform.cleaned_data['email'],
+                                        password=make_password(password=uform.cleaned_data['password'], salt=None,
+                                                               hasher="bcrypt"), state=state, zone=zone, address1="",
+                                        address2="", city="", executive=executive, reference_id=referer_id, active=True)
+                            referer_object.referer = ""
+                            referer_object.save()
+                        except Exception as e:
+                            user = User(name=uform.cleaned_data['name'], phone=uform.cleaned_data['phone'], email=uform.cleaned_data['email'],password=make_password(password=uform.cleaned_data['password'], salt=None, hasher="bcrypt"), country=country, state=state,zone=zone, address1="", address2 ="", city="", executive=executive, active=True)
+                    user.save()
+                    bizmail = BizEmailService();
+                    bizmail.send_signup_notification_to_admin(user=user)
+                    bizmail.send_approval_notification_to_user(user, uform.cleaned_data['password'])
+                    page_context['message_type']="success"
+                    page_context['message']="Registered Successfully"
+                    messages.success(request, 'Success! Your Application has been submitted successfully. Please login and complete your profile.')
+                    #return render(request, "app/login-register.html", page_context)
+                    return HttpResponseRedirect("/registration-success")
+                else:
+                    # return HttpResponse('POST method'+request.POST['name'])
+                    # request.session['name'] ="Session Created";
+                    page_context['message_type']="failed"
+                    page_context['message']="Something Went wrong"
+                    return render(request, "app/login-register.html", page_context)
+        if request.POST['form_type'] == "signin":
+            try:
+                user = User.objects.get(email=request.POST['email'])
+                if check_password(request.POST['password'], user.password):
+                    if user.deleted is True:
+                        page_context['message_type'] = "failed"
+                        page_context['message'] = "Account has been deleted"
+                        return render(request, "app/login-register.html", page_context)
+                    elif user.active == False:
+                        page_context['message_type']="failed"
+                        page_context['message']="Your Profile is disabled Contact customer care to approve"
+                        return render(request, "app/login-register.html", page_context)
+                    else:
+                        request.session['id'] = user.id
+                        return HttpResponseRedirect('user/dashboard')
+                else:
+                    page_context['message_type']="failed"
+                    page_context['message']="Incorrect username and password"
+                    return render(request, "app/login-register.html", page_context)
+            except:
+                page_context['message_type']="failed"
+                page_context['message']="Incorrect username and password"
+                return render(request, "app/login-register.html", page_context)
+    page_context['message_type']=""
+    return render(request, "app/register.html", page_context)
 
 
 def forgot_password(request):
@@ -442,6 +566,10 @@ def import_csv(request):
 
 
 def dispaly_business(request, category_id):
+    try:
+        category = Category.objects.get(id=category_id)
+    except:
+        pass
     businesses = Business.objects.filter(category_id=category_id, active=True, deleted=False)
     docs = []
     page_context = dict()
@@ -468,6 +596,12 @@ def dispaly_business(request, category_id):
                         })
 
     page_context['docs'] = docs
+    page_context['page'] = "search"
+    try:
+        category
+        page_context['page_tag'] = 'Showing result of "' + category.name + '"'
+    except NameError as e:
+        print(e)
     page_context['doc_len'] = len(docs)
     return render(request, "app/category-data.html", page_context)
 

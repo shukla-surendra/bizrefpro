@@ -60,11 +60,13 @@ class SearchSyncCronJob(CronJobBase):
 
     def calculate_group_rating(self, business):
         points = 0
+        referal_points = 0
         if business is not None:
             total_thumbs_up =0
             user_id = business.user.id
             object_list = User.objects.filter(reference_id=user_id)
             for object in object_list:
+                referal_points += 1
                 thumbs_up = 0
                 businesses = Business.objects.filter(user=object)
                 for business in businesses:
@@ -72,7 +74,7 @@ class SearchSyncCronJob(CronJobBase):
                     thumbs_up += business.thumbs_up
                     total_thumbs_up += thumbs_up
             points = total_thumbs_up
-        return points
+        return points+referal_points
 
     def calculate_group_thumbs_down_rating(self, business):
         points = 0

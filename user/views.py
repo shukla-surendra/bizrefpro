@@ -20,6 +20,7 @@ def dashboard(request):
         signupDate = user.created_at.strftime("%d-%m-%Y")
         expiryDate = user.created_at+datetime.timedelta(days=364)
         expiryDate = expiryDate.strftime("%d-%m-%Y")
+        total = User.objects.filter(reference_id=request.session['id']).count()
         doc_points = 0
         businesses = Business.objects.filter(user=user)
         for business in businesses:
@@ -45,7 +46,7 @@ def dashboard(request):
             accountType = "Paid"
         if user.member_type == 'l':
             expiryDate = '-'
-        return render(request, "user/index.html", {"user":user,"expiryDate":expiryDate,"docPoint":doc_points, "amount":user.amount,"accountType":accountType,"status":status, "created_at":signupDate,"title": "Best Business Referral Program | Destination to Grow Business"})
+        return render(request, "user/index.html", {"user":user,"expiryDate":expiryDate,"docPoint":doc_points+total, "amount":user.amount,"accountType":accountType,"status":status, "created_at":signupDate,"title": "Best Business Referral Program | Destination to Grow Business"})
 
 
 def profile(request):
@@ -271,6 +272,7 @@ def add_website(request):
             website = Website(name=request.POST['name'], verification_key=uuidKey,user=user)
             website.save()
             messages.success(request, 'Website Successfully Added.')
+            return HttpResponseRedirect('/user/manage-website')
         categories = Category.objects.all()
         context = {"title": "Add Website", "message_type":"","categories":categories}
         return render(request, "user/add-website.html", context)
@@ -318,7 +320,11 @@ def edit_business(request, id):
             countries = Countries.objects.all()
             states = States.objects.all()
             cities = Cities.objects.all()
-            locations = Location.objects.all()
+            locations = Location.objects.all().exclude(id=196)
+            try:
+                delhi_ncr = Location.objects.get(id=196)
+            except:
+                delhi_ncr = None
             form = BusinessForm()
             if request.method == "POST":
                 form = BusinessForm(request.POST)
@@ -502,8 +508,9 @@ def edit_business(request, id):
                 rentagreement = Media.objects.get(title="rentagreement", business=business, ref_type="business")
             except:
                 rentagreement = None
-
-            myContext = {"title": "Manage Business", "message_type":"","business":business,"websites":websites, "form":form, "categories":categories,"countries":countries,"states":states,"cities":cities,"savedKeywords":savedKeywords, "locations":locations}
+                
+         
+            myContext = {"title": "Manage Business", "message_type":"","business":business,"websites":websites, "form":form, "categories":categories,"countries":countries,"states":states,"cities":cities,"savedKeywords":savedKeywords, "locations":locations, "delhi_ncr": delhi_ncr}
             myContext['vidoes'] = videos 
             myContext['pancard'] = pancard
             try:
@@ -545,7 +552,11 @@ def add_business(request):
             messages.info(request, "Contact your BizRefPro Business Developer")
             return redirect('/user/manage-business')
         categories = Category.objects.filter(parent_id=0).order_by('name')
-        locations = Location.objects.all()
+        locations = Location.objects.all().exclude(id=196)
+        try:
+            delhi_ncr = Location.objects.get(id=196)
+        except:
+            delhi_ncr = None
         user = User.objects.get(id=request.session['id'])
         websites = Website.objects.filter(user=user)
         countries = Countries.objects.all()
@@ -629,7 +640,7 @@ def add_business(request):
                 index_queue.save()
                 messages.success(request, 'Business Successfully Added.')
                 return redirect('/user/edit-business/'+str(business.id))
-        return render(request, "user/add-business.html", {"title": "Add Business", "message_type":"", "form":form,"categories":categories,"websites":websites,"countries":countries,"states":states,"locations":locations,"cities":cities})
+        return render(request, "user/add-business.html", {"title": "Add Business", "message_type":"", "form":form,"categories":categories,"websites":websites,"countries":countries,"states":states,"locations":locations,"cities":cities, 'delhi_ncr':delhi_ncr})
 
 
 # method to handle file uploads
@@ -691,12 +702,16 @@ def add_member(request):
                 phone = request.POST['phone']
                 uuidKey = uuid.uuid4().hex
                 try:
-                   Referer.objects.get(email=email)
+                   if email not in ["", None]:
+                       Referer.objects.get(email=email)
+                   else:
+                       Referer.objects.get(phone=phone)
                    messages.error(request, 'User already registered')
                 except:
                     referer = Referer(name=name,email=email,phone=phone,user=user,referer=uuidKey)
                     referer.save()
-                    send_invitation(referer.name, referer.email, user.name, uuidKey)
+                    if referer.email not in ["", None]:
+                        send_invitation(referer.name, referer.email, user.name, uuidKey)
                     messages.success(request, 'Invitation sent')
             except:
                 pass
@@ -753,8 +768,11 @@ def get_user_groupes(request):
         total_positive = total_thumsup+total_thumsup1
         total_negative = total_thumsdown+total_thumsdown1
         list.append({"name": '<h4>Rating Point</h4>', "positive_points":str(total_positive), "negative_points": total_negative, "action":"<!--<strong>"+str(total_positive-total_negative)+"</strong> (Positive-Negative)-->"})
+        list.append(
+            {"name": 'Referral Point', "positive_points": str(total), "negative_points": "",
+             "action": ""})
         list.append({"name": 'Doc Point', "positive_points":str(document_point) , "negative_points": "", "action":""})
-        list.append({"name": '<h4>Total Point</h4>', "positive_points": str(total_positive+document_point), "negative_points": "", "action": "<!--<strong>"+str((total_positive+document_point)-total_negative)+"</strong>-->"})
+        list.append({"name": '<h4>Total Point</h4>', "positive_points": str(total_positive+document_point+total), "negative_points": "", "action": "<!--<strong>"+str((total_positive+document_point)-total_negative)+"</strong>-->"})
         mdict = {"data": list}
         mdict['draw'] = request.GET['draw']
         mdict['recordsTotal'] = total  # show from how many record its filtered.
@@ -762,7 +780,6 @@ def get_user_groupes(request):
         return HttpResponse(json.dumps(mdict))
     except:
         return HttpResponse(json.dumps([]))
-
 
 
 def detach_user(request):

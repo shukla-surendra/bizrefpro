@@ -128,11 +128,14 @@
 										<li><a href="/">Home</a></li>
                                         <li><a href="/about-us">About Us</a></li>
                                         <li><a href="/why-join">How it Work</a></li>
+										<li><a href="/why-we">Why We</a></li>
                                         <!--<li><a href="/pricing">Pricing</a></li>-->
                                         <!-- <li><a href="/news">News</a></li> -->
                                         <li><a href="/career">Career</a></li>
 										<li><a href="/franchise">Franchise</a></li>
                                         <li><a href="/faq">FAQ's</a></li>
+										<li><a href="/csr">CSR</a></li>
+										<li><a href="/refer_friend">Refer Friend</a></li>
                                         <li><a href="/contact">Contact Us</a></li>
                                         <li class="active"><a href="/login-register">Login / Register</a></li>
                                     </ul>
@@ -151,8 +154,14 @@
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                 <div class="bread-text">
+                                      {% ifnotequal page "search" %}
                                     <h3>{{pageTitle}}</h3>
                                     <p itemprop="breadcrumb"><a itemprop="url" href="/">Home&nbsp;/&nbsp;</a>{{pageTitle}}</p>
+                                    {% endifnotequal %}
+                                    {% ifequal page "search" %}
+                                    <h3>{{pageTitle}}</h3>
+                                    <p itemprop="breadcrumb"><a itemprop="url" href="/">Home&nbsp;/&nbsp;</a>{{page_tag}}</p>
+                                    {% endifequal %}
                                 </div>
                             </div>
                         </div>
@@ -170,7 +179,7 @@
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                      <div class="cl-footer-left">
-                                        Powered by <a href="https://itinfotechnologies.com/" target="_blank">Itinfo Technologies Pvt. Ltd.</a>
+                                        Copyright 2019 &copy; <a href="https://bizrefpro.com" target="_blank">Best Business Listing Website</a>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
@@ -187,9 +196,9 @@
                 </div>
             <!-- footer end -->
 			
-			<div class="foot-text-ab">
+			<!-- <div class="foot-text-ab">
 				Beta Version
-			</div>
+			</div> -->
             
         </div>
         <!-- page end -->
