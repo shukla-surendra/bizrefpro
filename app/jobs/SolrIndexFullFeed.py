@@ -55,7 +55,6 @@ class SolrIndexFullFeed(CronJobBase):
             except Exception as ex:
                 print("Exception Occurs", ex)
                 pass
-        print(index_data)
         solr.add(index_data, commit=True)
         if len(deindex_data) > 0:
             solr.delete(id=deindex_data, commit=True)

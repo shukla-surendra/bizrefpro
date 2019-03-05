@@ -3,13 +3,15 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.hashers import make_password, check_password
 from .forms import ExecutiveForm
 from django.contrib import messages
-from app.models import Executive, States, User, Zones, Category, Keyword, Business
+from app.models import Executive, States, User, Zones, Category, Keyword, Business, SearchAnalytics
 from administration.models import Administrator
 from app.bizrefpro_mail import BizEmailService
 import json, time, magic, csv
 from bizrefpro.settings import BASE_DIR
+from django.db import connection
 
 # Create your views here.
+
 
 def dashboard(request):
     if "admin_id" not in request.session:
@@ -44,7 +46,7 @@ def add_employee(request):
                 zone = Zones.objects.get(id=request.POST['zone'])
             except:
                 zone = None
-            executive = Executive(first_name=eform.cleaned_data['first_name'],last_name=eform.cleaned_data['last_name'], email=eform.cleaned_data['email'], role=eform.cleaned_data['role'], password=make_password(password=eform.cleaned_data['password'], salt=None, hasher="bcrypt"), state=state, zone=zone)
+            executive = Executive(first_name=eform.cleaned_data['first_name'],last_name=eform.cleaned_data['last_name'], email=eform.cleaned_data['email'], secret_code=eform.cleaned_data['secret_code'], role=eform.cleaned_data['role'], password=make_password(password=eform.cleaned_data['password'], salt=None, hasher="bcrypt"), state=state, zone=zone)
             executive.save()
         else:
             print(eform.errors)
@@ -281,4 +283,43 @@ def user_login(request, id):
         return redirect("/user/dashboard")
     else:
         return redirect("/")
+
+
+def top_keywords(request):
+    if "admin_id" not in request.session:
+        return HttpResponseRedirect('/administration/login')
+    page_context = dict()
+    page_context["title"]="Bizrefpro Dashboard"
+    page_context['pageTitle'] = 'Top Keywords'
+    return render(request, "administration/top_keywords.html", page_context)
+
+
+def get_hits(request):
+    if "admin_id" not in request.session:
+        return HttpResponse(json.dumps({}))
+    list = []
+    start = int(request.GET['start'])
+    length = int(request.GET['length'])
+    cursor = connection.cursor()
+    cursor.execute("""select count(*) as count from (select search_keywords, 
+    sum(`search_counter`) as hits 
+    from app_searchanalytics 
+    group by search_keywords 
+    order by hits desc) t""")
+    result = cursor.fetchall()
+    count = result[0][0]
+    analytics = SearchAnalytics.objects.raw("""select id, search_keywords, 
+    sum(`search_counter`) as hits 
+    from app_searchanalytics 
+    group by search_keywords 
+    order by hits desc""")[start:start+length]
+    rank = start
+    for analytic in analytics:
+        rank = rank + 1
+        list.append({"rank":str(rank),"keyword":analytic.search_keywords, "hits": str(analytic.hits)})
+    mdict = {"data": list}
+    mdict['draw'] = request.GET['draw']
+    mdict['recordsTotal'] = count  # show from how many record its filtered.
+    mdict['recordsFiltered'] = count  # show how many record filtered.
+    return HttpResponse(json.dumps(mdict))
 

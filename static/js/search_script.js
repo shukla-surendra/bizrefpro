@@ -14,9 +14,9 @@ $.ajax({
  myvar = '<div class="cl-add-item">'+
 '                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-zero">'+
 '                                            <div class="cl-add-item-detail">'+
-'                                                <h4><a href="#">'+business.title[0]+'</a></h4>'+
+'                                                <h4>'+business.title[0]+'</h4>'+
 '                                                <p>'+business.description[0]+'</p>'+
-'                                                <h6><span><a href="#"><i class="fas fa-map-marker-alt"></i> &nbsp;&nbsp;'+business.address[0]+'</a></span></h6>'+
+'                                                <h6><span><i class="fas fa-map-marker-alt"></i> &nbsp;&nbsp;'+business.address[0]+'</span></h6>'+
 '                                            </div>'+
 '                                            <div class="cl-add-item-icons">'+
 '                                                <ul>'+
@@ -39,7 +39,7 @@ $.ajax({
 
             if(website != ""){
 myvar += '                                                    <li>'+
-'                                                        <a target= "_blank" href="'+website+'">'+
+'                                                        <a target= "_blank" rel="nofollow" href="'+website+'">'+
 '                                                            Visit Website'+
 '                                                        </a>'+
 '                                                    </li>';
@@ -68,3 +68,7 @@ myvar += '											<li data-id="'+business.business_id[0]+'">'+
         }
     }
 })
+
+/* Search Analytics By Day */
+
+$.get( "/analytics?q="+qpart1);

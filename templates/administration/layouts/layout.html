@@ -336,7 +336,18 @@
               <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </a>
           </li>
-        <li class="active treeview menu-open">
+        <li class="treeview menu-open">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>Search Analytics</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="/administration/top_keywords"><i class="fa fa-circle-o"></i>Top Keywords</a></li>
+          </ul>
+        </li>
+        <li class="treeview menu-open">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>Employee Management</span>
             <span class="pull-right-container">
@@ -348,7 +359,7 @@
             <li class="active"><a href="/administration/add_employee"><i class="fa fa-circle-o"></i> Add New Employee</a></li>
           </ul>
         </li>
-                  <li class="active treeview menu-open">
+                  <li class="treeview menu-open">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>User Management</span>
             <span class="pull-right-container">
@@ -807,6 +818,21 @@
                             { "data": "city" },
                             { "data": "status" },
                             { "data": "action" }
+                        ]
+                    } );
+
+                    $('#searchCountTable').DataTable( {
+                        "processing": true,
+                        "serverSide": true,
+                        "searching": true,
+                        "ajax": {
+                            "url": "/administration/get_hits",
+                            "type": "GET",
+                        },
+                        "columns": [
+                            { "data": "rank" },
+                            { "data": "keyword" },
+                            { "data": "hits" }
                         ]
                     } );
 

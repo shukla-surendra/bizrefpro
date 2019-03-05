@@ -48,6 +48,9 @@ urlpatterns = [
     path("category/<int:category_id>", views.dispaly_business, name="dispaly_business"),
     path("autocomplete", views.autocomplete, name="autocomplete"),
     path("location_autocomplete", views.location_autocomplete, name="location_autocomplete"),
+    path("send_refer_otp", views.send_refer_otp, name="send_refer_otp"),
+    path("referabusiness", views.referabusiness, name="referabusiness"),
+    path("analytics", views.search_analytics, name="search_analytics"),
     #search auto complete
     #path("hosting-features.html", views.hosting_features, name="hosting_features"),
     #sync search index

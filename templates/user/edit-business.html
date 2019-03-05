@@ -728,11 +728,12 @@
             keyword :{required:true, maxlength:1000 },
             categories:"required",
             first_name:"required",
-            contact_number:"required",
+            contact_number:{ required: true, digits:true },
             address1:{ 
                 required: true,
                 maxlength:100,
             },
+            landline:{digits:true},
             country: "required",
             state: "required",
             city: "required",
@@ -758,12 +759,15 @@
             } ,
             categories:"<i>Please choose categories</i>",
              keyword:{ required: "<i>Please enter keyword</i>", maxlength:"<i>maximum 1000 words are allowed</i>"},
-            contact_number:"<i>Please provide contact number</i>",
+            contact_number:{ required: "<i>Please provide contact number</i>", digits:"<i>Please enter numeric value only</i>"},
             first_name: "<i>Contact Person name is required</i>",
             country: "<i>Please select the Country</i>",
             state: "<i>Please select the State</i>",
             city: "<i>Please enter the City</i>",
             pincode: "<i>Please enter the Pincode</i>",
+            landline:{
+            digits:"<i>Please enter numeric value only</i>"
+            },
             aboutus:{
                 required: "<i>Please enter the about detail</i>",
                 maxlength:"<i>maximum 300 characters are allowed</i>"

@@ -9,7 +9,7 @@ from .rating import calculate_rating, get_calculate_rating
 import time, magic, uuid, urllib.parse, urllib.request
 from bizrefpro.settings import BASE_DIR
 import os, json, datetime
-from app.bizrefpro_mail import send_invitation
+from app.bizrefpro_mail import send_invitation, BizEmailService
 
 
 def dashboard(request):
@@ -708,8 +708,10 @@ def add_member(request):
                        Referer.objects.get(phone=phone)
                    messages.error(request, 'User already registered')
                 except:
-                    referer = Referer(name=name,email=email,phone=phone,user=user,referer=uuidKey)
+                    referer = Referer(name=name, email=email, phone=phone, user=user, referer=uuidKey)
                     referer.save()
+                    bizrefpro_email = BizEmailService()
+                    bizrefpro_email.notify_referred_to_admin(referer, user)
                     if referer.email not in ["", None]:
                         send_invitation(referer.name, referer.email, user.name, uuidKey)
                     messages.success(request, 'Invitation sent')

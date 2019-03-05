@@ -1,5 +1,4 @@
-
-          {% extends 'app/layouts/layout.html' %}
+ {% extends 'app/layouts/layout.html' %}
           {% block content  %}
           <!-- content section begin -->
             <div class="cl-default-wrapper">
@@ -7,71 +6,95 @@
                     <div class="container">
                         <div class="row justify-content-md-center">
 						
-							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                <div class="contact-left">
-                                    <h5 class="text-center">Positive review of your referral business associates will drastically increase your rank in the search engine because all referral associates rating will get added in your ranking therefore keep referring vendors and that will eventually double your chance to get the top rank in the search engine.</h5>
-                                </div>
-                            </div>
-                            
-							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-12">
                                 <div class="login-form">
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <div class="login-form-title">
-                                            <h4>Refer Rriend</h4>
+                                            <!-- <h4>Refer Friend</h4> -->
+                                            <p class="frm_message"><strong>Positive review of your referral business associates will drastically increase your rank in the search engine because all referral associates rating will get added in your ranking therefore keep referring vendors and that will eventually double your chance to get the top rank in the search engine.</strong></p>
                                         </div>
                                     </div>
-                                    <form method="post" action="" id="">
+                                    <form method="post" action="" id="referral_form">
+                                        {% csrf_token %}
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                                <label>Enter Your Register Email Id</label>
-                                            </div>
-                                            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10">
-                                                <div class="popup-cont">
-                                                    <input name="" placeholder="Email ID" required="" type="email">
-                                                </div>
-                                            </div>
-											<div class="col-xl-10 col-lg-10 col-md-10 col-sm-10">
-                                                <div class="popup-cont">
-                                                    <button class="btn-style-2">Send OTP</button>
-                                                </div>
-                                            </div>
-                                        </div>
-										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                                <label>Name</label>
-                                            </div>
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                                <div class="popup-cont">
-                                                    <input name="" placeholder="Name" required="" type="text">
-                                                </div>
-                                            </div>
-                                        </div>
-										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                                <label>Email</label>
-                                            </div>
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                                <div class="popup-cont">
-                                                    <input name="" placeholder="Email" required="" type="email">
-                                                </div>
-                                            </div>
-                                        </div>
-										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                                <label>Contact No.</label>
-                                            </div>
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                                <div class="popup-cont">
-                                                    <input name="" placeholder="Contact No." required="" type="text">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                                <div class="popup-cont">
-                                                    <button class="btn-style-2">Login</button>
-                                                </div>
-                                            </div>
+										
+											<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
+												<div class="row">
+													<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+														<label>Please enter your registered email</label>
+													</div>
+													<div class="col-xl-9 col-lg-9 col-md-9 col-sm-8">
+														<div class="popup-cont">
+															<input name="referer_email" id="referer_email" placeholder="Email ID" required="" type="email">
+														</div>
+													</div>
+													<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4">
+														<div class="popup-cont">
+															<button class="btn-style-2" style="padding: 6px 35px; margin-top: 0px;" id="sendOtpButton">Send OTP</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
+												<div class="row">
+													<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+														<label>Enter OTP</label>
+													</div>
+													<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+														<div class="popup-cont">
+															<input name="otp" id="otp" placeholder="Enter OTP" required="" type="text">
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row login-popup-item">
+												<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+													<div class="row">
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+															<label>Name</label>
+														</div>
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+															<div class="popup-cont">
+																<input name="name" id="name" placeholder="Name" required="" type="text">
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+													<div class="row">
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+															<label>Email</label>
+														</div>
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+															<div class="popup-cont">
+																<input name="email" id="email" placeholder="Email" type="email">
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+													<div class="row">
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+															<label>Contact No.</label>
+														</div>
+														<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+															<div class="popup-cont">
+																<input name="contact" id="contact" placeholder="Contact No." required="" type="text">
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item" style="text-align: center;">
+												<div class="row justify-content-md-center">
+													<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+														<div class="popup-cont">
+															<button class="btn-style-2">Refer</button>
+														</div>
+													</div>
+												</div>
+											</div>
+                                           
                                         </div>
 									</form>
                                 </div>

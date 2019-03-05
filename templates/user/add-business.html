@@ -562,13 +562,14 @@
             },
             first_name:"required",
             //keyword :{required:true, maxlength:1000 },
-            contact_number:"required",
+            contact_number:{required:true, digits: true},
             category_id:"required",
             //categories:"required",
             address1:{ 
                 required: true,
                 maxlength:100,
             },
+            landline:{digits:true},
             country: "required",
             state: "required",
             states: "required",
@@ -597,7 +598,7 @@
                 required: "<i>Please enter the Address 1</i>",
                 maxlength:"<i>maximum 100 characters are allowed</i>" 
             } ,
-            contact_number:"<i>Please provide contact number</i>",
+            contact_number:{ required: "<i>Please provide contact number</i>", digits:"<i>Please enter numeric value only</i>"},
             //categories:"<i>Please choose categories</i>",
             //keyword:{ required: "<i>Please enter keyword</i>", <i>maxlength:"maximum 1000 words are allowed</i>"},
             first_name: "<i>Contact Person name is required</i>",
@@ -608,6 +609,9 @@
             aboutus:{
                 required: "<i>Please enter the about detail</i>",
                 maxlength:"<i>maximum 300 characters are allowed</i>"
+            },
+            landline:{
+            digits:"<i>Please enter numeric value only</i>"
             },
             title: {
                 required: "<i>Please enter the Title</i>",

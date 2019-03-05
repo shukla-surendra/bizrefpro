@@ -1054,6 +1054,83 @@ input,button,select,textarea{
 }
 
 
+.breadcrumb-search{
+    display: block;
+    padding: 15px 150px;
+}
+.breadcrumb-search .bread-form-row{
+    padding: 0px 5px;
+}
+.breadcrumb-search input[type="text"]{
+    position: relative;
+    display: block;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 12px 15px;
+    width: 100%;
+    border-radius: 2px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16),0 0 0 1px rgba(0,0,0,0.08);
+    transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: all 500ms ease;
+    -webkit-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+}
+.breadcrumb-search input[type="text"]:hover{
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,0.2),0 0 0 1px rgba(0,0,0,0.08);
+}
+.breadcrumb-search input[type="submit"]{
+    position: relative;
+    display: block;
+    background-color: rgba(252, 139, 83, 1);
+    padding: 12px 15px;
+    width: 100%;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 500ms ease;
+    -webkit-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+}
+.breadcrumb-search input[type="submit"]:hover{
+    background-color: rgb(252, 111, 41);
+    color: #fff;
+}
+.breadcrumb-search button{
+    position: relative;
+    display: block;
+    background-color: rgba(252, 139, 83, 1);
+    padding: 12px 15px;
+    width: 100%;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 500ms ease;
+    -webkit-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+}
+.breadcrumb-search button:hover{
+    background-color: rgb(252, 111, 41);
+    color: #fff;
+}
+.breadcrumb-search select{
+    position: relative;
+    display: block;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 15px 15px;
+    width: 100%;
+    background-image: url(images/icons/select-down.png);
+    background-repeat: no-repeat;
+    background-position: right center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
 /*====================================================================
                         default section style
 ====================================================================*/
@@ -1228,6 +1305,7 @@ input,button,select,textarea{
     padding: 5px 0px 5px 0px;
 	border-bottom: 1px solid #e8e8e8;
 	margin-bottom: 20px;
+	text-align: center;
 }
 .login-form-title h4 {
     padding-bottom: 5px;
@@ -1242,6 +1320,9 @@ input,button,select,textarea{
     width: 100%;
     padding: 0px;
     overflow: hidden;
+}
+.login-popup-item .popup-cont button {
+    margin: 0 auto;
 }
 .login-form input[type="text"],.login-form input[type="email"] {
     width: 100%;
@@ -1998,6 +2079,10 @@ input,button,select,textarea{
   }
 }
 
+
+label.error{
+color:#FF0000;
+}
 
 
 

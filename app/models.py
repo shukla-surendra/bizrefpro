@@ -2,27 +2,26 @@ from django.db import models
 from django.utils import timezone
 
 
-# Create your models here.
 class Category(models.Model):
-        name = models.CharField(max_length=100)
-        slug = models.CharField(max_length=100)
-        parent_id = models.IntegerField(default=0)
-        active = models.BooleanField(default=True)
-        deleted = models.BooleanField(default=False)
+    name = models.CharField(max_length=100)
+    slug = models.CharField(max_length=100)
+    parent_id = models.IntegerField(default=0)
+    active = models.BooleanField(default=True)
+    deleted = models.BooleanField(default=False)
 
-        def __str__(self):
-            return self.name
+    def __str__(self):
+        return self.name
 
 
 class Keyword(models.Model):
-        name = models.CharField(max_length=150)
-        slug = models.CharField(max_length=100)
-        category = models.ForeignKey(Category,on_delete=models.DO_NOTHING)
-        active = models.BooleanField(default=True)
-        deleted = models.BooleanField(default=False)
+    name = models.CharField(max_length=150)
+    slug = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    active = models.BooleanField(default=True)
+    deleted = models.BooleanField(default=False)
 
-        def __str__(self):
-            return self.name
+    def __str__(self):
+        return self.name
 
 
 class User(models.Model):
@@ -32,7 +31,7 @@ class User(models.Model):
     name = models.CharField(max_length=80)
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=120)
-    phone = models.CharField(max_length=12, blank=True, null=True)
+    phone = models.CharField(max_length=12, unique=True)
     address1 = models.CharField(max_length=120, blank=True, null=True)
     address2 = models.CharField(max_length=120, blank=True, null=True)
     country = models.ForeignKey('Countries',on_delete=models.SET_NULL, null=True)
@@ -55,17 +54,17 @@ class User(models.Model):
 
 
 class Website(models.Model):
-        name = models.CharField(max_length=150)
-        verification_key = models.CharField(max_length=100)
-        user = models.ForeignKey(User,on_delete=models.DO_NOTHING)        
-        category = models.ForeignKey(Category,on_delete=models.SET_NULL, null=True)
-        verified = models.BooleanField(default=False)
-        created_at = models.DateTimeField('date created', default=timezone.now)
-        active = models.BooleanField(default=False)
-        deleted = models.BooleanField(default=False)
-        
-        def __str__(self):
-            return self.name
+    name = models.CharField(max_length=150)
+    verification_key = models.CharField(max_length=100)
+    user = models.ForeignKey(User,on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(Category,on_delete=models.SET_NULL, null=True)
+    verified = models.BooleanField(default=False)
+    created_at = models.DateTimeField('date created', default=timezone.now)
+    active = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
 
 class Business(models.Model):
@@ -95,6 +94,7 @@ class Business(models.Model):
     locations = models.ManyToManyField('Location')
     gst_no = models.CharField(max_length=30, default="", blank=True, null=True)
     rating = models.IntegerField(default=10)
+    search_ranking = models.IntegerField(default=0)
     categories = models.ManyToManyField('Category')
     category_id = models.IntegerField(default=0)
     keywords = models.ManyToManyField('Keyword')
@@ -194,6 +194,7 @@ class Executive(models.Model):
     last_name = models.CharField(max_length=80)
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=120)
+    secret_code = models.CharField(max_length=120, unique=True, null=True)
     phone = models.CharField(max_length=12)
     role = models.CharField(max_length=120)
     country = models.ForeignKey('Countries',on_delete=models.SET_NULL, null=True)
@@ -210,7 +211,7 @@ class Executive(models.Model):
 class Otp(models.Model):
     otp  = models.CharField(max_length=150)
     email = models.EmailField(max_length=100)
-    business_id = models.CharField(max_length = 15)
+    business_id = models.CharField(max_length=15, blank=True, null=True)
     created_at = models.DateTimeField('date created', default=timezone.now)
     active = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
@@ -263,3 +264,9 @@ class Location(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SearchAnalytics(models.Model):
+    search_keywords = models.CharField(max_length=150)
+    search_counter = models.IntegerField(default=1)
+    analytics_date = models.DateField()

@@ -45,7 +45,8 @@ INSTALLED_APPS = [
 
 CRON_CLASSES = [
     "app.jobs.SearchSyncCronJob.SearchSyncCronJob",
-    "app.jobs.SearchSyncCronJob.SolrIndexFullFeed"
+    "app.jobs.SearchSyncCronJob.SolrIndexFullFeed",
+    "app.jobs.DbRankSyncCronJob.DbRankSyncCronJob"
 ]
 
 MIDDLEWARE = [
