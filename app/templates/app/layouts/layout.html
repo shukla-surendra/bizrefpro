@@ -1,0 +1,612 @@
+<!doctype html>{% load staticfiles %}
+<html lang="en">
+<head>
+    <title>{{title}}</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'app/css/bootstrap.min.css' %}" type="text/css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'app/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'app/css/color.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'app/css/responsive.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'app/css/animate.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'app/css/hover.css' %}" type="text/css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- Custom fonts -->
+    <link rel="stylesheet" href="{% static 'app/fonts/fontawesome-5.0.13/web-fonts-with-css/css/fontawesome-all.css' %}"
+          type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <script type="text/javascript"> //<![CDATA[
+		var tlJsHost = ((window.location.protocol == "https:") ? "https://secure.comodo.com/" : "http://www.trustlogo.com/");
+		document.write(unescape("%3Cscript src='" + tlJsHost + "trustlogo/javascript/trustlogo.js' type='text/javascript'%3E%3C/script%3E"));
+		//]]>
+
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-115799952-1"></script>
+    <script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'UA-115799952-1');
+
+    </script>
+
+
+</head>
+
+<body>
+
+<!-- page begin -->
+<div class="page">
+
+    <!-- header begin -->
+    <div class="cl-header">
+        <div class="cl-header-in">
+            <div class="container">
+                <div class="row">
+                    <!-- logo begin -->
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 col-12">
+                        <div class="cl-branding">
+                            <a href="/"><img src="{% static 'app/images/logo.png' %}" class="" alt="bizrefpro"/></a>
+                        </div>
+                    </div>
+                    <!-- logo end -->
+                    <!-- right video begin -->
+                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-8 col-12 ml-auto">
+                        <div class="cl-top-right">
+
+                            <div class="row">
+                                <!--<div class="col-lg-1 col-md-1 col-sm-1 pl-0 pr-0">
+                                    <div class="certificate_image">
+                                        <img src="{% static 'images/sign.png' %}" class="img-fluid"
+                                             alt="CERTIFICATE OF RECOGNITION"/>
+                                    </div>
+                                </div> -->
+                                <div class="col-lg-12 col-md-12 col-sm-12 pr-0">
+                                    <div class="certificate_text">
+                                        <p>CERTIFICATE OF RECOGNITION <span>(Certificate No.&nbsp;: DIPP30730)</span>
+                                            <br/> Department of Industrial Policy & Promotion <br/>Ministry of Commerce
+                                            & Industry <span>(Government of India)</span></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <ul>
+                                 <li>
+                                      <a href="#" data-toggle="modal" data-target="#myModal" class="play-link">
+                                         <i class="fas fa-play"></i>
+                                     </a>
+                                 </li>
+                                 <li>
+                                      <h3>Check Video How We Work</h3>
+                                 </li>
+                             </ul> -->
+                        </div>
+                    </div>
+                    <!-- right video end -->
+
+                    <!-- Modal popue begin -->
+                    <div class="modal fade" id="myModal" tabindex="99" role="dialog" aria-labelledby="myModal"
+                         aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">How we Work Video</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <iframe width="100%" height="450" src="https://www.youtube.com/embed/n-tJcRFQznI"
+                                            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal popue end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header end -->
+
+    <!-- navigation begin -->
+    <div class="cl-nav-section bg-blue-dark">
+        <div class="cl-nav-section-in">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                        <nav class="">
+                            <div class="hamburger">
+                                <i class="fas fa-align-justify"></i>
+                                <span>Menu</span>
+                            </div>
+                            <ul class="int-list">
+                                <li><a href="/">Home</a></li>
+                                <li><a href="/about-us">About Us</a></li>
+                                <li><a href="/why-join">How it Work</a></li>
+                                <li><a href="/why-we">Why We</a></li>
+                                <!--<li><a href="/pricing">Pricing</a></li>-->
+                                <!-- <li><a href="/news">News</a></li> -->
+                                <li><a href="/career">Career</a></li>
+                                <li><a href="/franchise">Franchise</a></li>
+                                <li><a href="/faq">FAQ's</a></li>
+                                <li><a href="/csr">CSR</a></li>
+                                <li><a href="/refer_friend">Refer Friend</a></li>
+                                <li><a href="/contact">Contact Us</a></li>
+                                <li class="active"><a href="/login-register">Login</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- navigation end -->
+
+    <!-- breadcrumb section start -->
+    <section class="breadcrumb-section">
+        <div class="breadcrumb-sec-in">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                        <div class="bread-text">
+
+                            {% ifnotequal page "search" %}
+
+                            <h3>{{pageTitle}}</h3>
+                            <p itemprop="breadcrumb"><a itemprop="url" href="/">Home&nbsp;/&nbsp;</a>{{pageTitle}}</p>
+                            {% endifnotequal %}
+                            {% ifequal page "search" %}
+                             <div class="breadcrumb-search">
+							<form action="/search-result" type="get">
+								<div class="row">
+									<div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 bread-form-row"></div>
+									<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 bread-form-row">
+										<input type="text" class="ui-autocomplete-input" name="q" id="searchQ" required="required" autocomplete="off" value="{{qpart1}}" placeholder="Enter keyword and wait for available option" />
+									</div>
+									<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 bread-form-row">
+										<input type="submit" value="Search" />
+									</div>
+								</div>
+							</form>
+						</div>
+                            <p itemprop="breadcrumb"><a itemprop="url" href="/">Home&nbsp;/&nbsp;</a>{{page_tag}}</p>
+                            {% endifequal %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- breadcrumb section end -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- footer begin -->
+    <div class="cl-footer bg-blue-dark">
+        <div class="cl-footer-in">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                        <div class="cl-footer-left">
+                            Copyright 2019 &copy; <a href="https://bizrefpro.com" target="_blank">Best Business Listing
+                            Website</a>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                        <div class="cl-footer-right">
+                            <ul>
+                                <li><a href="/privacy-policy">Privacy Policy</a></li>
+                                <li><a href="/terms">Term & Conditions</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- footer end -->
+
+    <!-- <div class="foot-text-ab">
+        Beta Version
+    </div> -->
+
+</div>
+<!-- page end -->
+
+<!-- Optional JavaScript -->
+<script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+{% ifnotequal page "search" %}
+<script src="{% static 'app/js/jquery-3.3.1.slim.min.js' %}" type="text/javascript"></script>
+{% endifnotequal %}
+<script src="{% static 'app/js/popper.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'app/js/bootstrap.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'app/js/default.js' %}" type="text/javascript"></script>
+<script src="{% static 'app/js/wow.js' %}" type="text/javascript"></script>
+{% ifequal page "search" %}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="{% static 'app/js/autosuggest.js' %}" type="text/javascript"></script>
+<script src="{% static 'app/js/search_script.js' %}" type="text/javascript"></script>
+{% endifequal %}
+{% ifnotequal page "search" %}
+<script src="{% static 'app/js/jquery.js' %}" type="text/javascript"></script>
+<script src="{% static 'app/vendors/jquery-validation/dist/jquery.validate.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'app/js/validation.js' %}" type="text/javascript"></script>
+{% endifnotequal %}
+<script>
+            $("#sendPasswordRestLink").on("submit", function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                $('#mailsent').hide();
+                $('#usernotexits').hide();
+                formdata = $(this).serialize();
+                jQuery.ajax({
+                   type:'POST',
+                   url:'/send-password-reset-link',
+                   data:formdata,
+                   success:function(result, response, status)
+                   {
+                       if(result=="ok")
+                        {
+                            $('#mailsent').show();
+                        }
+                        else{
+                            $('#usernotexits').show();
+                        }
+                   }
+                })
+            });
+
+</script>
+{% ifequal page "refer_friend" %}
+<script>
+$("#referral_form").validate({
+  rules: {
+    referer_email: {
+      required: true,
+      email: true
+    },
+    otp: "required",
+    email: {email:true},
+    name: "required",
+    contact:{required:true, digits:true}
+  },
+  messages: {
+  referer_email: {
+      required: "Please provide your registered email ID",
+      email: "Your email address must be in the format of name@domain.com"
+    },
+    email: {
+      email: "Your email address must be in the format of name@domain.com"
+    },
+    otp: "Please provide your Otp received on email, if not click send otp ",
+    name: "Please provide name",
+    contact:{
+    required: "Please provide contact number",
+    digits :"Contact number must be numeric"
+    }
+  }
+});
+
+
+          $(document).on("click", "#sendOtpButton", function(e){
+          e.preventDefault();
+          referer_email = $("#referer_email").val();
+          if(referer_email===""){
+          $("#referer_email").parent('div').find('.referer_email_error').remove()
+          $("#referer_email").parent('div').append('<p class="referer_email_error text-danger">Please Enter your valid registered email</p>')
+          }else{
+          re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          if(re.test(referer_email)){
+          $("#referer_email").parent('div').find('.referer_email_error').remove()
+          $.ajax({
+           type:'GET',
+           url:'/send_refer_otp',
+           data:'email='+referer_email,
+           success:function(result, status, xhr){
+           $("#referer_email").parent('div').find('.referer_email_error').remove();
+           if(result.status === "success"){
+                $("#referer_email").parent('div').append('<p class="referer_email_error text-success">'+result.message+'</p>');
+           }else{
+                $("#referer_email").parent('div').append('<p class="referer_email_error text-danger">'+result.message+'</p>');
+           }
+           }
+          })
+          }else{
+          $("#referer_email").parent('div').find('.referer_email_error').remove();
+          $("#referer_email").parent('div').append('<p class="referer_email_error text-danger">Please Enter your valid registered email</p>');
+          }}
+
+          });
+
+          $(document).on("submit","#referral_form", function(e){
+          e.preventDefault();
+          formData =new FormData(document.getElementById("referral_form"));
+          $.ajax({
+          type:'POST',
+          url:'/referabusiness',
+          processData: false,
+          contentType: false,
+          data:formData,
+          success:function(res, status, xhr){
+          if(res.success){
+              $("#referral_form").trigger("reset");
+              $("#referer_email").parent('div').find('.referer_email_error').remove();
+              $(".frm_message").removeClass("text-danger").addClass("text-primary").text(res.message);
+              $('html, body').animate({
+    scrollTop: $(".frm_message").offset().top
+  }, 1000)
+          }else{
+               $(".frm_message").removeClass("text-primary").addClass("text-danger").text(res.message);
+               $('html, body').animate({
+    scrollTop: $(".frm_message").offset().top
+  }, 1000)
+          }
+          }
+          })
+          })
+
+
+</script>
+{% endifequal %}
+<script>
+            $(document).ready(function(){
+               $("#state").on("change", function(){
+                 value = $("#state").val();
+                 $.ajax({
+                   url:'/administration/get-zones/'+value,
+                   data:'csrfmiddlewaretoken={{csrf_token}}',
+                   type:'POST',
+                   success:function(res, status, xHr){
+                     $("#zone").html(res)
+                     $("#executive").html('<option value="0">Select Executive</option>')
+                   }
+                 })
+               })
+               $("#zone").on("change", function(){
+                value = $("#zone").val();
+                $.ajax({
+                  url:'/administration/get-executives/'+value,
+                  data:'csrfmiddlewaretoken={{csrf_token}}',
+                  type:'POST',
+                  success:function(res, status, xHr){
+                    $("#executive").html(res)
+                  }
+                })
+              })
+            });
+
+</script>
+
+<script>
+           /* $(function () {
+              $('#myTab a:first').tab('show')
+            });
+            $('ul.nav-tabs li a').click(function (e) {
+              $('ul.nav-tabs li.active').removeClass('active')
+              $(this).parent('li').addClass('active')
+            });*/
+            function validEmail(email) {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            }
+
+            $(document).on("click", ".fa-thumbs-up", function(){
+                id = $(this).data("id");
+                //reset
+                $("#displayMessage").hide();
+                $("#message1").hide();
+                $("#message2").hide();
+                $("#message3").hide();
+                $("#send_otp_mail").show();
+                $("#get_otp").hide();
+                $("#otp").val("")
+                $("#email").val("")
+                //reset end
+
+                $("#business_id").val(id)
+                $("#thums_up").modal('show')
+             });
+            
+             $(document).on("click","#sendOtp", function(e){
+                 e.preventDefault();
+                 e.stopPropagation();
+                business_id = $("#business_id").val();
+                email = $("#email").val();
+                if(email != ""){
+                    if(validEmail(email)){
+                        jQuery.ajax({
+                            url:'/send_thumbsup_otp',
+                            type:'GET',
+                            data:'business_id='+business_id+"&email="+email,
+                            success:function(res, status, xhr){
+                             response = JSON.parse(res);
+                             if(response.status === "success")
+                             {
+                                 $("#send_otp_mail").hide();
+                                 $("#get_otp").show();
+                             }else{
+                                 $("#message1").addClass("text-danger");
+                                 $("#message1").text(response.message);
+                                 $('#message1').show();
+                             }
+                            }
+                        });
+                    $('#message1').hide();
+                    } else {
+                    $("#message1").addClass("text-danger");
+                    $("#message1").text("Please enter valid registered email id");
+                    $('#message1').show();
+                    }
+                }else{
+                 $("#message1").addClass("text-danger");
+                 $("#message1").text("Please enter your registered email id");
+                 $('#message1').show();
+                }
+                 
+             })
+
+             $(document).on("click","#thumsup", function(e){
+                e.preventDefault();
+                e.stopPropagation();
+               business_id = $("#business_id").val();
+               otp = $("#otp").val();
+               email = $("#email").val();
+               if(otp != ""){
+                       jQuery.ajax({
+                           url:'/thums_up',
+                           type:'GET',
+                           data:'business_id='+business_id+"&otp="+otp+"&email="+email,
+                           success:function(res, status, xhr){
+                            response = JSON.parse(res);
+                            if(response.status === "success")
+                            {
+                                $("#displayMessage").show();
+                                $("#message3").text(response.message);
+                                $('#message3').show();
+                                $("#get_otp").hide();
+
+                            } else {
+                                $("#message2").addClass("text-danger");
+                                $("#message2").text(response.message);
+                                $('#message2').show();
+                            }
+                           }
+                       });
+                   $('#message2').hide();
+               
+               }else{
+                $("#message2").addClass("text-danger");
+                $("#message2").text("Please provide the Otp received on email");
+                $('#message2').show();
+               }
+                
+            })
+
+</script>
+
+<script>
+
+$(document).on("click", ".fa-thumbs-down", function(e){
+                id = $(this).data("id");
+                //reset
+                $("#displayMessage").hide();
+                $("#message11").hide();
+                $("#message22").hide();
+                $("#message33").hide();
+                $("#send_otp_mail_down").show();
+                $("#get_otp_down").hide();
+                $("#otpdown").val("")
+                $("#emaildown").val("")
+                //reset end
+
+                $("#business_id_down").val(id)
+                $("#thums_down").modal('show')
+             });
+
+$(document).on("click","#sendOtpdown", function(e){
+                 e.preventDefault();
+                 e.stopPropagation();
+                business_id = $("#business_id_down").val();
+                email = $("#emaildown").val();
+               
+                if(email != ""){
+                    if(validEmail(email)){
+                        jQuery.ajax({
+                            url:'/send_thumbsup_otp',
+                            type:'GET',
+                            data:'business_id='+business_id+"&email="+email,
+                            success:function(res, status, xhr){
+                             response = JSON.parse(res);
+                             if(response.status === "success")
+                             {
+                                 $("#send_otp_mail_down").hide();
+                                 $("#get_otp_down").show();
+                             }else{
+                                 $("#message11").addClass("text-danger");
+                                 $("#message11").text(response.message);
+                                 $('#message11').show();
+                             }
+                            }
+                        });
+                    $('#message11').hide();
+                    } else {
+                    $("#message11").addClass("text-danger");
+                    $("#message11").text("Please enter valid registered email id");
+                    $('#message11').show();
+                    }
+                }else{
+                 $("#message11").addClass("text-danger");
+                 $("#message11").text("Please enter your registered email id");
+                 $('#message11').show();
+                }
+                 
+             })
+
+
+$(document).on("click","#thumsdown", function(e){
+                e.preventDefault();
+                e.stopPropagation();
+               business_id = $("#business_id_down").val();
+               otp = $("#otpdown").val();
+               email = $("#emaildown").val();
+               if(otp != ""){
+                       jQuery.ajax({
+                           url:'/thums_down',
+                           type:'GET',
+                           data:'business_id='+business_id+"&otp="+otp+"&email="+email,
+                           success:function(res, status, xhr){
+                            response = JSON.parse(res);
+                            if(response.status === "success")
+                            {
+                                $("#displayMessage2").show();
+                                $("#message33").text(response.message);
+                                $('#message33').show();
+                                $("#get_otp_down").hide();
+
+                            } else {
+                                $("#message22").addClass("text-danger");
+                                $("#message22").text(response.message);
+                                $('#message22').show();
+                            }
+                           }
+                       });
+                   $('#message22').hide();
+               
+               }else{
+                $("#message22").addClass("text-danger");
+                $("#message22").text("Please provide the Otp received on email");
+                $('#message22').show();
+               }
+                
+            })
+
+
+
+</script>
+
+
+<script language="JavaScript" type="text/javascript">
+		TrustLogo("https://www.bizrefpro.com/static/images/comodo_secure_seal_113x59_transp.png", "CL1", "none");
+
+</script>
+<a href="https://ssl.comodo.com" id="comodoTL">Comodo SSL</a>
+
+
+</body>
+</html>
