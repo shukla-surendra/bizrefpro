@@ -48,7 +48,8 @@ def pricing(request):
 
 
 def csr(request):
-    page_context = {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle": "Corporate Social Responsibility"}
+    page_context = {"title": "Best Business Referral Program | Destination to Grow Business",
+                    "pageTitle": "Corporate Social Responsibility"}
     return render(request, "app/csr.html", page_context)
 
 
@@ -90,8 +91,8 @@ def how_it_work(request):
 
 def refer_friend(request):
     page_context = dict()
-    page_context["title"]= "Best Business Referral Program | Destination to Grow Business"
-    page_context["pageTitle"]= "Refer Friend"
+    page_context["title"] = "Best Business Referral Program | Destination to Grow Business"
+    page_context["pageTitle"] = "Refer Friend"
     page_context['page'] = "refer_friend"
     return render(request, "app/refer_friend.html", page_context)
 
@@ -117,7 +118,7 @@ def search_result(request):
         return HttpResponseRedirect("/")
     page_context = dict()
     page_context["title"] = "Best Business Referral Program | Destination to Grow Business"
-    page_context["pageTitle"]= "Search Result"
+    page_context["pageTitle"] = "Search Result"
     page_context['page'] = "search"
     page_context['page_tag'] = 'Showing result of "' + request.GET['q'] + '"'
     page_context['qpart1'] = request.GET['q']
@@ -179,8 +180,15 @@ def login_register(request):
                 user = User.objects.get(email=request.POST['email'])
                 page_context['message_type'] = "failed"
                 page_context['message'] = "Email Address Already Exists"
-                return render(request, "app/login-register.html", page_context)
+                return render(request, "app/register.html", page_context)
             except:
+                try:
+                    user = User.objects.get(phone=request.POST['phone'])
+                    page_context['message_type'] = "failed"
+                    page_context['message'] = "Contact Number Already Exists"
+                    return render(request, "app/register.html", page_context)
+                except Exception as e:
+                    pass
                 country = Countries.objects.get(id=1)
                 uform = UserForm(request.POST)
                 if uform.is_valid():
@@ -202,8 +210,12 @@ def login_register(request):
                         executive = None
                     else:
                         try:
-                            executive = Executive.objects.get(id=request.POST['executive'])
+                            executive = Executive.objects.get(id=request.POST['executive'],
+                                                              secret_code=request.POST['secret_code'])
                         except:
+                            page_context['message_type'] = "failed"
+                            page_context['message'] = "Incorrect executive secret code"
+                            return render(request, "app/register.html", page_context)
                             executive = None
                     if 'referer' in request.GET:
                         referer = request.GET['referer']
@@ -241,9 +253,27 @@ def login_register(request):
                                                                hasher="bcrypt"), country=country, state=state,
                                         zone=zone, address1="", address2="", city="", executive=executive, active=True)
                     user.save()
-                    bizmail = BizEmailService();
-                    # bizmail.send_signup_notification_to_admin(user=user)
+                    bizmail = BizEmailService()
+                    bizmail.send_signup_notification_to_admin(user=user)
                     bizmail.send_approval_notification_to_user(user, uform.cleaned_data['password'])
+                    if executive is not None:
+                        bizmail.send_signup_notification_to_executive(user=user, executive=executive)
+                    if zone is not None:
+                        try:
+                            zone_manager = Executive.objects.get(zone=zone, role="zone-manager")
+                            bizmail.send_signup_notification_to_executive(user=user, executive=zone_manager)
+                        except:
+                            print("zone manager does not exists")
+                    '''  
+                    # stopping state manager mail for now     
+                    if state is not None:
+                        try:
+                            state_manager = Executive.objects.get(state=state, role="state-manager")
+                            bizmail.send_signup_notification_to_executive(user=user, executive=state_manager)
+                        except:
+                            print("zone manager does not exists")
+                     '''
+
                     page_context['message_type'] = "success"
                     page_context['message'] = "Registered Successfully"
                     messages.success(request,
@@ -323,7 +353,8 @@ def register(request):
                         executive = None
                     else:
                         try:
-                            executive = Executive.objects.get(id=request.POST['executive'], secret_code=request.POST['secret_code'])
+                            executive = Executive.objects.get(id=request.POST['executive'],
+                                                              secret_code=request.POST['secret_code'])
                         except:
                             page_context['message_type'] = "failed"
                             page_context['message'] = "Incorrect executive secret code"
@@ -370,6 +401,21 @@ def register(request):
                     bizmail.send_approval_notification_to_user(user, uform.cleaned_data['password'])
                     if executive is not None:
                         bizmail.send_signup_notification_to_executive(user=user, executive=executive)
+                    if zone is not None:
+                        try:
+                            zone_manager = Executive.objects.get(zone=zone, role="zone-manager")
+                            bizmail.send_signup_notification_to_executive(user=user, executive=zone_manager)
+                        except:
+                            print("zone manager does not exists")
+                    '''  
+                    # stopping state manager mail for now     
+                    if state is not None:
+                        try:
+                            state_manager = Executive.objects.get(state=state, role="state-manager")
+                            bizmail.send_signup_notification_to_executive(user=user, executive=state_manager)
+                        except:
+                            print("zone manager does not exists")
+                     '''
 
                     page_context['message_type'] = "success"
                     page_context['message'] = "Registered Successfully"
@@ -538,12 +584,14 @@ def referabusiness(request):
             if count > 0:
                 try:
                     user = User.objects.get(email=form.cleaned_data['referer_email'])
-                    referer_count = Referer.objects.filter(name=form.cleaned_data['name']).filter(Q(email=form.cleaned_data['email'])|Q(phone=form.cleaned_data['contact'])).count()
+                    referer_count = Referer.objects.filter(name=form.cleaned_data['name']).filter(
+                        Q(email=form.cleaned_data['email']) | Q(phone=form.cleaned_data['contact'])).count()
                     if referer_count == 0:
-                        referer = Referer(name=form.cleaned_data['name'], email=form.cleaned_data['email'], phone=form.cleaned_data['contact'], user=user)
+                        referer = Referer(name=form.cleaned_data['name'], email=form.cleaned_data['email'],
+                                          phone=form.cleaned_data['contact'], user=user)
                         referer.save()
                         bizrefpro_email = BizEmailService()
-                        bizrefpro_email.notify_referred_to_admin(referer,user)
+                        bizrefpro_email.notify_referred_to_admin(referer, user)
                         if referer.email not in ["", None]:
                             uuid_key = uuid.uuid4().hex
                             send_invitation(referer.name, referer.email, user.name, uuid_key)
@@ -701,7 +749,8 @@ def dispaly_business(request, category_id):
         category = Category.objects.get(id=category_id)
     except:
         pass
-    businesses = Business.objects.filter(category_id=category_id, active=True, deleted=False).order_by('-search_ranking')
+    businesses = Business.objects.filter(category_id=category_id, active=True, deleted=False).order_by(
+        '-search_ranking')
     docs = []
     page_context = dict()
     for business in businesses:
@@ -749,9 +798,6 @@ def search_analytics(request):
             analytics = SearchAnalytics(search_keywords=search_query, analytics_date=today)
             analytics.save()
     return HttpResponse("ok")
-
-
-
 
 
 # error handlers

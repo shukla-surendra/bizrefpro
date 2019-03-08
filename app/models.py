@@ -191,10 +191,10 @@ class Contact(models.Model):
 
 class Executive(models.Model):
     first_name = models.CharField(max_length=80)
-    last_name = models.CharField(max_length=80)
+    last_name = models.CharField(max_length=80, blank=True, null=True)
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=120)
-    secret_code = models.CharField(max_length=120, unique=True, null=True)
+    secret_code = models.CharField(max_length=120, blank=True, null=True)
     phone = models.CharField(max_length=12)
     role = models.CharField(max_length=120)
     country = models.ForeignKey('Countries',on_delete=models.SET_NULL, null=True)
@@ -205,7 +205,7 @@ class Executive(models.Model):
     created_at = models.DateTimeField('date created', default=timezone.now)
 
     def __str__(self):
-            return self.first_name+" "+self.last_name
+            return str(self.first_name)+" "+str(self.last_name)
 
 
 class Otp(models.Model):

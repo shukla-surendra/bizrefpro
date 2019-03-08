@@ -6,17 +6,45 @@
             <div class="cl-default-wrapper">
                 <div class="cl-default-wrapper-in">
                     <div class="container">
-                        <div class="row">
+                        <div class="row justify-content-md-center">
                             
                             {% if messages %}
                                 {% for message in messages %}
                                 {% if message.tags == "success" %}
-                                <div class="alert alert-success">
+                                <!-- <div class="alert alert-success">
                                     <strong>Success!</strong> {{ message }}
-                                  {% endif %}
-                                {% endfor %}
+								</div> -->
+								<div class="col-xl-8 col-lg-8 col-md-8 col-sm-12">
+									<div class="login-form">
+										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+											<div class="login-form-title">
+												<h4>Success!</h4>
+												<p class="frm_message"><strong>Thanks for registration your application has been pending for approval. But you can still able to <a href="https://YOUR_SERVER_IP/login-register">login</a> and update your profile and business information.</strong></p>
+												<p class="frm_message">Your payment status is pending kindly find below information for your payment.</p>
+											</div>
+										</div>
+										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 login-popup-item">
+											<h4>Payment Method</h4>
+											<p class="frm_message">Wire Transfer/NEFT : You can Wire Transfer funds to the following account:</p>
+											<p class="frm_message">
+												Bank Name - ICICI <br/>
+												Name - Technologies Pvt. Ltd.<br/>
+												Account Type - Current<br/>
+												A/c No - XXXXXXXXXXXX<br/>
+												IFSC - XXXX0000000
+											</p>
+											<p class="frm_message">
+												Online Payment Link : https://payments.example.com/pay/EXAMPLE
+											</p>
+											<p class="frm_message">Please let us know with transaction id so that we can notify your payment and list your business in BizRefPro. Please feel free to ask if you have any query regarding this.</p>
+											<p class="frm_message">Please call us at <strong>0000000000</strong> if you have any query</p>
+										</div>
+									</div>
+								</div>
+							{% endif %}
+							{% endfor %}
                             {% endif %}
-                        </div>
+                        
                     </div>
                 </div>
             </div>

@@ -43,7 +43,7 @@ def dashboard(request):
     pageContext = {}
     pageContext['pageTitle'] = "Dashboard"
     if executive.role == 'executive':
-        pageContext['breadcrumb'] = "Dashboad >> Excutive("+executive.first_name+" "+executive.last_name+")"
+        pageContext['breadcrumb'] = "Dashboad >> Excutive("+executive.first_name+" "+str(executive.last_name)+")"
         pageContext['target_role'] = executive.role
         pageContext['target_zone'] = executive.zone.id
         pageContext['executive_id'] = executive.id
@@ -57,7 +57,7 @@ def dashboard(request):
         except:
             zones = {}
         pageContext['zones'] = zones 
-        pageContext['breadcrumb'] = "Dashboad >> State Manager("+executive.first_name+" "+executive.last_name+")"
+        pageContext['breadcrumb'] = "Dashboad >> State Manager("+executive.first_name+" "+str(executive.last_name)+")"
         pageContext['state'] = loggedExecutive.state.id
         pageContext['executive_id'] = loggedExecutive.id
         subExecutive = Executive.objects.filter(state=executive.state, role='zone-manager')
@@ -65,7 +65,7 @@ def dashboard(request):
         return render(request, "executive/state-manager/index.html", pageContext)
     else :
         #city-manager
-        pageContext['breadcrumb'] = "Dashboad >> Zone Manager("+executive.first_name+" "+executive.last_name+")"
+        pageContext['breadcrumb'] = "Dashboad >> Zone Manager("+executive.first_name+" "+str(executive.last_name)+")"
         pageContext['zone_id'] = executive.zone.id
         pageContext['role'] = executive.role
         pageContext['state'] = executive.state
@@ -86,14 +86,14 @@ def lead_detail(request, id):
     if executive.role == 'state-manager':
         try:
            zone_manager = Executive.objects.get(zone = user.zone,role = 'zone-manager')
-           zone_manager = zone_manager.first_name+" "+zone_manager.last_name
+           zone_manager = zone_manager.first_name+" "+str(zone_manager.last_name)
         except:
             zone_manager = ""
-        pageContext['breadcrumb'] = "State-Manager ("+executive.first_name+" "+executive.last_name+") >> Zone Manager("+zone_manager+") >>Executive ("+user.executive.first_name+" "+user.executive.last_name+")"
+        pageContext['breadcrumb'] = "State-Manager ("+executive.first_name+" "+str(executive.last_name)+") >> Zone Manager("+zone_manager+") >>Executive ("+user.executive.first_name+" "+str(user.executive.last_name)+")"
     elif executive.role == 'zone-manager':
-        pageContext['breadcrumb'] = "Zone Manager ("+executive.first_name+" "+executive.last_name+")  >> Executive ("+user.executive.first_name+" "+user.executive.last_name+")"
+        pageContext['breadcrumb'] = "Zone Manager ("+executive.first_name+" "+str(executive.last_name)+")  >> Executive ("+user.executive.first_name+" "+str(user.executive.last_name)+")"
     else:
-        pageContext['breadcrumb'] = "Executive ("+executive.first_name+" "+executive.last_name+")"
+        pageContext['breadcrumb'] = "Executive ("+executive.first_name+" "+str(executive.last_name)+")"
             
     pageContext['lead_name'] = user.name
     added_year = user.created_at+datetime.timedelta(days=364)
@@ -118,14 +118,14 @@ def lead(request):
     pageContext['state'] = executive.state.id
     pageContext['executive'] = executive
     if executive.role == 'zone-manager':
-        pageContext['breadcrumb'] = 'Zone Manager ("'+executive.first_name+" "+executive.last_name+'")>> All Leads'
+        pageContext['breadcrumb'] = 'Zone Manager ("'+executive.first_name+" "+str(executive.last_name)+'")>> All Leads'
         pageContext['layout_file'] = 'executive/zone-manager/layouts/layout.html'
     elif executive.role == 'state-manager':
-        pageContext['breadcrumb'] = 'State Manager ("'+executive.first_name+" "+executive.last_name+'")>> All Leads'
+        pageContext['breadcrumb'] = 'State Manager ("'+executive.first_name+" "+str(executive.last_name)+'")>> All Leads'
         pageContext['layout_file'] = 'executive/state-manager/layouts/layout.html'
     else:
         #executive
-        pageContext['breadcrumb'] = 'Executive Manager ("'+executive.first_name+" "+executive.last_name+'")>> All Leads'
+        pageContext['breadcrumb'] = 'Executive Manager ("'+executive.first_name+" "+str(executive.last_name)+'")>> All Leads'
         pageContext['layout_file'] = 'executive/executive/layouts/layout.html'
     return render(request, "executive/common/lead.html", pageContext)
 
@@ -144,14 +144,14 @@ def executive_lead(request, id):
     pageContext['state'] = executive.state
     pageContext['executive'] = executive
     if loggedExecutive.role == 'zone-manager':
-        pageContext['breadcrumb'] = 'Zone Manager ("'+loggedExecutive.first_name+" "+loggedExecutive.last_name+'")>>Executive("'+executive.first_name+" "+executive.last_name+'") >> All Leads'
+        pageContext['breadcrumb'] = 'Zone Manager ("'+loggedExecutive.first_name+" "+str(loggedExecutive.last_name)+'")>>Executive("'+executive.first_name+" "+str(executive.last_name)+'") >> All Leads'
         pageContext['layout_file'] = 'executive/zone-manager/layouts/layout.html'
     elif loggedExecutive.role == 'state-manager':
-        pageContext['breadcrumb'] = 'State Manager ("'+loggedExecutive.first_name+" "+loggedExecutive.last_name+'")>>Executive("'+executive.first_name+" "+executive.last_name+'") >>All Leads'
+        pageContext['breadcrumb'] = 'State Manager ("'+loggedExecutive.first_name+" "+str(loggedExecutive.last_name)+'")>>Executive("'+executive.first_name+" "+str(executive.last_name)+'") >>All Leads'
         pageContext['layout_file'] = 'executive/state-manager/layouts/layout.html'
     else:
         #executive
-        pageContext['breadcrumb'] = 'Executive ("'+loggedExecutive.first_name+" "+loggedExecutive.last_name+'")>> All Leads'
+        pageContext['breadcrumb'] = 'Executive ("'+loggedExecutive.first_name+" "+str(loggedExecutive.last_name)+'")>> All Leads'
         pageContext['layout_file'] = 'executive/executive/layouts/layout.html'
     return render(request, "executive/common/lead.html", pageContext)
 
@@ -167,7 +167,7 @@ def zone_city_manager(request):
     except:
         zones = {}
     pageContext['zones'] = zones 
-    pageContext['breadcrumb'] = loggedExecutive.first_name+" "+loggedExecutive.last_name
+    pageContext['breadcrumb'] = loggedExecutive.first_name+" "+str(loggedExecutive.last_name)
     pageContext['state'] = loggedExecutive.state.id
     pageContext['executive_id'] = loggedExecutive.id
     return render(request, "executive/state-manager/zone-city-manager.html", pageContext)
@@ -231,7 +231,7 @@ def executive(request):
     pageContext['state'] = executive.state.id
     pageContext['role'] = executive.role
     if executive.role == 'zone-manager':
-        pageContext['breadcrumb'] = 'Zone Manager('+executive.first_name+" "+executive.last_name+') >> Executives'
+        pageContext['breadcrumb'] = 'Zone Manager('+executive.first_name+" "+str(executive.last_name)+') >> Executives'
         pageContext['layout_file'] = 'executive/zone-manager/layouts/layout.html'
     elif executive.role == 'state-manager':
         loggedExecutive = Executive.objects.get(id=request.session['executive_id'])
@@ -240,7 +240,7 @@ def executive(request):
         except:
             zones = {}
         pageContext['zones'] = zones
-        pageContext['breadcrumb'] = 'State Manager('+executive.first_name+" "+executive.last_name+') >> Executives'
+        pageContext['breadcrumb'] = 'State Manager('+executive.first_name+" "+str(executive.last_name)+') >> Executives'
         pageContext['layout_file'] = 'executive/state-manager/layouts/layout.html'
     return render(request, "executive/common/executive.html", pageContext)
 
@@ -257,9 +257,9 @@ def executive_list(request, id):
     pageContext['zone_id'] = executive.zone.id
     pageContext['role'] = 'zone-mamanger'
     pageContext['state'] = executive.state
-    pageContext['breadcrumb'] = 'Zone Manager('+executive.first_name+""+executive.last_name+') >> Executives'
+    pageContext['breadcrumb'] = 'Zone Manager('+executive.first_name+""+str(executive.last_name)+') >> Executives'
     if(loggedExecutive.role == 'state-manager'):
-        pageContext['breadcrumb'] = 'State Manager ('+loggedExecutive.first_name+''+loggedExecutive.last_name+') >> '+pageContext['breadcrumb']
+        pageContext['breadcrumb'] = 'State Manager ('+loggedExecutive.first_name+''+str(loggedExecutive.last_name)+') >> '+pageContext['breadcrumb']
     pageContext['layout_file'] = 'executive/state-manager/layouts/layout.html'
     return render(request, "executive/common/executive.html", pageContext)
 
@@ -326,7 +326,7 @@ def get_executive_data(request):
             status = "Active"
         else:
             status = "In-Active"
-        list.append({"executive": "<a href='/executive/lead/"+str(object.id)+"'>"+object.first_name+" "+object.last_name+"</a>", "zone": zone, "leads": leads, "revenue": totalSum, "status": status, "action": "<a href='#' class='text-primary'>Edit</a>"})
+        list.append({"executive": "<a href='/executive/lead/"+str(object.id)+"'>"+object.first_name+" "+str(object.last_name)+"</a>", "zone": zone, "leads": leads, "revenue": totalSum, "status": status, "action": "<a href='#' class='text-primary'>Edit</a>"})
     list.append({"executive": "<h4>Total:</h4>", "zone": '', "leads": '', "revenue": totalRevenue, "status": '', "action": ""})
     mdict = {"data": list}
     mdict['draw'] = request.GET['draw']
@@ -459,7 +459,7 @@ def get_zonecity_manager(request):
                 amountSum = amountSum['amount__sum']
                 totalRevenue += amountSum
 
-            list.append({"zone-city-manager": '<input type="checkbox" value="'+str(object.id)+'" name="selectcheck" class="selectcheck"><a href="/executive/executive/'+str(object.id)+'">'+object.first_name+" "+object.last_name+'</a>', "zone-city": zone_name, "executive_count": total_executive, "leads_count": leads_count,"revenue": amountSum,  "status": status, "action":'<a href="javascript:void(0)" class="text-primary">Edit</a>'})
+            list.append({"zone-city-manager": '<input type="checkbox" value="'+str(object.id)+'" name="selectcheck" class="selectcheck"><a href="/executive/executive/'+str(object.id)+'">'+object.first_name+" "+str(object.last_name)+'</a>', "zone-city": zone_name, "executive_count": total_executive, "leads_count": leads_count,"revenue": amountSum,  "status": status, "action":'<a href="javascript:void(0)" class="text-primary">Edit</a>'})
         list.append({"zone-city-manager": '<h4>Total:</h4>', "zone-city": '', "executive_count": '', "leads_count": '',"revenue": totalRevenue,  "status": "", "action":''})
         mdict = {"data": list}
         mdict['draw'] = request.GET['draw']

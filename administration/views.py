@@ -46,10 +46,15 @@ def add_employee(request):
                 zone = Zones.objects.get(id=request.POST['zone'])
             except:
                 zone = None
-            executive = Executive(first_name=eform.cleaned_data['first_name'],last_name=eform.cleaned_data['last_name'], email=eform.cleaned_data['email'], secret_code=eform.cleaned_data['secret_code'], role=eform.cleaned_data['role'], password=make_password(password=eform.cleaned_data['password'], salt=None, hasher="bcrypt"), state=state, zone=zone)
-            executive.save()
+            try:
+                executive = Executive.objects.get(secret_code=eform.cleaned_data['secret_code'])
+                messages.error(request, "Secret Code already exists")
+            except:
+                executive = Executive(first_name=eform.cleaned_data['first_name'],last_name=eform.cleaned_data['last_name'], email=eform.cleaned_data['email'], secret_code=eform.cleaned_data['secret_code'], role=eform.cleaned_data['role'], password=make_password(password=eform.cleaned_data['password'], salt=None, hasher="bcrypt"), state=state, zone=zone)
+                executive.save()
+                messages.success(request, "Employee Added Successfully")
         else:
-            print(eform.errors)
+            messages.error(request,eform.errors)
     return render(request, "administration/add_employee.html", pageContext)
 
 
@@ -102,14 +107,14 @@ def get_zones(request, id):
 
 
 def get_executives(request, id):
-    htmlResponse = "";
+    htmlResponse = ""
     htmlResponse +='<option value="0">Select Executives</option>'
     try:
         executives = Executive.objects.filter(zone=id,role='executive').exclude(deleted=True)
         for executive in executives:
-            htmlResponse +='<option value="'+str(executive.id)+'">'+executive.first_name.capitalize()+' '+executive.last_name.capitalize()+'</option>'
-    except:
-        None        
+            htmlResponse +='<option value="'+str(executive.id)+'">'+executive.first_name.capitalize()+' '+str(executive.last_name).capitalize()+'</option>'
+    except Exception as e:
+        print(e)
     return HttpResponse(htmlResponse);
 
 
