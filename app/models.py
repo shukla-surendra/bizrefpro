@@ -191,7 +191,7 @@ class Contact(models.Model):
 
 class Executive(models.Model):
     first_name = models.CharField(max_length=80)
-    last_name = models.CharField(max_length=80, blank=True, null=True)
+    last_name = models.CharField(max_length=80, blank=True, default="")
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=120)
     secret_code = models.CharField(max_length=120, blank=True, null=True)

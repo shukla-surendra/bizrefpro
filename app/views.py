@@ -69,7 +69,7 @@ def terms(request):
 
 
 def franchise(request):
-    page_context = {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle": "Franchise"}
+    page_context = {"title": "Best Business Referral Program | Destination to Grow Business", "pageTitle": "Channel Partner"}
     return render(request, "app/franchise.html", page_context)
 
 
@@ -543,6 +543,8 @@ def send_thumbsup_otp(request):
             otp = Otp(otp=otp_number, email=email, business_id=business_id)
             otp.save()
             send_otp(email, otp_number)
+            resp['status'] = "success"
+            resp["message"] = "Otp sent successfully"
         except:
             resp['status'] = "failed"
             resp["message"] = "Please enter registered Email ID"

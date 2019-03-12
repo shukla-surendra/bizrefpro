@@ -61,8 +61,9 @@
                                             <th><input type="checkbox" class="checkall">Leads</th>
                                             <th>Registration Date</th>
                                             <th>Renewell Date <a href="/static/executive/#"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a> <a href="/static/executive/#"><i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i></a></th>
-                <th>Amount</th>
-                                             <th>Status</th>
+                                            <th>Amount</th>
+                                            <th>Referer</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody class="tbody-inverse">
@@ -81,6 +82,38 @@
         </div>
     </div>
 </section>
+
+<!-- Modal -->
+<div id="referarModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">View Referer</h4>
+      </div>
+      <div class="modal-body">
+          <table class="table table-striped">
+              <thead>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Referer Count</th>
+              </thead>
+              <tbody id="refererList">
+
+              </tbody>
+          </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <script>
     $('#leadDataTable').DataTable( {
     "processing": true,
@@ -94,6 +127,7 @@
         { "data": "created" },
         { "data": "renew" },
         { "data": "revenue" },
+        { "data": "referer" },
         { "data": "status" }
     ]
 } );

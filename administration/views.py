@@ -153,6 +153,21 @@ def get_users(request):
     mdict['recordsFiltered'] = count  # show how many record filtered.
     return HttpResponse(json.dumps(mdict))
 
+def get_employees(request):
+    if "admin_id" not in request.session:
+        return HttpResponse(json.dumps({}))
+    list = []
+    start = int(request.GET['start'])
+    length = int(request.GET['length'])
+    count = Executive.objects.count()
+    executives = Executive.objects.all().order_by('-id').exclude(deleted=True)[start:start+length]
+    for executive in executives:
+        list.append({"name": executive.first_name + " " + executive.last_name,"email":executive.email, "phone": executive.phone, "role":executive.role})
+    mdict = {"data": list}
+    mdict['draw'] = request.GET['draw']
+    mdict['recordsTotal'] = count  # show from how many record its filtered.
+    mdict['recordsFiltered'] = count  # show how many record filtered.
+    return HttpResponse(json.dumps(mdict))
 
 def approve_users(request):
     response = {}

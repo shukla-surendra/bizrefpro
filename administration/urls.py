@@ -24,6 +24,7 @@ urlpatterns = [
     path("all_employee", views.all_employee, name="all_employee"),
     path("get-zones/<int:id>", views.get_zones, name="get_zones"),
     path("get-executives/<int:id>", views.get_executives, name="get_executives"),
+    path("get_employees", views.get_employees, name="get_employees"),
     path("all_users", views.all_users, name="all_users"),
     path("get_users", views.get_users, name="get_users"),
     path("approve_users", views.approve_users, name="approve_users"),

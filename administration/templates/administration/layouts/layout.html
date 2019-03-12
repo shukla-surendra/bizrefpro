@@ -803,6 +803,22 @@
 </script>
 <script>
 
+                    $('#employeeDataTable').DataTable( {
+                        "processing": true,
+                        "serverSide": true,
+                        "searching": true,
+                        "ajax": {
+                            "url": "/administration/get_employees",
+                            "type": "GET",
+                        },
+                        "columns": [
+                            { "data": "name" },
+                            { "data": "email" },
+                            { "data": "phone" },
+                            { "data": "role" }
+                        ]
+                    } );
+
                     $('#userDataTable').DataTable( {
                         "processing": true,
                         "serverSide": true,

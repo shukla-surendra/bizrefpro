@@ -29,6 +29,7 @@ urlpatterns = [
     path("get_executive_lead", views.get_executive_lead, name="get_executive_lead"),
     path("logout", views.logout, name="logout"),
     path("get_executive_data", views.get_executive_data, name="get_executive_data"),
-    path("get_zonecity_manager", views.get_zonecity_manager, name="get_zonecity_manager")
+    path("get_zonecity_manager", views.get_zonecity_manager, name="get_zonecity_manager"),
+    path("get_reference", views.get_reference, name="get_reference")
 
 ]

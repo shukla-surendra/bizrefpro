@@ -25,16 +25,18 @@
                                                         <th>Expire Date</th>
                                                         <th>Amount</th>
                                                         <th>Status</th>
+                                                        <th>Referer</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="tbody-inverse">
                                                 
                                                      <tr>
-                                                    	<td><input type="checkbox" value="295" name="selectcheck" class="selectcheck">{{user.created_at.date}}</td>
-                                                        <td>{{expiry}}</td>
-                                                        <td>Rs {{user.amount}}</td>  
-                                                        <td>{{status}}</td>
+                                                         <td><input type="checkbox" value="295" name="selectcheck" class="selectcheck">{{user.created_at.date}}</td>
+                                                         <td>{{expiry}}</td>
+                                                         <td>Rs {{user.amount}}</td>
+                                                         <td>{{status}}</td>
+                                                         <td><a href="" class="show_referer" data-id="{{user.id}}">{{total_reference}}</a></td>
                                                          <td><a href="#" data-toggle="modal" data-target="#leadModal">View</a></td>
                                                     </tr>
                                                    
@@ -81,6 +83,39 @@
   
     </div>
   </div>
+
+
+<!-- Modal -->
+<div id="referarModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">View Referer</h4>
+      </div>
+      <div class="modal-body">
+          <table class="table table-striped">
+              <thead>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Referer Count</th>
+              </thead>
+              <tbody id="refererList">
+
+              </tbody>
+          </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 {% endblock %}
             
            

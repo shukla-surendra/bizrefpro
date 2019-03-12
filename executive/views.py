@@ -1,14 +1,14 @@
 from django.shortcuts import render
 from django.contrib.auth.hashers import make_password, check_password
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
-from django.core import serializers
 import json
 from django.contrib import messages
-from app.models import Executive, User, Zones,States
+from app.models import Executive, User, Zones, States, Cities
 import datetime
 from django.utils import timezone
 import logging
 from django.db.models import Sum
+from django.core import serializers
 # Create your views here.
 
 # Get an instance of a logger
@@ -76,9 +76,11 @@ def lead_detail(request, id):
     if "executive_id" not in request.session:
         return HttpResponseRedirect('/executive/login')
     executive = Executive.objects.get(id=request.session['executive_id'])
-
     user = User.objects.get(id=id)
-    pageContext = {'user': user}
+    pageContext = dict()
+    total_reference = User.objects.filter(reference_id=user.id).count()
+    pageContext['user']=user
+    pageContext['total_reference'] = total_reference
     if user.active == True:
         pageContext['status'] = 'Active'
     else:
@@ -195,19 +197,19 @@ def setting(request):
     # user = User.objects.get(id=id)
     pageContext = {}
     pageContext['executive'] = executive
-    #getting state
+    # getting state
     state = ""
     try:
         state_obj = States.objects.get(id=executive.state)
         state = state_obj.name
-    except:
-        None
+    except Exception as e:
+        print(e)
     zone = ""
     try:
         zone_obj = Cities.objects.get(id=executive.state)
         zone = zone_obj.name
-    except:
-        None
+    except Exception as e:
+        print(e)
     pageContext['state'] = state
     pageContext['zone'] = zone
     if executive.role == 'zone-manager':
@@ -400,9 +402,10 @@ def get_executive_lead(request):
         else:
             status = "In-Active"
         addedYear = object.created_at+datetime.timedelta(days=364)
-        list.append({"lead": '<input type="checkbox" value="'+str(object.id)+'" name="selectcheck" class="selectcheck"><a href="/executive/lead_detail/'+str(object.id)+'">'+object.name+'</a>', "created": str(object.created_at.strftime("%d-%m-%Y")), "renew": str(addedYear.strftime("%d-%m-%Y")), "revenue": object.amount, "status": status})
+        ref_count = User.objects.filter(reference_id=object.id).count()
+        list.append({"lead": '<input type="checkbox" value="'+str(object.id)+'" name="selectcheck" class="selectcheck"><a href="/executive/lead_detail/'+str(object.id)+'">'+object.name+'</a>', "created": str(object.created_at.strftime("%d-%m-%Y")), "renew": str(addedYear.strftime("%d-%m-%Y")), "revenue": object.amount,"referer":'<a href="" class="show_referer" data-id="'+str(object.id)+'">'+str(ref_count)+'</a>', "status": status})
         totalAmount += object.amount
-    list.append({"lead": "<h4>Total:</h4>", "created": "", "renew": "", "revenue": "<h4>"+str(totalAmount)+"</h4>", "status": ""})
+    list.append({"lead": "<h4>Total:</h4>", "created": "", "renew": "", "revenue": "<h4>"+str(totalAmount)+"</h4>", "referer":"", "status": ""})
     mdict = {"data": list}
     mdict['draw'] = request.GET['draw']
     mdict['recordsTotal'] = total  # show from how many record its filtered.
@@ -460,7 +463,7 @@ def get_zonecity_manager(request):
                 totalRevenue += amountSum
 
             list.append({"zone-city-manager": '<input type="checkbox" value="'+str(object.id)+'" name="selectcheck" class="selectcheck"><a href="/executive/executive/'+str(object.id)+'">'+object.first_name+" "+str(object.last_name)+'</a>', "zone-city": zone_name, "executive_count": total_executive, "leads_count": leads_count,"revenue": amountSum,  "status": status, "action":'<a href="javascript:void(0)" class="text-primary">Edit</a>'})
-        list.append({"zone-city-manager": '<h4>Total:</h4>', "zone-city": '', "executive_count": '', "leads_count": '',"revenue": totalRevenue,  "status": "", "action":''})
+        list.append({"zone-city-manager": '<h4>Total:</h4>', "zone-city": '', "executive_count": '', "leads_count": '',"revenue": totalRevenue, "status": "", "action":''})
         mdict = {"data": list}
         mdict['draw'] = request.GET['draw']
         mdict['recordsTotal'] = total  # show from how many record its filtered.
@@ -468,6 +471,17 @@ def get_zonecity_manager(request):
         return HttpResponse(json.dumps(mdict))
     except:
         return HttpResponse(json.dumps([]))
+
+
+def get_reference(request):
+    data = list()
+    if 'id' in request.GET:
+        id = request.GET['id']
+        referers = User.objects.filter(reference_id=id)
+        for object in referers:
+            referer_count = User.objects.filter(reference_id=object.id).count()
+            data.append({'id': object.id,'name': object.name,'email': object.email, 'reference': referer_count})
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 
     

@@ -8,8 +8,8 @@ $(function() {
 //collapses the sidebar on window resize.
 // Sets the min-height of #page-wrapper to window size
 $(function() {
-    $(window).bind("load resize", function() {
-        /* topOffset = 50;
+    /*$(window).bind("load resize", function() {
+        topOffset = 50;
         width = (this.window.innerWidth > 0) ? this.window.innerWidth : this.screen.width;
         if (width < 768) {
             $('div.navbar-collapse').addClass('collapse');
@@ -110,20 +110,43 @@ $( document ).ready(function() {
 
 $(document).ready(function(){
 	$('#mybtn').click(function(){
-	$('.new-adds').show(500);	
+	$('.new-adds').show(500);
 	});
 });
 
 $(document).ready(function(){
 	$('#mybtn3').click(function(){
-	$('.new-adds1').show(500);	
+	$('.new-adds1').show(500);
 	});
 });
 
 
 $(document).ready(function(){
 	$('#mybtn4').click(function(){
-	$('.new-adds4').show(500);	
+	$('.new-adds4').show(500);
 	$('.new-adds5').show(500);
 	});
+
+	$(document).on("click",".show_referer", function(e){
+	e.preventDefault();
+	e.preventDefault();
+	user_id = $(this).data("id")
+    $.ajax({
+    url:'/executive/get_reference',
+    data:'id='+user_id,
+    success:function(res, status, xHr){
+    if(res.length > 0){
+    $("#refererList").html("")
+    $.each(res, function(index, element){
+    $("#refererList").append('<tr><td>'+element.name+'</td><td>'+element.email+'</td><td><a class="show_referer" data-id="'+element.id+'">'+element.reference+'</a></td></tr>');
+    })
+
+    $("#referarModal").modal("show");
+    }
+    }
+    })
+
+
+	})
+
 });
