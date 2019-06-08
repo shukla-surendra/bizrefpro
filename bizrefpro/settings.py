@@ -25,7 +25,7 @@ SECRET_KEY = 'change-me-dev-only'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','docker.bizrefpro.com','34.207.124.76','bizrefpro.com','www.bizrefpro.com']
 
 
 # Application definition
@@ -39,9 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'user',
-    'administration',
     'executive',
-    'django_cron'
+    'administration',
+    'django_cron',
+]
+
+CRON_CLASSES = [
+    "app.jobs.SearchSyncCronJob.SearchSyncCronJob",
+    "app.jobs.SolrIndexFullFeed.SolrIndexFullFeed",
+    "app.jobs.DbRankSyncCronJob.DbRankSyncCronJob"
 ]
 
 MIDDLEWARE = [
@@ -54,18 +60,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CRON_CLASSES = [
-    "app.jobs.SearchSyncCronJob.SearchSyncCronJob",
-    "app.jobs.SolrIndexFullFeed.SolrIndexFullFeed",
-    "app.jobs.DbRankSyncCronJob.DbRankSyncCronJob"
-]
-
 ROOT_URLCONF = 'bizrefpro.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,9 +88,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bizrefpro',
-        'HOST': '127.0.0.1',
+        'HOST': 'db',
+        'PORT':'3306',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'my_root_pass',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
@@ -130,27 +131,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-##logger config
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'debug.log',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -160,8 +140,8 @@ STATIC_URL = '/static/'
 
 STATIC_DIRS = 'static'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') 
 
-STATICFILES_DIRS = [
-    STATIC_DIRS,
-]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static') # used in collect static # conflict with STATICFILES_DIRS
+# STATICFILES_DIRS = [
+#     STATIC_DIRS,
+# ]

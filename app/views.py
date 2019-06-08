@@ -210,8 +210,7 @@ def login_register(request):
                         executive = None
                     else:
                         try:
-                            executive = Executive.objects.get(id=request.POST['executive'],
-                                                              secret_code=request.POST['secret_code'])
+                            executive = Executive.objects.get(id=request.POST['executive'])
                         except:
                             page_context['message_type'] = "failed"
                             page_context['message'] = "Incorrect executive secret code"
