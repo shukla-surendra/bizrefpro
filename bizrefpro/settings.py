@@ -90,8 +90,8 @@ DATABASES = {
         'NAME': 'bizrefpro',
         'HOST': '127.0.0.1',
         'PORT':'3306',
-        'USER': 'root',
-        'PASSWORD': 'my_root_pass',
+        'USER': 'my_root',
+        'PASSWORD': 'password',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
