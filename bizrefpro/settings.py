@@ -25,7 +25,7 @@ SECRET_KEY = 'change-me-dev-only'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','52.90.201.23','docker.bizrefpro.com','34.207.124.76','bizrefpro.com','www.bizrefpro.com']
+ALLOWED_HOSTS = ['127.0.0.1','35.171.21.81','docker.bizrefpro.com','34.207.124.76','bizrefpro.com','www.bizrefpro.com']
 
 
 # Application definition
